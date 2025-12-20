@@ -13,25 +13,31 @@ import { LocationStep } from "./redemption/LocationStep";
 import { PartySelectionStep } from "./redemption/PartySelectionStep";
 import { BankDetailsStep } from "./redemption/BankDetailsStep";
 import { StepIndicator } from "./redemption/StepIndicator";
+import { SuccessConfirmation } from "./redemption/SuccessConfirmation";
 
 export function CardRedemptionForm() {
   const navigate = useNavigate();
   const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
   const [cardValid, setCardValid] = useState(false);
-  const [showForm, setShowForm] = useState(false); // Control form visibility after card validation
+  const [showSpinner, setShowSpinner] = useState(false); // Show spinner after button click
+  const [showForm, setShowForm] = useState(false); // Control form visibility after spinner
+  const [showSuccess, setShowSuccess] = useState(false); // Show success screen after submission
   const [step, setStep] = useState(1); // Start at 1, only shown when cardValid is true
+  const [submittedValues, setSubmittedValues] =
+    useState<RedemptionFormValues | null>(null);
 
-  // Handle transition delay after card validation
+  // Handle transition delay after button click (only show spinner when explicitly triggered)
   useEffect(() => {
-    if (cardValid && !showForm) {
+    if (showSpinner && !showForm) {
       const timer = setTimeout(() => {
         setShowForm(true);
+        setShowSpinner(false);
         setIsLoading(false);
       }, 2000);
       return () => clearTimeout(timer);
     }
-  }, [cardValid, showForm]);
+  }, [showSpinner, showForm]);
 
   const form = useForm<RedemptionFormValues>({
     resolver: zodResolver(RedemptionSchema),
@@ -91,21 +97,9 @@ export function CardRedemptionForm() {
     try {
       await new Promise((resolve) => setTimeout(resolve, 2000));
 
-      toast({
-        title: "Success!",
-        description: `Card ****${values.serialNumber.slice(
-          -2
-        )} redeemed successfully. Check your account.`,
-      });
-
-      form.reset();
-      setCardValid(false);
-      setShowForm(false);
-      setStep(1);
-
-      setTimeout(() => {
-        navigate("/");
-      }, 2000);
+      // Store values for success screen
+      setSubmittedValues(values);
+      setShowSuccess(true);
     } catch (error) {
       toast({
         variant: "destructive",
@@ -117,12 +111,29 @@ export function CardRedemptionForm() {
     }
   };
 
+  const handleSuccessComplete = () => {
+    form.reset();
+    setCardValid(false);
+    setShowForm(false);
+    setShowSuccess(false);
+    setStep(1);
+    navigate("/");
+  };
+
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="w-full space-y-8">
         <AnimatePresence mode="wait">
+          {/* Success Screen - Show after form submission */}
+          {showSuccess && submittedValues && (
+            <SuccessConfirmation
+              values={submittedValues}
+              onComplete={handleSuccessComplete}
+            />
+          )}
+
           {/* Card Verification - Standalone Step */}
-          {!cardValid && (
+          {!cardValid && !showSuccess && (
             <motion.div
               key="card-step"
               initial={{ opacity: 0 }}
@@ -137,13 +148,14 @@ export function CardRedemptionForm() {
                 onNext={() => {
                   setIsLoading(true);
                   setCardValid(true);
+                  setShowSpinner(true); // Trigger spinner after button click
                 }}
               />
             </motion.div>
           )}
 
           {/* Loading Spinner - Show during transition */}
-          {cardValid && !showForm && (
+          {showSpinner && !showForm && !showSuccess && (
             <motion.div
               key="loading"
               initial={{ opacity: 0 }}
@@ -160,7 +172,7 @@ export function CardRedemptionForm() {
           )}
 
           {/* Main Form Steps - Only show if card is valid and transition is complete */}
-          {cardValid && showForm && (
+          {showForm && !showSuccess && (
             <motion.div
               key="form"
               initial={{ opacity: 0, y: 20 }}

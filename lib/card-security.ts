@@ -78,40 +78,31 @@ export function generateCardCode(): string {
 
 /**
  * Validate card code format
- * Expected: "XXX-HHHH-HHHH-HHHH" (3 chars - 12 hex digits with delimiters)
- * Length check: 3 + 1 + 4 + 1 + 4 + 1 + 4 = 18 characters total
- * Clean length: 3 + 12 = 15 characters
+ * Expected: First 3 characters must be letters, followed by any digits/hex
+ * Minimum valid: "ABC" (3 letters)
+ * Full format: "XXX-HHHH-HHHH-HHHH" (but can be partial while typing)
  */
 export function validateCardCode(code: string): boolean {
-  // Remove hyphens for length check
+  // Remove hyphens for clean validation
   const cleanCode = code.replace(/-/g, "");
 
-  // Must be 15 characters total (3 + 12)
-  if (cleanCode.length !== 15) {
+  // Must have at least 3 characters
+  if (cleanCode.length < 3) {
     return false;
   }
 
-  const parts = code.split("-");
-
-  // Must have exactly 4 parts: XXX-HHHH-HHHH-HHHH
-  if (parts.length !== 4) {
-    return false;
-  }
-
-  const [token, h1, h2, h3] = parts;
-
-  // Validate token: 3 uppercase letters
+  // First 3 characters must be uppercase letters
+  const token = cleanCode.substring(0, 3);
   if (!token.match(/^[A-Z]{3}$/)) {
     return false;
   }
 
-  // Validate each hash segment: 4 hex characters each (case-insensitive)
-  if (
-    !h1.match(/^[A-Fa-f0-9]{4}$/i) ||
-    !h2.match(/^[A-Fa-f0-9]{4}$/i) ||
-    !h3.match(/^[A-Fa-f0-9]{4}$/i)
-  ) {
-    return false;
+  // Remaining characters (if any) must be hex digits (0-9, A-F)
+  if (cleanCode.length > 3) {
+    const remaining = cleanCode.substring(3);
+    if (!remaining.match(/^[A-Fa-f0-9]*$/)) {
+      return false;
+    }
   }
 
   return true;
@@ -136,18 +127,30 @@ export function formatCardCode(input: string): string {
   const cleaned = input.toUpperCase().replace(/[^A-Z0-9]/g, "");
 
   // Format: XXX-HHHH-HHHH-HHHH
-  // Position: 0-2 (token), 3-6 (first hash), 7-10 (second hash), 11-14 (third hash)
-  let result = "";
-
-  for (let i = 0; i < cleaned.length && i < 15; i++) {
-    // Add hyphens after positions 2, 6, 10
-    if ((i === 3 || i === 7 || i === 11) && i < cleaned.length) {
-      result += "-";
-    }
-    result += cleaned[i];
+  if (cleaned.length <= 3) {
+    return cleaned;
   }
-
-  return result;
+  if (cleaned.length <= 7) {
+    return cleaned.substring(0, 3) + "-" + cleaned.substring(3);
+  }
+  if (cleaned.length <= 11) {
+    return (
+      cleaned.substring(0, 3) +
+      "-" +
+      cleaned.substring(3, 7) +
+      "-" +
+      cleaned.substring(7)
+    );
+  }
+  return (
+    cleaned.substring(0, 3) +
+    "-" +
+    cleaned.substring(3, 7) +
+    "-" +
+    cleaned.substring(7, 11) +
+    "-" +
+    cleaned.substring(11, 15)
+  );
 }
 
 /**
