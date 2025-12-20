@@ -94,7 +94,6 @@ export function RedemptionForm() {
             value={formData.cardCode}
             onChange={handleInputChange}
             disabled={isLoading}
-            className="font-mono"
           />
           <p className="text-xs text-muted-foreground">
             Enter the full code from your scratch card
@@ -131,7 +130,7 @@ export function RedemptionForm() {
             <div className="grid gap-4">
               <div>
                 <p className="text-xs text-muted-foreground">Card Code</p>
-                <p className="font-mono font-semibold">{formData.cardCode}</p>
+                <p className="font-semibold">{formData.cardCode}</p>
               </div>
               <div>
                 <p className="text-xs text-muted-foreground">
@@ -228,7 +227,7 @@ export function RedemptionForm() {
             <div className="grid gap-4">
               <div>
                 <p className="text-xs text-muted-foreground">Redemption ID</p>
-                <p className="font-mono font-semibold text-sm">
+                <p className="font-semibold text-sm">
                   {currentRedemption.id}
                 </p>
               </div>
@@ -246,7 +245,7 @@ export function RedemptionForm() {
               </div>
               <div>
                 <p className="text-xs text-muted-foreground">Account</p>
-                <p className="font-mono text-sm">
+                <p className="text-sm">
                   {currentRedemption.accountName}
                 </p>
               </div>

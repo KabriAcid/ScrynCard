@@ -29,7 +29,9 @@ export default function RedeemPage() {
       <main className="w-full max-w-2xl mt-20">
         <Card className="shadow-2xl">
           <CardHeader className="text-center">
-            <CardTitle className="text-3xl font-bold">Redeem Your Card</CardTitle>
+            <CardTitle className="text-3xl font-bold">
+              Redeem Your Card
+            </CardTitle>
             <CardDescription>
               Complete the process in two simple steps
             </CardDescription>
