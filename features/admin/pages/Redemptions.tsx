@@ -60,7 +60,9 @@ export default function RedemptionsPage() {
                   <TableCell>
                     {new Date(redemption.createdAt).toLocaleDateString()}
                   </TableCell>
-                  <TableCell>{redemption.citizen?.fullName || "Unknown"}</TableCell>
+                  <TableCell>
+                    {redemption.citizen?.fullName || "Unknown"}
+                  </TableCell>
                   <TableCell>₦{redemption.amount.toLocaleString()}</TableCell>
                   <TableCell>{redemption.bankName}</TableCell>
                   <TableCell>

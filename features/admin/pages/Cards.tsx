@@ -84,7 +84,9 @@ export default function CardsPage() {
                   <TableCell>₦{card.denomination.toLocaleString()}</TableCell>
                   <TableCell>
                     <Badge
-                      variant={card.status === "active" ? "secondary" : "default"}
+                      variant={
+                        card.status === "active" ? "secondary" : "default"
+                      }
                     >
                       {card.status}
                     </Badge>

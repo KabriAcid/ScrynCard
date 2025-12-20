@@ -114,7 +114,11 @@ export default function FraudPage() {
                   <TableCell>
                     <div className="flex gap-1 flex-wrap">
                       {alert.flags.slice(0, 2).map((flag) => (
-                        <Badge key={flag.code} variant="outline" className="text-xs">
+                        <Badge
+                          key={flag.code}
+                          variant="outline"
+                          className="text-xs"
+                        >
                           {flag.code}
                         </Badge>
                       ))}

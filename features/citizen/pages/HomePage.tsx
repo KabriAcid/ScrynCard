@@ -1,21 +1,24 @@
+"use client";
+
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Gift, ShieldCheck, TrendingUp } from "lucide-react";
 import { Logo } from "@/components/logo";
+import { useNavigate } from "react-router-dom";
 
 export default function HomePage() {
+  const navigate = useNavigate();
+
   return (
     <div className="flex min-h-screen flex-col">
       <header className="container mx-auto flex h-20 items-center justify-between px-4 md:px-6">
         <Logo />
         <div className="flex items-center gap-2">
-          <Button variant="ghost">
-            <a href="/login">Login</a>
+          <Button variant="ghost" onClick={() => navigate("/login")}>
+            Login
           </Button>
-          <Button>
-            <a href="/politician/order">
-              <span className="sm:hidden">Order</span>
-              <span className="hidden sm:block">Order For Cards</span>
-            </a>
+          <Button onClick={() => navigate("/redeem")}>
+            <span className="sm:hidden">Redeem</span>
+            <span className="hidden sm:block">Redeem Card</span>
           </Button>
         </div>
       </header>
@@ -33,12 +36,13 @@ export default function HomePage() {
               <Button
                 size="lg"
                 className="group relative h-16 px-12 text-lg font-bold transition-all duration-500"
+                onClick={() => navigate("/redeem")}
               >
-                <a href="/redeem" className="relative flex items-center gap-3">
+                <div className="relative flex items-center gap-3">
                   <Gift className="h-6 w-6 transition-transform duration-500 group-hover:rotate-6 group-hover:scale-105" />
                   <span>Redeem Your Card</span>
                   <ArrowRight className="h-6 w-6 transition-all duration-500 group-hover:translate-x-1" />
-                </a>
+                </div>
               </Button>
             </div>
           </div>
@@ -107,15 +111,16 @@ export default function HomePage() {
             &copy; {new Date().getFullYear()} Scryn. All rights reserved.
           </p>
           <div className="flex items-center gap-4">
-            <Link href="#" className="text-sm hover:underline">
+            <button className="text-sm hover:underline" onClick={() => navigate("/")}>
               Terms of Service
-            </Link>
-            <Link href="#" className="text-sm hover:underline">
+            </button>
+            <button className="text-sm hover:underline" onClick={() => navigate("/")}>
               Privacy Policy
-            </Link>
+            </button>
           </div>
         </div>
       </footer>
     </div>
   );
 }
+

@@ -1,110 +1,92 @@
-import { Suspense } from "react";
-import { Megaphone, Plus } from "lucide-react";
-import { DataTable } from "@/components/admin/data-table";
+"use client";
+
+import { Megaphone } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import { DashboardSkeleton } from "@/components/dashboard/skeletons";
-import { simulateDelay } from "@/lib/dev-utils";
-import prisma from "@/lib/prisma";
+import { useAdminStore } from "@/stores/adminStore";
+import { useEffect } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 
-async function getCampaignsData() {
-  await simulateDelay(800);
+export default function CampaignsPage() {
+  const { orders, isLoading, fetchOrders } = useAdminStore();
 
-  const orders = await prisma.order.findMany({
-    orderBy: { createdAt: "desc" },
-    include: {
-      politician: true,
-      _count: {
-        select: {
-          orderItems: true,
-        },
-      },
-    },
-  });
+  useEffect(() => {
+    fetchOrders();
+  }, [fetchOrders]);
 
-  return orders;
-}
-
-async function CampaignsContent() {
-  const campaigns = await getCampaignsData();
-
-  const columns = [
-    {
-      key: "id",
-      label: "Campaign ID",
-      render: (value: string) => (
-        <span className="font-mono text-xs">{value.slice(0, 8)}...</span>
-      ),
-    },
-    {
-      key: "politician",
-      label: "Politician",
-      render: (value: any) => value?.name || "Unknown",
-    },
-    {
-      key: "totalAmount",
-      label: "Total Value",
-      render: (value: number) => `₦${value.toLocaleString()}`,
-    },
-    {
-      key: "_count",
-      label: "Card Types",
-      render: (value: any) => value.items,
-    },
-    {
-      key: "status",
-      label: "Status",
-      render: (value: string) => (
-        <Badge
-          variant={
-            value === "COMPLETED"
-              ? "default"
-              : value === "PROCESSING"
-              ? "secondary"
-              : "destructive"
-          }
-          className="capitalize"
-        >
-          {value.toLowerCase()}
-        </Badge>
-      ),
-    },
-    {
-      key: "createdAt",
-      label: "Created",
-      render: (value: Date) => new Date(value).toLocaleDateString(),
-    },
-  ];
+  if (isLoading) {
+    return <DashboardSkeleton />;
+  }
 
   return (
     <div className="space-y-6">
-      <div className="flex items-start justify-between">
-        <div>
-          <h1 className="text-3xl font-bold">Campaigns</h1>
-          <p className="mt-2 text-muted-foreground">
-            Manage campaigns across all politicians
-          </p>
-        </div>
-        <Button>
-          <Plus className="mr-2 h-4 w-4" />
-          Create Campaign
-        </Button>
+      <div>
+        <h1 className="text-3xl font-bold flex items-center gap-2">
+          <Megaphone className="h-8 w-8" />
+          Campaigns
+        </h1>
+        <p className="mt-2 text-muted-foreground">
+          Manage campaigns and card orders across all politicians
+        </p>
       </div>
 
-      <DataTable
-        title="All Campaigns"
-        description={`Showing ${campaigns.length} campaigns`}
-        columns={columns}
-        data={campaigns}
-      />
+      <Card>
+        <CardHeader>
+          <CardTitle>All Campaigns ({orders.length})</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Batch ID</TableHead>
+                <TableHead>Politician</TableHead>
+                <TableHead>Total Value</TableHead>
+                <TableHead>Status</TableHead>
+                <TableHead>Created</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {orders.map((order) => (
+                <TableRow key={order.id}>
+                  <TableCell className="font-mono text-xs">
+                    {order.batchId.slice(0, 8)}...
+                  </TableCell>
+                  <TableCell>
+                    {order.politician?.fullName || "Unknown"}
+                  </TableCell>
+                  <TableCell>
+                    ₦{order.totalCardValue.toLocaleString()}
+                  </TableCell>
+                  <TableCell>
+                    <Badge
+                      variant={
+                        order.status === "completed"
+                          ? "default"
+                          : order.status === "processing"
+                          ? "secondary"
+                          : "outline"
+                      }
+                    >
+                      {order.status}
+                    </Badge>
+                  </TableCell>
+                  <TableCell>
+                    {new Date(order.createdAt).toLocaleDateString()}
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </CardContent>
+      </Card>
     </div>
-  );
-}
-
-export default function CampaignsPage() {
-  return (
-    <Suspense fallback={<DashboardSkeleton />}>
-      <CampaignsContent />
-    </Suspense>
   );
 }
