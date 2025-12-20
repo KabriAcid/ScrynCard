@@ -2,9 +2,11 @@ import { Button } from "@/components/ui/button";
 import { ArrowRight, Gift, ShieldCheck, TrendingUp } from "lucide-react";
 import { Logo } from "@/components/logo";
 import { useNavigate } from "react-router-dom";
+import { PlaceHolderImages } from "@/lib/placeholder-images";
 
 export default function HomePage() {
   const navigate = useNavigate();
+  const heroImage = PlaceHolderImages.find((p) => p.id === "hero-nigeria");
 
   return (
     <div className="flex min-h-screen flex-col">
@@ -14,29 +16,38 @@ export default function HomePage() {
           <Button variant="ghost" onClick={() => navigate("/login")}>
             Login
           </Button>
-          <Button onClick={() => navigate("/redeem")}>
-            <span className="sm:hidden">Redeem</span>
-            <span className="hidden sm:block">Redeem Card</span>
+          <Button onClick={() => navigate("/order")}>
+            <span className="sm:hidden">Order</span>
+            <span className="hidden sm:block">Order For Cards</span>
           </Button>
         </div>
       </header>
       <main className="flex-1">
-        <section className="relative w-full py-20 md:py-32 lg:py-40 bg-gradient-to-b from-primary/10 to-background">
+        <section className="relative w-full py-20 md:py-32 lg:py-40">
+          {heroImage && (
+            <img
+              src={heroImage.imageUrl}
+              alt={heroImage.description}
+              className="absolute inset-0 w-full h-full object-cover"
+              data-ai-hint={heroImage.imageHint}
+            />
+          )}
+          <div className="absolute inset-0 bg-gradient-to-t from-background to-background/50" />
           <div className="container relative z-10 mx-auto px-4 text-center md:px-6">
             <h1 className="text-4xl font-bold tracking-tighter text-foreground sm:text-5xl md:text-6xl lg:text-7xl">
               Empowering Nigerian Communities
             </h1>
             <p className="mx-auto mt-4 max-w-[700px] text-lg text-muted-foreground md:text-xl">
               A transparent, efficient, and secure platform for distributing
-              funds through digital scratch cards.
+              funds.
             </p>
             <div className="mt-12 flex justify-center">
               <Button
                 size="lg"
-                className="group relative h-16 px-12 text-lg font-bold transition-all duration-500"
+                className="group relative h-16 px-12 text-lg font-bold transition-all duration-500 overflow-hidden before:absolute before:inset-0 before:-translate-x-full before:bg-gradient-to-r before:from-transparent before:via-white/30 before:to-transparent before:animate-shine hover:before:translate-x-full before:transition-transform before:duration-1000"
                 onClick={() => navigate("/redeem")}
               >
-                <div className="relative flex items-center gap-3">
+                <div className="relative flex items-center gap-3 z-10">
                   <Gift className="h-6 w-6 transition-transform duration-500 group-hover:rotate-6 group-hover:scale-105" />
                   <span>Redeem Your Card</span>
                   <ArrowRight className="h-6 w-6 transition-all duration-500 group-hover:translate-x-1" />

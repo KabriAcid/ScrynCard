@@ -11,7 +11,6 @@ import { useAuthStore } from "@/stores/authStore";
 // Layouts
 import AdminLayout from "@/features/admin/layout/AdminLayout";
 import PoliticianLayout from "@/features/politician/layout/PoliticianLayout";
-import CitizenLayout from "@/features/citizen/layout/CitizenLayout";
 
 // Public Pages
 import HomePage from "@/features/citizen/pages/HomePage";
@@ -29,23 +28,11 @@ import AdminCampaigns from "@/features/admin/pages/Campaigns";
 
 // Politician Pages
 import PoliticianDashboard from "@/features/politician/pages/Dashboard";
-// import PoliticianAnalytics from "@/features/politician/pages/Analytics";
-// import PoliticianRedemption from "@/features/politician/pages/Redemption";
-// import PoliticianRedemptionDetails from "@/features/politician/pages/RedemptionDetails";
-
-// Citizen Pages
-import CitizenHome from "@/features/citizen/pages/HomePage";
-// import CitizenRedeem from "@/features/citizen/pages/RedeemPage";
-// import CitizenRedeemDetails from "@/features/citizen/pages/RedeemDetails";
-// import CitizenOrderCards from "@/features/citizen/pages/OrderCards";
-
-// Loading Component
-import { DashboardSkeleton } from "@/features/admin/components";
 
 // Protected Route Component
 interface ProtectedRouteProps {
   children: ReactNode;
-  requiredRole: "admin" | "politician" | "citizen";
+  requiredRole: "admin" | "politician";
 }
 
 function ProtectedRoute({ children, requiredRole }: ProtectedRouteProps) {
@@ -61,7 +48,6 @@ function ProtectedRoute({ children, requiredRole }: ProtectedRouteProps) {
     const dashboardMap: Record<string, string> = {
       admin: "/admin",
       politician: "/politician",
-      citizen: "/redeem",
     };
     return <Navigate to={dashboardMap[user.role] || "/"} replace />;
   }
@@ -75,11 +61,11 @@ function App() {
   return (
     <Router>
       <Routes>
-        {/* Public Routes */}
+        {/* Public Routes - Guest (no auth required) */}
         <Route path="/" element={<HomePage />} />
         <Route path="/login" element={<LoginPage />} />
 
-        {/* Admin Routes */}
+        {/* Admin Routes - Super Admin */}
         <Route
           path="/admin/*"
           element={
@@ -100,7 +86,7 @@ function App() {
           }
         />
 
-        {/* Politician Routes */}
+        {/* Politician Routes - Authenticated Politician */}
         <Route
           path="/politician/*"
           element={
@@ -108,33 +94,13 @@ function App() {
               <PoliticianLayout>
                 <Routes>
                   <Route path="/" element={<PoliticianDashboard />} />
-                  {/* <Route path="/analytics" element={<PoliticianAnalytics />} /> */}
-                  {/* <Route path="/redemption" element={<PoliticianRedemption />} /> */}
-                  {/* <Route path="/redemption/:id" element={<PoliticianRedemptionDetails />} /> */}
                 </Routes>
               </PoliticianLayout>
             </ProtectedRoute>
           }
         />
 
-        {/* Citizen Routes */}
-        <Route
-          path="/redeem/*"
-          element={
-            <ProtectedRoute requiredRole="citizen">
-              <CitizenLayout>
-                <Routes>
-                  <Route path="/" element={<CitizenHome />} />
-                  {/* <Route path="/card" element={<CitizenRedeem />} /> */}
-                  {/* <Route path="/card/:id" element={<CitizenRedeemDetails />} /> */}
-                  {/* <Route path="/order" element={<CitizenOrderCards />} /> */}
-                </Routes>
-              </CitizenLayout>
-            </ProtectedRoute>
-          }
-        />
-
-        {/* Fallback - Redirect to home or appropriate dashboard */}
+        {/* Fallback - Redirect based on auth state */}
         <Route
           path="*"
           element={
@@ -144,8 +110,6 @@ function App() {
                   ? "/admin"
                   : user?.role === "politician"
                   ? "/politician"
-                  : user?.role === "citizen"
-                  ? "/redeem"
                   : "/"
               }
               replace

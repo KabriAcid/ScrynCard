@@ -1,6 +1,7 @@
 // Scryn Platform Type Definitions
 
-export type UserRole = "admin" | "politician" | "citizen";
+// Roles: Admin (super admin), Politician (authenticated), Guest (public - no auth needed for redemption)
+export type UserRole = "admin" | "politician";
 
 export type OrderStatus = "pending" | "processing" | "completed" | "cancelled";
 export type CardStatus = "active" | "redeemed" | "expired" | "blocked";

@@ -25,9 +25,9 @@ export const useAuthStore = create<AuthState>((set) => ({
       await new Promise((resolve) => setTimeout(resolve, 1000));
 
       // Mock login - determine role based on email
-      let role: UserRole = "citizen";
+      // Only "admin" and "politician" roles for authenticated users
+      let role: UserRole = "politician";
       if (email.includes("admin")) role = "admin";
-      if (email.includes("politician")) role = "politician";
 
       const mockUser: User = {
         id: `USER-${Math.random().toString(36).substr(2, 9)}`,
@@ -53,12 +53,18 @@ export const useAuthStore = create<AuthState>((set) => ({
     set({ isLoading: true, error: null });
     try {
       await new Promise((resolve) => setTimeout(resolve, 1000));
+      // Default role should be "politician" if registering through normal flow
+      const role = data.role || "politician";
+      if (!["admin", "politician"].includes(role)) {
+        throw new Error("Invalid role");
+      }
+
       const mockUser: User = {
         id: `USER-${Math.random().toString(36).substr(2, 9)}`,
         fullName: data.fullName,
         email: data.email,
         phone: data.phone,
-        role: data.role || "citizen",
+        role: role as UserRole,
         verified: false,
         createdAt: new Date().toISOString(),
       };

@@ -54,12 +54,16 @@ export default function PoliticiansPage() {
             <TableBody>
               {politicians.map((politician) => (
                 <TableRow key={politician.id}>
-                  <TableCell className="font-medium">{politician.fullName}</TableCell>
+                  <TableCell className="font-medium">
+                    {politician.fullName}
+                  </TableCell>
                   <TableCell>{politician.party}</TableCell>
                   <TableCell>{politician.position}</TableCell>
                   <TableCell>{politician.state}</TableCell>
                   <TableCell>
-                    <Badge variant={politician.verified ? "default" : "secondary"}>
+                    <Badge
+                      variant={politician.verified ? "default" : "secondary"}
+                    >
                       {politician.verified ? "Verified" : "Pending"}
                     </Badge>
                   </TableCell>

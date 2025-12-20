@@ -66,8 +66,6 @@ export function LoginForm() {
           navigate("/admin");
         } else if (user?.role === "politician") {
           navigate("/politician");
-        } else if (user?.role === "citizen") {
-          navigate("/redeem");
         }
       } else {
         setError("Login failed. Please try again.");
