@@ -78,9 +78,9 @@ export function generateCardCode(): string {
 
 /**
  * Validate card code format
- * Expected: First 3 characters must be letters, followed by any digits/hex
+ * Expected: First 3 characters must be uppercase letters, followed by any letters/digits
  * Minimum valid: "ABC" (3 letters)
- * Full format: "XXX-HHHH-HHHH-HHHH" (but can be partial while typing)
+ * Examples: "ABC123", "MVK-3JER-3EKJ-RERI", "XYZ-ABCD-EFGH-IJKL"
  */
 export function validateCardCode(code: string): boolean {
   // Remove hyphens for clean validation
@@ -97,10 +97,10 @@ export function validateCardCode(code: string): boolean {
     return false;
   }
 
-  // Remaining characters (if any) must be hex digits (0-9, A-F)
+  // Remaining characters (if any) must be alphanumeric (letters or digits)
   if (cleanCode.length > 3) {
     const remaining = cleanCode.substring(3);
-    if (!remaining.match(/^[A-Fa-f0-9]*$/)) {
+    if (!remaining.match(/^[A-Za-z0-9]*$/)) {
       return false;
     }
   }

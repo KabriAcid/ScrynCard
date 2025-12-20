@@ -19,15 +19,19 @@ export function CardRedemptionForm() {
   const navigate = useNavigate();
   const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
-  const [cardValid, setCardValid] = useState(false);
-  const [showSpinner, setShowSpinner] = useState(false); // Show spinner after button click
-  const [showForm, setShowForm] = useState(false); // Control form visibility after spinner
-  const [showSuccess, setShowSuccess] = useState(false); // Show success screen after submission
-  const [step, setStep] = useState(1); // Start at 1, only shown when cardValid is true
+  const [cardVerified, setCardVerified] = useState(false); // Card verification complete
+  const [showSpinner, setShowSpinner] = useState(false); // Show spinner after verification
+  const [showForm, setShowForm] = useState(false); // Show form after spinner
+  const [showSuccess, setShowSuccess] = useState(false); // Show success screen
+  const [step, setStep] = useState(1); // Form step (1-4)
   const [submittedValues, setSubmittedValues] =
     useState<RedemptionFormValues | null>(null);
 
-  // Handle transition delay after button click (only show spinner when explicitly triggered)
+  // Serial and card code state (for card verification)
+  const [serialNumber, setSerialNumber] = useState("");
+  const [cardCode, setCardCode] = useState("");
+
+  // Handle spinner -> form transition
   useEffect(() => {
     if (showSpinner && !showForm) {
       const timer = setTimeout(() => {
@@ -61,15 +65,14 @@ export function CardRedemptionForm() {
     },
   });
 
-  const onValidChange = (
-    isValid: boolean,
-    data?: { serial: string; code: string }
-  ) => {
-    setCardValid(isValid);
-    if (isValid && data) {
-      form.setValue("serialNumber", data.serial);
-      form.setValue("cardCode", data.code);
-    }
+  const handleCardVerificationNext = () => {
+    setIsLoading(true);
+    setCardVerified(true);
+    setShowSpinner(true);
+
+    // Set form values with card data
+    form.setValue("serialNumber", serialNumber);
+    form.setValue("cardCode", cardCode);
   };
 
   const handleNextStep = async () => {
@@ -96,8 +99,6 @@ export function CardRedemptionForm() {
     setIsLoading(true);
     try {
       await new Promise((resolve) => setTimeout(resolve, 2000));
-
-      // Store values for success screen
       setSubmittedValues(values);
       setShowSuccess(true);
     } catch (error) {
@@ -113,10 +114,12 @@ export function CardRedemptionForm() {
 
   const handleSuccessComplete = () => {
     form.reset();
-    setCardValid(false);
+    setCardVerified(false);
     setShowForm(false);
     setShowSuccess(false);
     setStep(1);
+    setSerialNumber("");
+    setCardCode("");
     navigate("/");
   };
 
@@ -124,7 +127,7 @@ export function CardRedemptionForm() {
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="w-full space-y-8">
         <AnimatePresence mode="wait">
-          {/* Success Screen - Show after form submission */}
+          {/* Success Screen */}
           {showSuccess && submittedValues && (
             <SuccessConfirmation
               values={submittedValues}
@@ -132,10 +135,10 @@ export function CardRedemptionForm() {
             />
           )}
 
-          {/* Card Verification - Standalone Step */}
-          {!cardValid && !showSuccess && (
+          {/* Card Verification Step */}
+          {!cardVerified && !showSuccess && (
             <motion.div
-              key="card-step"
+              key="card-verification"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
@@ -143,21 +146,19 @@ export function CardRedemptionForm() {
             >
               <CardVerificationStep
                 isLoading={isLoading}
-                cardValid={cardValid}
-                onCardValid={onValidChange}
-                onNext={() => {
-                  setIsLoading(true);
-                  setCardValid(true);
-                  setShowSpinner(true); // Trigger spinner after button click
-                }}
+                serialNumber={serialNumber}
+                cardCode={cardCode}
+                onSerialChange={setSerialNumber}
+                onCodeChange={setCardCode}
+                onNext={handleCardVerificationNext}
               />
             </motion.div>
           )}
 
-          {/* Loading Spinner - Show during transition */}
+          {/* Loading Spinner */}
           {showSpinner && !showForm && !showSuccess && (
             <motion.div
-              key="loading"
+              key="spinner"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
@@ -166,25 +167,23 @@ export function CardRedemptionForm() {
             >
               <div className="text-center">
                 <LoaderCircle className="h-12 w-12 animate-spin text-primary mx-auto mb-4" />
-                <p className="text-muted-foreground">Processing your card...</p>
+                <p className="text-muted-foreground">Verifying your card...</p>
               </div>
             </motion.div>
           )}
 
-          {/* Main Form Steps - Only show if card is valid and transition is complete */}
+          {/* Main Form */}
           {showForm && !showSuccess && (
             <motion.div
-              key="form"
+              key="form-steps"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -20 }}
               transition={{ duration: 0.4 }}
               className="space-y-8"
             >
-              {/* Step Indicator for form steps (1-4) */}
               <StepIndicator currentStep={step} totalSteps={4} />
 
-              {/* Steps Container */}
               <AnimatePresence mode="wait">
                 {step === 1 && (
                   <PersonalDetailsStep

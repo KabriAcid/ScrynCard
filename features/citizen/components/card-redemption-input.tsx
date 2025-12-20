@@ -1,10 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { motion } from "framer-motion";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
   validateCardCode,
-  validateSerialNumber,
   formatCardCode,
   formatSerialNumber,
 } from "@/lib/card-security";
@@ -12,58 +11,50 @@ import { CheckCircle2, AlertCircle } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 interface CardRedemptionInputProps {
-  onValidChange?: (
-    isValid: boolean,
-    data?: { serial: string; code: string }
-  ) => void;
+  serialNumber: string;
+  cardCode: string;
+  onSerialChange: (value: string) => void;
+  onCodeChange: (value: string) => void;
   disabled?: boolean;
 }
 
 export function CardRedemptionInput({
-  onValidChange,
+  serialNumber,
+  cardCode,
+  onSerialChange,
+  onCodeChange,
   disabled = false,
 }: CardRedemptionInputProps) {
-  const [serialNumber, setSerialNumber] = useState("");
-  const [cardCode, setCardCode] = useState("");
-  const [isValid, setIsValid] = useState(false);
+  const [touched, setTouched] = useState({
+    serial: false,
+    code: false,
+  });
 
-  // Validate when either field changes
-  useEffect(() => {
-    const serialValid =
-      serialNumber.length === 9 && /^[A-Z]{2}-[A-Z0-9]{6}$/.test(serialNumber);
-    const codeValid = validateCardCode(cardCode);
-    const valid = serialValid && codeValid;
+  // Validate serial number (format: XX-XXXXXX)
+  const serialValid =
+    serialNumber.length === 9 && /^[A-Z]{2}-[A-Z0-9]{6}$/.test(serialNumber);
 
-    setIsValid(valid);
-    onValidChange?.(
-      valid,
-      valid ? { serial: serialNumber, code: cardCode } : undefined
-    );
-  }, [serialNumber, cardCode, onValidChange]);
+  // Validate card code - must be exactly 16 characters (without hyphens)
+  const cleanCode = cardCode.replace(/-/g, "");
+  const codeValid =
+    cleanCode.length === 16 && /^[A-Z]{3}[A-Za-z0-9]{13}$/.test(cleanCode);
 
-  // Handle serial number input with real-time validation
   const handleSerialChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const formatted = formatSerialNumber(e.target.value);
-    setSerialNumber(formatted);
+    onSerialChange(formatted);
   };
 
-  // Handle card code input with auto-formatting and delimiters
   const handleCodeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const formatted = formatCardCode(e.target.value);
-    setCardCode(formatted);
+    onCodeChange(formatted);
   };
 
-  const serialValid = serialNumber.length === 9;
-  const codeValid = validateCardCode(cardCode);
-
-  const containerVariants = {
-    hidden: { opacity: 0 },
+  const checkmarkVariants = {
+    hidden: { scale: 0, opacity: 0 },
     visible: {
+      scale: 1,
       opacity: 1,
-      transition: {
-        staggerChildren: 0.1,
-        delayChildren: 0.2,
-      },
+      transition: { type: "spring", stiffness: 200, damping: 15 },
     },
   };
 
@@ -76,21 +67,19 @@ export function CardRedemptionInput({
     },
   };
 
-  const checkmarkVariants = {
-    hidden: { scale: 0, opacity: 0 },
-    visible: {
-      scale: 1,
-      opacity: 1,
-      transition: { type: "spring", stiffness: 200, damping: 15 },
-    },
-  };
-
   return (
     <motion.div
       className="space-y-4"
       initial="hidden"
       animate="visible"
-      variants={containerVariants}
+      variants={{
+        visible: {
+          transition: {
+            staggerChildren: 0.1,
+            delayChildren: 0.2,
+          },
+        },
+      }}
     >
       {/* Input Row - Stack on Mobile, Row on Desktop */}
       <div className="flex flex-col lg:flex-row gap-3 lg:gap-4 items-start lg:items-end">
@@ -99,24 +88,27 @@ export function CardRedemptionInput({
           className="w-full lg:w-auto space-y-2"
           variants={itemVariants}
         >
-          <Label htmlFor="serial-number" className="text-sm">
-            Serial
+          <Label htmlFor="serial-number" className="text-sm font-medium">
+            Serial Number
           </Label>
           <div className="relative">
             <Input
               id="serial-number"
               type="text"
-              placeholder="AB-123456"
+              placeholder="ABC-123456"
               value={serialNumber}
               onChange={handleSerialChange}
+              onBlur={() => setTouched({ ...touched, serial: true })}
               disabled={disabled}
               maxLength={9}
               className={cn(
                 "font-mono text-base tracking-wider h-10 w-full lg:w-40",
-                serialValid ? "border-green-500 bg-green-50" : "border-gray-300"
+                serialValid && serialNumber.length > 0
+                  ? "border-green-500 bg-green-50"
+                  : ""
               )}
             />
-            {serialValid && (
+            {serialValid && serialNumber.length > 0 && (
               <motion.div
                 initial="hidden"
                 animate="visible"
@@ -126,17 +118,22 @@ export function CardRedemptionInput({
                 <CheckCircle2 className="h-4 w-4 text-green-500" />
               </motion.div>
             )}
-            {serialNumber.length > 0 && !serialValid && (
+            {touched.serial && serialNumber.length > 0 && !serialValid && (
               <motion.div
                 initial="hidden"
                 animate="visible"
                 variants={checkmarkVariants}
                 className="absolute right-3 top-1/2 -translate-y-1/2"
               >
-                <AlertCircle className="h-4 w-4 text-amber-500" />
+                <AlertCircle className="h-4 w-4 text-red-500" />
               </motion.div>
             )}
           </div>
+          {touched.serial && serialNumber.length > 0 && !serialValid && (
+            <p className="text-xs text-red-500 mt-1">
+              Format: 2 letters, hyphen, 6 alphanumeric
+            </p>
+          )}
         </motion.div>
 
         {/* Card Code Input */}
@@ -144,24 +141,27 @@ export function CardRedemptionInput({
           className="w-full lg:flex-1 space-y-2"
           variants={itemVariants}
         >
-          <Label htmlFor="card-code" className="text-sm">
+          <Label htmlFor="card-code" className="text-sm font-medium">
             Card Code
           </Label>
           <div className="relative">
             <Input
               id="card-code"
               type="text"
-              placeholder="XXX-HHHH-HHHH-HHHH"
+              placeholder="ABC-1234-5678-9000"
               value={cardCode}
               onChange={handleCodeChange}
+              onBlur={() => setTouched({ ...touched, code: true })}
               disabled={disabled}
               maxLength={18}
               className={cn(
                 "font-mono text-base tracking-wider h-10",
-                codeValid ? "border-green-500 bg-green-50" : "border-gray-300"
+                codeValid && cardCode.length > 0
+                  ? "border-green-500 bg-green-50"
+                  : ""
               )}
             />
-            {codeValid && (
+            {codeValid && cardCode.length > 0 && (
               <motion.div
                 initial="hidden"
                 animate="visible"
@@ -171,22 +171,27 @@ export function CardRedemptionInput({
                 <CheckCircle2 className="h-4 w-4 text-green-500" />
               </motion.div>
             )}
-            {cardCode.length > 0 && !codeValid && (
+            {touched.code && cardCode.length > 0 && !codeValid && (
               <motion.div
                 initial="hidden"
                 animate="visible"
                 variants={checkmarkVariants}
                 className="absolute right-3 top-1/2 -translate-y-1/2"
               >
-                <AlertCircle className="h-4 w-4 text-amber-500" />
+                <AlertCircle className="h-4 w-4 text-red-500" />
               </motion.div>
             )}
           </div>
+          {touched.code && cardCode.length > 0 && !codeValid && (
+            <p className="text-xs text-red-500 mt-1">
+              Card code must be exactly 16 characters (e.g., ABC1234567890123)
+            </p>
+          )}
         </motion.div>
       </div>
 
       {/* Status Message */}
-      {isValid && (
+      {serialValid && codeValid && (
         <motion.div
           initial={{ opacity: 0, y: -5 }}
           animate={{ opacity: 1, y: 0 }}
@@ -194,7 +199,9 @@ export function CardRedemptionInput({
           className="flex items-center gap-2 text-green-600 text-sm"
         >
           <CheckCircle2 className="h-4 w-4" />
-          <span className="font-medium">Ready to redeem</span>
+          <span className="font-medium">
+            Both fields valid - ready to continue
+          </span>
         </motion.div>
       )}
     </motion.div>

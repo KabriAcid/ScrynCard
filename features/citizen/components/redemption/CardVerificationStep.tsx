@@ -1,15 +1,15 @@
 import { motion } from "framer-motion";
-import { CreditCard, LoaderCircle, ArrowRight } from "lucide-react";
+import { CreditCard, LoaderCircle, AlertCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { CardRedemptionInput } from "../card-redemption-input";
+import { useState } from "react";
 
 interface CardVerificationStepProps {
   isLoading: boolean;
-  cardValid: boolean;
-  onCardValid: (
-    valid: boolean,
-    data?: { serial: string; code: string }
-  ) => void;
+  serialNumber: string;
+  cardCode: string;
+  onSerialChange: (value: string) => void;
+  onCodeChange: (value: string) => void;
   onNext: () => void;
 }
 
@@ -30,13 +30,45 @@ const stepVariants = {
 
 export function CardVerificationStep({
   isLoading,
-  cardValid,
-  onCardValid,
+  serialNumber,
+  cardCode,
+  onSerialChange,
+  onCodeChange,
   onNext,
 }: CardVerificationStepProps) {
+  const [error, setError] = useState<string | null>(null);
+
+  // Validate serial number (format: XX-XXXXXX)
+  const serialValid =
+    serialNumber.length === 9 && /^[A-Z]{2}-[A-Z0-9]{6}$/.test(serialNumber);
+
+  // Validate card code - must be 16 characters total (with hyphens: XXX-HHHH-HHHH-HHHH = 18 chars)
+  // Remove hyphens to count actual characters
+  const cleanCode = cardCode.replace(/-/g, "");
+  const codeValid =
+    cleanCode.length === 16 && /^[A-Z]{3}[A-Za-z0-9]{13}$/.test(cleanCode);
+
+  const isValid = serialValid && codeValid;
+
+  const handleVerify = async () => {
+    setError(null);
+
+    // Simulate card verification
+    // In a real scenario, this would call a backend API
+    try {
+      // Simulate verification delay
+      await new Promise((resolve) => setTimeout(resolve, 1500));
+
+      // For now, assume verification succeeds and proceed
+      onNext();
+    } catch (err) {
+      setError("Card verification failed. Please check your details.");
+    }
+  };
+
   return (
     <motion.div
-      key="step-1"
+      key="card-verification"
       className="space-y-6"
       variants={stepVariants}
       initial="hidden"
@@ -61,21 +93,39 @@ export function CardVerificationStep({
       </motion.div>
 
       <motion.div variants={itemVariants}>
-        <CardRedemptionInput onValidChange={onCardValid} disabled={isLoading} />
+        <CardRedemptionInput
+          serialNumber={serialNumber}
+          cardCode={cardCode}
+          onSerialChange={onSerialChange}
+          onCodeChange={onCodeChange}
+          disabled={isLoading}
+        />
       </motion.div>
+
+      {/* Error Message */}
+      {error && (
+        <motion.div
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="flex items-center gap-2 text-red-600 text-sm bg-red-50 border border-red-200 rounded-lg p-3"
+        >
+          <AlertCircle className="h-4 w-4 flex-shrink-0" />
+          <span>{error}</span>
+        </motion.div>
+      )}
 
       <motion.div variants={itemVariants}>
         <Button
           type="button"
-          onClick={onNext}
-          disabled={!cardValid || isLoading}
+          onClick={handleVerify}
+          disabled={!isValid || isLoading}
           className="w-full"
           size="lg"
         >
           {isLoading ? (
             <>
               <LoaderCircle className="mr-2 h-4 w-4 animate-spin" />
-              Validating Card...
+              Verifying Card...
             </>
           ) : (
             <>
