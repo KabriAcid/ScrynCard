@@ -43,7 +43,7 @@ export function PartySelectionStep({
 
   return (
     <motion.div
-      key="step-4"
+      key="step-3"
       className="space-y-5"
       variants={stepVariants}
       initial="hidden"
@@ -62,7 +62,7 @@ export function PartySelectionStep({
             Political Preference
           </h3>
           <p className="text-muted-foreground text-sm">
-            Select your favorite political party
+            Step 3 of 4: Select your favorite political party
           </p>
         </div>
       </motion.div>

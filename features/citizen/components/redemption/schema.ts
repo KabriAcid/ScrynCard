@@ -39,26 +39,21 @@ export type RedemptionFormValues = z.infer<typeof RedemptionSchema>;
 export const STEPS = [
   {
     id: 1,
-    title: "Card Information",
-    description: "Enter your scratch card details",
-  },
-  {
-    id: 2,
     title: "Personal Details",
     description: "Enter your personal information",
   },
   {
-    id: 3,
+    id: 2,
     title: "Location",
     description: "Select your location details",
   },
   {
-    id: 4,
+    id: 3,
     title: "Favorite Party",
     description: "Select your political preference",
   },
   {
-    id: 5,
+    id: 4,
     title: "Bank Details",
     description: "Enter your bank account information",
   },

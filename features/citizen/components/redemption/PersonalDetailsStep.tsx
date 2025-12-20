@@ -48,7 +48,7 @@ export function PersonalDetailsStep({
 }: PersonalDetailsStepProps) {
   return (
     <motion.div
-      key="step-2"
+      key="step-1"
       className="space-y-5"
       variants={stepVariants}
       initial="hidden"
@@ -67,7 +67,7 @@ export function PersonalDetailsStep({
             Personal Information
           </h3>
           <p className="text-muted-foreground text-sm">
-            Enter your details for verification
+            Step 1 of 4: Enter your details for verification
           </p>
         </div>
       </motion.div>

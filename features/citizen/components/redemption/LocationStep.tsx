@@ -70,7 +70,7 @@ export function LocationStep({
 
   return (
     <motion.div
-      key="step-3"
+      key="step-2"
       className="space-y-5"
       variants={stepVariants}
       initial="hidden"
@@ -89,7 +89,7 @@ export function LocationStep({
             Location Details
           </h3>
           <p className="text-muted-foreground text-sm">
-            Select your state, LGA, and ward
+            Step 2 of 4: Select your state, LGA, and ward
           </p>
         </div>
       </motion.div>

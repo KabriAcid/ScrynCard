@@ -48,7 +48,7 @@ export function BankDetailsStep({
 }: BankDetailsStepProps) {
   return (
     <motion.div
-      key="step-5"
+      key="step-4"
       className="space-y-5"
       variants={stepVariants}
       initial="hidden"
@@ -67,7 +67,7 @@ export function BankDetailsStep({
             Bank Details
           </h3>
           <p className="text-muted-foreground text-sm">
-            Enter your bank account information
+            Step 4 of 4: Enter your bank account information
           </p>
         </div>
       </motion.div>
