@@ -1,11 +1,9 @@
-"use client";
-
 import { Menu } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Logo } from "@/components/logo";
 import { AdminNav } from "./nav";
-import { usePathname } from "next/navigation";
+import { useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
 
 export function AdminMobileNav() {

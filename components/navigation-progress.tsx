@@ -1,19 +1,16 @@
-"use client";
-
 import { useEffect, useState } from "react";
-import { usePathname, useSearchParams } from "next/navigation";
+import { useLocation } from "react-router-dom";
 import { Progress } from "@/components/ui/progress";
 
 export function NavigationProgress() {
-  const pathname = usePathname();
-  const searchParams = useSearchParams();
+  const location = useLocation();
   const [isNavigating, setIsNavigating] = useState(false);
   const [progress, setProgress] = useState(0);
 
   useEffect(() => {
     setIsNavigating(false);
     setProgress(0);
-  }, [pathname, searchParams]);
+  }, [location.pathname]);
 
   useEffect(() => {
     if (!isNavigating) return;

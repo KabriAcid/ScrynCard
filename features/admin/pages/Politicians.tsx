@@ -72,7 +72,3 @@ export default function PoliticiansPage() {
     </div>
   );
 }
-      <PoliticiansContent />
-    </Suspense>
-  );
-}

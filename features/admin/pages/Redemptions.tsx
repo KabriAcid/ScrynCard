@@ -1,5 +1,3 @@
-"use client";
-
 import { useEffect } from "react";
 import { Gift } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
@@ -21,10 +19,6 @@ export default function RedemptionsPage() {
   useEffect(() => {
     fetchRedemptions();
   }, [fetchRedemptions]);
-
-  if (isLoading) {
-    return <DashboardSkeleton />;
-  }
 
   if (isLoading) {
     return <DashboardSkeleton />;
@@ -85,13 +79,5 @@ export default function RedemptionsPage() {
         </CardContent>
       </Card>
     </div>
-  );
-}
-
-export default function RedemptionsPage() {
-  return (
-    <Suspense fallback={<DashboardSkeleton />}>
-      <RedemptionsContent />
-    </Suspense>
   );
 }

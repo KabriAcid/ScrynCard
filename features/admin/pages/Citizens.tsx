@@ -17,11 +17,6 @@ export default function CitizensPage() {
   const totalCitizens = citizens.length;
   const verifiedCitizens = citizens.filter((c) => c.verified).length;
 
-export default function CitizensPage() {
-  const citizens = mockCitizens;
-  const totalCitizens = citizens.length;
-  const verifiedCitizens = citizens.filter((c) => c.verified).length;
-
   const kpis = [
     {
       icon: Users,

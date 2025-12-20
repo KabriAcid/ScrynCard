@@ -1,5 +1,3 @@
-"use client";
-
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -67,7 +65,12 @@ export function DetailsForm() {
     setIsLoading(true);
 
     // Validate required fields
-    if (!formData.fullName || !formData.phone || !formData.bankName || !formData.accountNumber) {
+    if (
+      !formData.fullName ||
+      !formData.phone ||
+      !formData.bankName ||
+      !formData.accountNumber
+    ) {
       setError("Please fill in all required fields");
       setIsLoading(false);
       return;
@@ -184,7 +187,10 @@ export function DetailsForm() {
 
       <div className="space-y-2">
         <Label htmlFor="state">State</Label>
-        <Select value={formData.state} onValueChange={(v) => handleSelectChange("state", v)}>
+        <Select
+          value={formData.state}
+          onValueChange={(v) => handleSelectChange("state", v)}
+        >
           <SelectTrigger>
             <SelectValue placeholder="Select your state" />
           </SelectTrigger>
@@ -205,7 +211,10 @@ export function DetailsForm() {
 
       <div className="space-y-2">
         <Label htmlFor="bankName">Bank Name *</Label>
-        <Select value={formData.bankName} onValueChange={(v) => handleSelectChange("bankName", v)}>
+        <Select
+          value={formData.bankName}
+          onValueChange={(v) => handleSelectChange("bankName", v)}
+        >
           <SelectTrigger>
             <SelectValue placeholder="Select your bank" />
           </SelectTrigger>
@@ -239,7 +248,10 @@ export function DetailsForm() {
           name="agreeToTerms"
           checked={formData.agreeToTerms}
           onCheckedChange={(checked) =>
-            setFormData((prev) => ({ ...prev, agreeToTerms: checked as boolean }))
+            setFormData((prev) => ({
+              ...prev,
+              agreeToTerms: checked as boolean,
+            }))
           }
           disabled={isLoading}
         />

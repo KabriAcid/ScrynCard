@@ -1,5 +1,3 @@
-"use client";
-
 import { useState } from "react";
 import { Search, Plus, Users } from "lucide-react";
 import { DataTable, EmptyState } from "@/components/admin";

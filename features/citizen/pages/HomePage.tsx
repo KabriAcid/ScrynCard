@@ -109,10 +109,16 @@ export default function HomePage() {
             &copy; {new Date().getFullYear()} Scryn. All rights reserved.
           </p>
           <div className="flex items-center gap-4">
-            <button className="text-sm hover:underline" onClick={() => navigate("/")}>
+            <button
+              className="text-sm hover:underline"
+              onClick={() => navigate("/")}
+            >
               Terms of Service
             </button>
-            <button className="text-sm hover:underline" onClick={() => navigate("/")}>
+            <button
+              className="text-sm hover:underline"
+              onClick={() => navigate("/")}
+            >
               Privacy Policy
             </button>
           </div>
@@ -121,4 +127,3 @@ export default function HomePage() {
     </div>
   );
 }
-
