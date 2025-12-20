@@ -16,7 +16,6 @@ import PoliticianLayout from "@/features/politician/layout/PoliticianLayout";
 import HomePage from "@/features/citizen/pages/HomePage";
 import LoginPage from "@/features/auth/pages/LoginPage";
 import RedeemPage from "@/features/citizen/pages/RedeemPage";
-import RedeemDetails from "@/features/citizen/pages/RedeemDetails";
 import OrderCards from "@/features/citizen/pages/OrderCards";
 
 // Admin Pages
@@ -68,7 +67,6 @@ function App() {
         <Route path="/" element={<HomePage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/redeem" element={<RedeemPage />} />
-        <Route path="/redeem/:id" element={<RedeemDetails />} />
         <Route path="/order" element={<OrderCards />} />
 
         {/* Admin Routes - Super Admin */}

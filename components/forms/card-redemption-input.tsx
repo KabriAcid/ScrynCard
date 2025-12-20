@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { motion } from "framer-motion";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
@@ -7,7 +8,6 @@ import {
   formatCardCode,
   formatSerialNumber,
 } from "@/lib/card-security";
-import { CheckCircle2, AlertCircle } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 interface CardRedemptionInputProps {
@@ -55,102 +55,102 @@ export function CardRedemptionInput({
   const serialValid = serialNumber.length === 6;
   const codeValid = validateCardCode(cardCode);
 
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.1,
+        delayChildren: 0.2,
+      },
+    },
+  };
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 10 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: { type: "spring", stiffness: 100, damping: 12 },
+    },
+  };
+
+  const checkmarkVariants = {
+    hidden: { scale: 0, opacity: 0 },
+    visible: {
+      scale: 1,
+      opacity: 1,
+      transition: { type: "spring", stiffness: 200, damping: 15 },
+    },
+  };
+
   return (
-    <div className="space-y-6">
-      {/* Serial Number Input */}
-      <div className="space-y-2">
-        <Label htmlFor="serial-number">Serial Number</Label>
-        <div className="relative">
+    <motion.div
+      className="space-y-4"
+      initial="hidden"
+      animate="visible"
+      variants={containerVariants}
+    >
+      {/* Input Row - Stack on Mobile, Row on Desktop */}
+      <div className="flex flex-col lg:flex-row gap-3 lg:gap-4 items-start lg:items-end">
+        {/* Serial Number Input */}
+        <motion.div
+          className="w-full lg:w-auto space-y-2"
+          variants={itemVariants}
+        >
+          <Label htmlFor="serial-number" className="text-sm">
+            Serial
+          </Label>
           <Input
             id="serial-number"
             type="text"
-            placeholder="6-digit number (e.g., 123456)"
+            placeholder="123456"
             value={serialNumber}
             onChange={handleSerialChange}
             disabled={disabled}
             maxLength={6}
             className={cn(
-              "font-mono text-lg tracking-widest",
-              serialValid ? "border-green-500 bg-green-50" : "border-gray-300"
+              "font-mono text-base tracking-wider h-10 w-full lg:w-32",
+              serialValid ? "border-primary/50 bg-primary/5" : ""
             )}
           />
-          {serialValid && (
-            <CheckCircle2 className="absolute right-3 top-1/2 -translate-y-1/2 h-5 w-5 text-green-500" />
-          )}
-          {serialNumber.length > 0 && !serialValid && (
-            <AlertCircle className="absolute right-3 top-1/2 -translate-y-1/2 h-5 w-5 text-amber-500" />
-          )}
-        </div>
-        <p className="text-xs text-gray-500">
-          {serialNumber.length}/6 digits • Found on your scratch card
-        </p>
-      </div>
+        </motion.div>
 
-      {/* Card Code Input with Auto-formatting */}
-      <div className="space-y-2">
-        <Label htmlFor="card-code">Card Code</Label>
-        <div className="relative">
+        {/* Card Code Input */}
+        <motion.div
+          className="w-full lg:flex-1 space-y-2"
+          variants={itemVariants}
+        >
+          <Label htmlFor="card-code" className="text-sm">
+            Card Code
+          </Label>
           <Input
             id="card-code"
             type="text"
-            placeholder="Type the 16-digit code (auto-formatted)"
+            placeholder="XXX-HHHH-HHHH-HHHH-HHHH"
             value={cardCode}
             onChange={handleCodeChange}
             disabled={disabled}
-            maxLength={23} // 3 + 1 + 4 + 1 + 4 + 1 + 4 + 1 + 4 = 23
+            maxLength={23}
             className={cn(
-              "font-mono text-lg tracking-widest",
-              codeValid ? "border-green-500 bg-green-50" : "border-gray-300"
+              "font-mono text-base tracking-wider h-10",
+              codeValid ? "border-primary/50 bg-primary/5" : ""
             )}
           />
-          {codeValid && (
-            <CheckCircle2 className="absolute right-3 top-1/2 -translate-y-1/2 h-5 w-5 text-green-500" />
-          )}
-          {cardCode.length > 0 && !codeValid && (
-            <AlertCircle className="absolute right-3 top-1/2 -translate-y-1/2 h-5 w-5 text-amber-500" />
-          )}
-        </div>
-        <p className="text-xs text-gray-500">
-          Format: XXX-HHHH-HHHH-HHHH-HHHH
-          {cardCode.length > 0 &&
-            ` (${cardCode.replace(/-/g, "").length}/19 characters)`}
-        </p>
+        </motion.div>
       </div>
 
-      {/* Validation Summary */}
-      <div className="rounded-lg border p-4">
-        <div className="flex items-center justify-between">
-          <span className="text-sm font-medium">Validation Status</span>
-          {isValid ? (
-            <div className="flex items-center gap-2 text-green-600">
-              <CheckCircle2 className="h-5 w-5" />
-              <span className="text-sm font-semibold">Ready to Redeem</span>
-            </div>
-          ) : (
-            <div className="text-sm text-gray-500">
-              {serialNumber.length === 0 && cardCode.length === 0
-                ? "Enter both fields"
-                : !serialValid
-                ? "Serial number incomplete"
-                : !codeValid
-                ? "Card code invalid"
-                : "Checking..."}
-            </div>
-          )}
-        </div>
-      </div>
-
-      {/* Debug Info (dev only) */}
-      {process.env.NODE_ENV === "development" && (
-        <div className="rounded-lg bg-gray-100 p-3 text-xs font-mono">
-          <div>
-            Serial: {serialNumber || "(empty)"} [Valid: {String(serialValid)}]
-          </div>
-          <div>
-            Code: {cardCode || "(empty)"} [Valid: {String(codeValid)}]
-          </div>
-        </div>
+      {/* Status Message */}
+      {isValid && (
+        <motion.div
+          initial={{ opacity: 0, y: -5 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ type: "spring", stiffness: 100 }}
+          className="flex items-center gap-2 text-primary text-sm"
+        >
+          <span className="font-medium">✓ Card validated successfully</span>
+        </motion.div>
       )}
-    </div>
+    </motion.div>
   );
 }
