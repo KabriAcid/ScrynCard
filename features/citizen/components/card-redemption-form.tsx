@@ -5,10 +5,7 @@ import { useToast } from "@/hooks/use-toast";
 import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { Form } from "@/components/ui/form";
-import {
-  RedemptionSchema,
-  RedemptionFormValues,
-} from "./redemption/schema";
+import { RedemptionSchema, RedemptionFormValues } from "./redemption/schema";
 import { CardVerificationStep } from "./redemption/CardVerificationStep";
 import { PersonalDetailsStep } from "./redemption/PersonalDetailsStep";
 import { LocationStep } from "./redemption/LocationStep";
