@@ -1,5 +1,3 @@
-"use client";
-
 import { useEffect } from "react";
 import { ShieldAlert, AlertTriangle, CheckCircle, Clock } from "lucide-react";
 import { Badge } from "@/components/ui/badge";

@@ -6,12 +6,14 @@ import { UserMenu } from "@/components/dashboard/user-menu";
 import { NotificationsMenu } from "@/components/dashboard/notifications-menu";
 import { SearchCommand } from "@/components/dashboard/search-command";
 import { Shield } from "lucide-react";
+import { useAuthStore } from "@/stores/authStore";
 
 export default function AdminLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const { user } = useAuthStore();
   return (
     <div className="grid min-h-screen w-full md:grid-cols-[220px_1fr] lg:grid-cols-[280px_1fr]">
       {/* Desktop Sidebar - Server Component */}
@@ -31,7 +33,9 @@ export default function AdminLayout({
                 </AvatarFallback>
               </Avatar>
               <div className="flex flex-col">
-                <span className="font-semibold">Admin User</span>
+                <span className="font-semibold text-sm">
+                  {user?.name || "Admin User"}
+                </span>
                 <span className="text-xs text-muted-foreground">
                   Super Admin
                 </span>

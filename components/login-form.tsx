@@ -1,8 +1,5 @@
-"use client";
-
-import { useActionState } from "react";
-import { useFormStatus } from "react-dom";
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   AlertCircle,
   ArrowRight,
@@ -10,104 +7,140 @@ import {
   Mail,
   KeyRound,
 } from "lucide-react";
-import { InstantLink } from "@/components/instant-link";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { login } from "@/app/login/actions";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { useToast } from "@/hooks/use-toast";
-import Loading from "@/app/loading";
+import { useAuthStore } from "@/stores/authStore";
 
 function SubmitButton({
-  setIsLoading,
+  isLoading,
 }: {
-  setIsLoading: (isLoading: boolean) => void;
+  isLoading: boolean;
 }) {
-  const { pending } = useFormStatus();
-
-  useEffect(() => {
-    setIsLoading(pending);
-  }, [pending, setIsLoading]);
-
   return (
-    <Button type="submit" className="w-full" disabled={pending}>
-      Sign In <ArrowRight />
+    <Button type="submit" className="w-full" disabled={isLoading}>
+      {isLoading ? (
+        <>
+          <LoaderCircle className="mr-2 h-4 w-4 animate-spin" />
+          Signing In...
+        </>
+      ) : (
+        <>
+          Sign In <ArrowRight className="ml-2" />
+        </>
+      )}
     </Button>
   );
 }
 
-const initialState = {
-  message: "",
-  status: "idle" as "idle" | "success" | "error",
-};
-
 export function LoginForm() {
-  const [state, formAction] = useActionState(login, initialState);
+  const navigate = useNavigate();
   const { toast } = useToast();
+  const { login } = useAuthStore();
   const [isLoading, setIsLoading] = useState(false);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
 
-  useEffect(() => {
-    if (state?.status === "error" && state.message) {
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError("");
+    
+    if (!email || !password) {
+      setError("Please enter both email and password");
+      return;
+    }
+
+    try {
+      setIsLoading(true);
+      // Mock login using Zustand store
+      const success = await login(email, password);
+      
+      if (success) {
+        toast({
+          title: "Success",
+          description: "You have been logged in",
+        });
+        // Navigate based on role
+        const user = useAuthStore.getState().user;
+        if (user?.role === "admin") {
+          navigate("/admin");
+        } else if (user?.role === "politician") {
+          navigate("/politician");
+        } else if (user?.role === "citizen") {
+          navigate("/redeem");
+        }
+      } else {
+        setError("Login failed. Please try again.");
+      }
+    } catch (err) {
+      setError("An error occurred during login");
       toast({
         variant: "destructive",
         title: "Login Failed",
-        description: state.message,
+        description: error || "An error occurred",
       });
+    } finally {
+      setIsLoading(false);
     }
-  }, [state, toast]);
-
+  };
   return (
-    <>
-      {isLoading && <Loading />}
-      <form action={formAction} className="space-y-6">
-        {state?.status === "error" && state.message && (
-          <Alert variant={"destructive"}>
-            <AlertCircle className="h-4 w-4" />
-            <AlertTitle>Error</AlertTitle>
-            <AlertDescription>{state.message}</AlertDescription>
-          </Alert>
-        )}
-        <div className="space-y-2">
-          <Label htmlFor="email">Email Address</Label>
-          <div className="relative">
-            <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-            <Input
-              id="email"
-              name="email"
-              type="email"
-              placeholder="you@example.com"
-              required
-              className="pl-10"
-            />
-          </div>
+    <form onSubmit={handleSubmit} className="space-y-6">
+      {error && (
+        <Alert variant="destructive">
+          <AlertCircle className="h-4 w-4" />
+          <AlertTitle>Error</AlertTitle>
+          <AlertDescription>{error}</AlertDescription>
+        </Alert>
+      )}
+      <div className="space-y-2">
+        <Label htmlFor="email">Email Address</Label>
+        <div className="relative">
+          <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+          <Input
+            id="email"
+            name="email"
+            type="email"
+            placeholder="you@example.com"
+            required
+            className="pl-10"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            disabled={isLoading}
+          />
         </div>
-        <div className="space-y-2">
-          <Label htmlFor="password">Password</Label>
-          <div className="relative">
-            <KeyRound className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-            <Input
-              id="password"
-              name="password"
-              type="password"
-              placeholder="••••••••"
-              required
-              className="pl-10"
-            />
-          </div>
+      </div>
+      <div className="space-y-2">
+        <Label htmlFor="password">Password</Label>
+        <div className="relative">
+          <KeyRound className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+          <Input
+            id="password"
+            name="password"
+            type="password"
+            placeholder="••••••••"
+            required
+            className="pl-10"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            disabled={isLoading}
+          />
         </div>
-        <SubmitButton setIsLoading={setIsLoading} />
-        <div className="text-center text-sm text-muted-foreground">
-          Don't have an account?{" "}
-          <InstantLink
-            href="/order"
-            className="font-semibold text-primary hover:underline"
-          >
-            Create an order
-          </InstantLink>
-        </div>
-      </form>
-    </>
+      </div>
+      <SubmitButton isLoading={isLoading} />
+      <div className="text-center text-sm text-muted-foreground">
+        Don't have an account?{" "}
+        <button
+          type="button"
+          onClick={() => navigate("/redeem/order")}
+          className="font-semibold text-primary hover:underline"
+        >
+          Create an order
+        </button>
+      </div>
+    </form>
   );
 }

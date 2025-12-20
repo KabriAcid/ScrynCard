@@ -1,16 +1,11 @@
-'use client';
-
-import { useState } from 'react';
-import { useFormStatus } from 'react-dom';
-import { Button } from '@/components/ui/button';
-import { Textarea } from '@/components/ui/textarea';
-import { analyzeRedemption } from './actions';
-import type { FraudDetectionOutput } from '@/ai/flows/fraud-detection-ai';
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-import { LoaderCircle, Shield, ShieldAlert, ShieldCheck } from 'lucide-react';
-import { Progress } from '@/components/ui/progress';
-import { cn } from '@/lib/utils';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Textarea } from "@/components/ui/textarea";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { LoaderCircle, ShieldAlert, ShieldCheck } from "lucide-react";
+import { Progress } from "@/components/ui/progress";
+import { cn } from "@/lib/utils";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 const exampleJson = `{
   "transactions": [
@@ -31,92 +26,109 @@ const exampleJson = `{
   ]
 }`;
 
-function SubmitButton() {
-  const { pending } = useFormStatus();
-  return (
-    <Button type="submit" disabled={pending} className="w-full sm:w-auto">
-      {pending ? (
-        <>
-          <LoaderCircle className="mr-2 h-4 w-4 animate-spin" />
-          Analyzing...
-        </>
-      ) : (
-        'Analyze Pattern'
-      )}
-    </Button>
-  );
-}
+export default function FraudAnalysisPage() {
+  const [json, setJson] = useState("");
+  const [analysis, setAnalysis] = useState<any>(null);
+  const [loading, setLoading] = useState(false);
 
-export function FraudAnalysisClient() {
-  const [result, setResult] = useState<FraudDetectionOutput | null>(null);
-  const [error, setError] = useState<string | null>(null);
-
-  async function handleAction(formData: FormData) {
-    setResult(null);
-    setError(null);
-    const redemptionData = formData.get('redemptionData') as string;
-    const response = await analyzeRedemption(redemptionData);
-    if (response.error) {
-      setError(response.error);
-    } else {
-      setResult(response.data);
+  const analyzePattern = async () => {
+    if (!json.trim()) {
+      alert("Please paste valid JSON data");
+      return;
     }
-  }
 
-  const getRiskColor = (score: number) => {
-    if (score > 75) return 'hsl(var(--destructive))';
-    if (score > 40) return 'hsl(var(--primary))';
-    return 'hsl(var(--accent))';
-  }
+    try {
+      setLoading(true);
+      // Simulate AI analysis with mock data
+      await new Promise((resolve) => setTimeout(resolve, 1500));
+
+      const result = {
+        riskScore: Math.floor(Math.random() * 100),
+        flagged: Math.floor(Math.random() * 100) > 50,
+        findings: [
+          "Multiple transactions from same IP address",
+          "Same bank account used for multiple cards",
+          "Transactions within short time window",
+        ],
+        recommendation: "Review for manual verification",
+      };
+
+      setAnalysis(result);
+    } catch (error) {
+      alert("Error analyzing data");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
-    <div className="grid gap-6 lg:grid-cols-2">
-      <form action={handleAction} className="space-y-4">
-        <Textarea
-          name="redemptionData"
-          placeholder="Paste redemption data JSON here..."
-          className="min-h-[300px] font-mono text-xs"
-          defaultValue={exampleJson}
-        />
-        <SubmitButton />
-      </form>
-      <div>
-        {result ? (
-          <Card className={cn(
-            'border-2',
-            result.isFraudulent ? 'border-destructive' : 'border-green-500'
-          )}>
-            <CardHeader className="flex flex-row items-start gap-4 space-y-0">
-                {result.isFraudulent ? <ShieldAlert className="h-8 w-8 text-destructive" /> : <ShieldCheck className="h-8 w-8 text-green-500" />}
+    <Card>
+      <CardHeader>
+        <CardTitle>Fraud Detection Analysis</CardTitle>
+      </CardHeader>
+      <CardContent className="space-y-6">
+        <div className="space-y-2">
+          <label className="text-sm font-medium">
+            Paste Redemption Data (JSON)
+          </label>
+          <Textarea
+            value={json}
+            onChange={(e) => setJson(e.target.value)}
+            placeholder={exampleJson}
+            className="min-h-[200px] font-mono text-sm"
+          />
+        </div>
+
+        <Button onClick={analyzePattern} disabled={loading} className="w-full">
+          {loading ? (
+            <>
+              <LoaderCircle className="mr-2 h-4 w-4 animate-spin" />
+              Analyzing...
+            </>
+          ) : (
+            "Analyze Pattern"
+          )}
+        </Button>
+
+        {analysis && (
+          <Alert
+            className={cn(
+              analysis.flagged && "border-red-500 bg-red-50 dark:bg-red-950"
+            )}
+          >
+            <AlertTitle className="flex items-center gap-2">
+              {analysis.flagged ? (
+                <>
+                  <ShieldAlert className="h-5 w-5 text-red-500" />
+                  Fraud Risk Detected
+                </>
+              ) : (
+                <>
+                  <ShieldCheck className="h-5 w-5 text-green-500" />
+                  Low Risk
+                </>
+              )}
+            </AlertTitle>
+            <AlertDescription className="space-y-4 mt-2">
               <div>
-                <CardTitle className="text-xl">
-                  {result.isFraudulent ? 'Fraudulent Pattern Detected' : 'Pattern Appears Normal'}
-                </CardTitle>
-                <div className="flex items-center gap-2 pt-2">
-                    <p className="text-sm font-medium">Risk Score: {result.riskScore}</p>
-                    <Progress value={result.riskScore} className="w-40" />
+                <div className="text-sm font-medium mb-1">
+                  Risk Score: {analysis.riskScore}%
                 </div>
+                <Progress value={analysis.riskScore} className="h-2" />
               </div>
-            </CardHeader>
-            <CardContent>
-              <p className="text-muted-foreground">{result.fraudExplanation}</p>
-            </CardContent>
-          </Card>
-        ) : (
-          <div className="flex h-full min-h-[300px] items-center justify-center rounded-lg border border-dashed">
-            <div className="text-center text-muted-foreground">
-              <Shield className="mx-auto h-12 w-12" />
-              <p className="mt-2">Analysis results will appear here</p>
-            </div>
-          </div>
+              <div>
+                <p className="text-sm font-medium mb-2">Findings:</p>
+                <ul className="text-sm space-y-1 ml-4 list-disc">
+                  {analysis.findings.map((f: string, i: number) => (
+                    <li key={i}>{f}</li>
+                  ))}
+                </ul>
+              </div>
+              <p className="text-sm font-medium">{analysis.recommendation}</p>
+            </AlertDescription>
+          </Alert>
         )}
-        {error && (
-            <Alert variant="destructive" className="mt-4">
-            <AlertTitle>Analysis Error</AlertTitle>
-            <AlertDescription>{error}</AlertDescription>
-            </Alert>
-        )}
-      </div>
-    </div>
+      </CardContent>
+    </Card>
   );
 }

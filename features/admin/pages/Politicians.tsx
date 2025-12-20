@@ -1,5 +1,3 @@
-"use client";
-
 import { useEffect } from "react";
 import { DashboardSkeleton } from "@/components/dashboard/skeletons";
 import { useAdminStore } from "@/stores/adminStore";

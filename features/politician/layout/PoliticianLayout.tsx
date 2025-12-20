@@ -6,15 +6,18 @@ import { UserMenu } from "@/components/dashboard/user-menu";
 import { NotificationsMenu } from "@/components/dashboard/notifications-menu";
 import { SearchCommand } from "@/components/dashboard/search-command";
 import { User } from "lucide-react";
+import { useAuthStore } from "@/stores/authStore";
 
-export default function DashboardLayout({
+export default function PoliticianLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const { user } = useAuthStore();
+
   return (
     <div className="grid min-h-screen w-full md:grid-cols-[220px_1fr] lg:grid-cols-[280px_1fr]">
-      {/* Desktop Sidebar - Server Component */}
+      {/* Desktop Sidebar */}
       <div className="hidden border-r bg-card md:block">
         <div className="flex h-full max-h-screen flex-col gap-2">
           <div className="flex h-14 items-center border-b px-4 lg:h-[60px] lg:px-6">
@@ -26,14 +29,18 @@ export default function DashboardLayout({
           <div className="mt-auto p-4 border-t">
             <div className="flex items-center gap-3">
               <Avatar>
-                <AvatarImage src="https://i.pravatar.cc/150?u=a042581f4e29026704d" />
+                <AvatarImage src={`https://i.pravatar.cc/150?u=${user?.id}`} />
                 <AvatarFallback>
                   <User />
                 </AvatarFallback>
               </Avatar>
               <div className="flex flex-col">
-                <span className="font-semibold">Hon. Adebayo</span>
-                <span className="text-sm text-muted-foreground">ACN Party</span>
+                <span className="font-semibold text-sm">
+                  {user?.name || "Politician"}
+                </span>
+                <span className="text-xs text-muted-foreground">
+                  Politician
+                </span>
               </div>
             </div>
           </div>
@@ -43,15 +50,15 @@ export default function DashboardLayout({
       {/* Main Content */}
       <div className="flex flex-col">
         <header className="flex h-14 items-center gap-4 border-b bg-card px-4 lg:h-[60px] lg:px-6 backdrop-blur-sm bg-card/95 sticky top-0 z-50">
-          {/* Mobile Nav - Client Component */}
+          {/* Mobile Nav */}
           <MobileNav />
           <div className="w-full flex-1">
             <SearchCommand />
           </div>
           <div className="flex items-center gap-2">
-            {/* Notifications Menu - Client Component */}
+            {/* Notifications Menu */}
             <NotificationsMenu />
-            {/* User Menu - Client Component */}
+            {/* User Menu */}
             <UserMenu />
           </div>
         </header>

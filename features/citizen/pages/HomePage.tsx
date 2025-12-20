@@ -1,5 +1,3 @@
-"use client";
-
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Gift, ShieldCheck, TrendingUp } from "lucide-react";
 import { Logo } from "@/components/logo";

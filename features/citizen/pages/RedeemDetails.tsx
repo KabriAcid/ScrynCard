@@ -1,6 +1,11 @@
-
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { DetailsForm } from '@/components/details-form';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { DetailsForm } from "@/components/details-form";
 
 export default function RedeemDetailsPage() {
   return (
@@ -9,7 +14,9 @@ export default function RedeemDetailsPage() {
         <Card className="shadow-2xl">
           <CardHeader className="text-center">
             <CardTitle className="text-3xl font-bold">Almost there!</CardTitle>
-            <CardDescription>Please provide your details to complete the redemption.</CardDescription>
+            <CardDescription>
+              Please provide your details to complete the redemption.
+            </CardDescription>
           </CardHeader>
           <CardContent className="p-4 md:p-6">
             <DetailsForm />
@@ -19,5 +26,3 @@ export default function RedeemDetailsPage() {
     </div>
   );
 }
-
-    

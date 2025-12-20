@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -18,134 +19,53 @@ import { Badge } from "@/components/ui/badge";
 import { CheckCircle, Clock, Gift, TrendingUp, XCircle } from "lucide-react";
 import type { Redemption } from "@/lib/types";
 import { cn } from "@/lib/utils";
-import { InstantLink } from "@/components/instant-link";
-import { Suspense } from "react";
+import { useNavigate } from "react-router-dom";
 import { TableSkeleton } from "@/components/dashboard/skeletons";
-import { simulateDelay } from "@/lib/dev-utils";
+import { usePoliticianStore } from "@/stores/politicianStore";
 
-const redemptions: Redemption[] = [
-  {
-    id: "RED-001",
-    date: "2024-03-20",
-    amount: 5000,
-    status: "Completed",
-    citizenName: "Aisha Bello",
-    cardCode: "****-1234",
-    bank: "Zenith Bank",
-  },
-  {
-    id: "RED-002",
-    date: "2024-03-21",
-    amount: 2000,
-    status: "Completed",
-    citizenName: "Chinedu Okoro",
-    cardCode: "****-5678",
-    bank: "GTBank",
-  },
-  {
-    id: "RED-003",
-    date: "2024-03-22",
-    amount: 10000,
-    status: "Pending",
-    citizenName: "Fatima Garba",
-    cardCode: "****-9012",
-    bank: "First Bank",
-  },
-  {
-    id: "RED-004",
-    date: "2024-03-23",
-    amount: 5000,
-    status: "Failed",
-    citizenName: "Yusuf Ahmed",
-    cardCode: "****-3456",
-    bank: "UBA",
-  },
-  {
-    id: "RED-005",
-    date: "2024-03-24",
-    amount: 1000,
-    status: "Completed",
-    citizenName: "Ngozi Eze",
-    cardCode: "****-7890",
-    bank: "Access Bank",
-  },
-];
+export default function RedemptionPage() {
+  const navigate = useNavigate();
+  const [loading, setLoading] = useState(true);
+  const [redemptions, setRedemptions] = useState<Redemption[]>([]);
+  const { fetchOrders } = usePoliticianStore();
 
-async function RedemptionsTable() {
-  // Simulate data fetching delay (only in development)
-  await simulateDelay(800);
+  useEffect(() => {
+    const loadRedemptions = async () => {
+      try {
+        setLoading(true);
+        const orders = await fetchOrders();
+        // Transform orders to redemption format for display
+        const transformedRedemptions: Redemption[] = orders.map(
+          (order: any, index: number) => ({
+            id: order.id,
+            date: new Date(order.createdAt).toISOString().split("T")[0],
+            amount: order.amount,
+            status: "Completed",
+            citizenName: `Citizen ${index + 1}`,
+            cardCode: `****-${Math.random().toString().slice(2, 6)}`,
+            bank: "Zenith Bank",
+          })
+        );
+        setRedemptions(transformedRedemptions);
+      } catch (error) {
+        console.error("Failed to load redemptions:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
 
-  return (
-    <Table>
-      <TableHeader>
-        <TableRow>
-          <TableHead className="whitespace-nowrap">S/N</TableHead>
-          <TableHead className="whitespace-nowrap">Date</TableHead>
-          <TableHead className="whitespace-nowrap">Citizen Name</TableHead>
-          <TableHead className="whitespace-nowrap">Amount</TableHead>
-          <TableHead className="whitespace-nowrap">Card Code</TableHead>
-          <TableHead className="whitespace-nowrap">Bank</TableHead>
-          <TableHead className="whitespace-nowrap">Status</TableHead>
-          <TableHead className="whitespace-nowrap">Actions</TableHead>
-        </TableRow>
-      </TableHeader>
-      <TableBody>
-        {redemptions.map((redemption, index) => (
-          <TableRow key={redemption.id}>
-            <TableCell className="font-medium whitespace-nowrap">
-              {index + 1}
-            </TableCell>
-            <TableCell className="whitespace-nowrap">
-              {redemption.date}
-            </TableCell>
-            <TableCell className="whitespace-nowrap">
-              {redemption.citizenName}
-            </TableCell>
-            <TableCell className="whitespace-nowrap">
-              ₦{redemption.amount.toLocaleString()}
-            </TableCell>
-            <TableCell className="whitespace-nowrap">
-              {redemption.cardCode}
-            </TableCell>
-            <TableCell className="whitespace-nowrap">
-              {redemption.bank}
-            </TableCell>
-            <TableCell className="whitespace-nowrap">
-              <Badge
-                variant={
-                  redemption.status === "Completed"
-                    ? "default"
-                    : redemption.status === "Pending"
-                    ? "secondary"
-                    : "destructive"
-                }
-                className={cn("capitalize", {
-                  "bg-green-100 text-green-800 dark:bg-green-900/50 dark:text-green-300":
-                    redemption.status === "Completed",
-                  "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/50 dark:text-yellow-300":
-                    redemption.status === "Pending",
-                  "bg-red-100 text-red-800 dark:bg-red-900/50 dark:text-red-300":
-                    redemption.status === "Failed",
-                })}
-              >
-                {redemption.status}
-              </Badge>
-            </TableCell>
-            <TableCell className="whitespace-nowrap">
-              <Button asChild variant="outline" size="sm">
-                <InstantLink href={`/dashboard/redemptions/${redemption.id}`}>
-                  View Details
-                </InstantLink>
-              </Button>
-            </TableCell>
-          </TableRow>
-        ))}
-      </TableBody>
-    </Table>
-  );
-}
+    loadRedemptions();
+  }, [fetchOrders]);
 
-export default function RedemptionsPage() {
+  if (loading) {
+    return <TableSkeleton numRows={5} numCells={8} />;
+  }
+
+  const totalRedemptions = redemptions.length;
+  const successfulPayouts = redemptions
+    .filter((r) => r.status === "Completed")
+    .reduce((sum, r) => sum + r.amount, 0);
+
   return (
     <div className="grid gap-6">
       <div className="grid gap-4 md:grid-cols-2 md:gap-8 lg:grid-cols-3">
@@ -158,7 +78,7 @@ export default function RedemptionsPage() {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">
-              1,258{" "}
+              {totalRedemptions}{" "}
               <span className="text-base text-muted-foreground">/ 10,000</span>
             </div>
             <p className="text-xs text-muted-foreground">+12% from last week</p>
@@ -172,7 +92,9 @@ export default function RedemptionsPage() {
             <CheckCircle className="h-4 w-4 text-green-500" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">₦5,231,890</div>
+            <div className="text-2xl font-bold">
+              ₦{successfulPayouts.toLocaleString()}
+            </div>
             <p className="text-xs text-muted-foreground">95% success rate</p>
           </CardContent>
         </Card>
@@ -186,9 +108,78 @@ export default function RedemptionsPage() {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <Suspense fallback={<TableSkeleton numRows={5} numCells={8} />}>
-            <RedemptionsTable />
-          </Suspense>
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead className="whitespace-nowrap">S/N</TableHead>
+                <TableHead className="whitespace-nowrap">Date</TableHead>
+                <TableHead className="whitespace-nowrap">
+                  Citizen Name
+                </TableHead>
+                <TableHead className="whitespace-nowrap">Amount</TableHead>
+                <TableHead className="whitespace-nowrap">Card Code</TableHead>
+                <TableHead className="whitespace-nowrap">Bank</TableHead>
+                <TableHead className="whitespace-nowrap">Status</TableHead>
+                <TableHead className="whitespace-nowrap">Actions</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {redemptions.map((redemption, index) => (
+                <TableRow key={redemption.id}>
+                  <TableCell className="font-medium whitespace-nowrap">
+                    {index + 1}
+                  </TableCell>
+                  <TableCell className="whitespace-nowrap">
+                    {redemption.date}
+                  </TableCell>
+                  <TableCell className="whitespace-nowrap">
+                    {redemption.citizenName}
+                  </TableCell>
+                  <TableCell className="whitespace-nowrap">
+                    ₦{redemption.amount.toLocaleString()}
+                  </TableCell>
+                  <TableCell className="whitespace-nowrap">
+                    {redemption.cardCode}
+                  </TableCell>
+                  <TableCell className="whitespace-nowrap">
+                    {redemption.bank}
+                  </TableCell>
+                  <TableCell className="whitespace-nowrap">
+                    <Badge
+                      variant={
+                        redemption.status === "Completed"
+                          ? "default"
+                          : redemption.status === "Pending"
+                          ? "secondary"
+                          : "destructive"
+                      }
+                      className={cn("capitalize", {
+                        "bg-green-100 text-green-800 dark:bg-green-900/50 dark:text-green-300":
+                          redemption.status === "Completed",
+                        "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/50 dark:text-yellow-300":
+                          redemption.status === "Pending",
+                        "bg-red-100 text-red-800 dark:bg-red-900/50 dark:text-red-300":
+                          redemption.status === "Failed",
+                      })}
+                    >
+                      {redemption.status}
+                    </Badge>
+                  </TableCell>
+                  <TableCell className="whitespace-nowrap">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() =>
+                        navigate(`/politician/redemption/${redemption.id}`)
+                      }
+                    >
+                      View Details
+                    </Button>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
         </CardContent>
       </Card>
     </div>

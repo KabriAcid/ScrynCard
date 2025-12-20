@@ -9,18 +9,19 @@ import {
 import { Logo } from "@/components/logo";
 import { RedemptionForm } from "@/components/redemption-form";
 import { ArrowLeft } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 export default function RedeemPage() {
+  const navigate = useNavigate();
+
   return (
     <div className="flex min-h-screen flex-col items-center justify-center bg-background p-4">
       <header className="absolute top-0 left-0 w-full p-4 md:p-6">
         <div className="flex items-center justify-between">
           <Logo />
-          <Button variant="ghost">
-            <a href="/" className="flex items-center">
-              <ArrowLeft className="mr-2 h-4 w-4" />
-              Back to Home
-            </a>
+          <Button variant="ghost" onClick={() => navigate("/redeem")}>
+            <ArrowLeft className="mr-2 h-4 w-4" />
+            Back to Home
           </Button>
         </div>
       </header>

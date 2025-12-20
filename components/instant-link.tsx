@@ -1,30 +1,25 @@
-"use client";
+import { useNavigate } from "react-router-dom";
+import { ComponentProps, MouseEvent, ReactNode } from "react";
 
-import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { ComponentProps, MouseEvent, startTransition } from "react";
-
-type InstantLinkProps = ComponentProps<typeof Link> & {
-  instant?: boolean;
+type InstantLinkProps = Omit<ComponentProps<"button">, "onClick"> & {
+  to?: string;
+  onClick?: (e: MouseEvent<HTMLButtonElement>) => void;
+  children?: ReactNode;
 };
 
 /**
- * A Link component that navigates instantly without waiting for data fetching.
- * Set instant={true} for instant navigation with loading states.
- * Set instant={false} or omit for default Next.js behavior (prefetch and wait).
+ * A Link component that navigates using React Router instead of Next.js.
  */
 export function InstantLink({
-  instant = true,
+  to = "/",
   onClick,
+  className = "",
+  children,
   ...props
 }: InstantLinkProps) {
-  const router = useRouter();
+  const navigate = useNavigate();
 
-  if (!instant) {
-    return <Link {...props} />;
-  }
-
-  const handleClick = (e: MouseEvent<HTMLAnchorElement>) => {
+  const handleClick = (e: MouseEvent<HTMLButtonElement>) => {
     // Call custom onClick if provided
     if (onClick) {
       onClick(e);
@@ -35,22 +30,20 @@ export function InstantLink({
       return;
     }
 
-    // Prevent default link behavior
-    e.preventDefault();
+    // Navigate to the specified path
+    navigate(to);
 
     // Dispatch navigation start event for progress bar
     window.dispatchEvent(new Event("navigationStart"));
-
-    // Get the href
-    const href = props.href.toString();
-
-    // Use startTransition to mark navigation as non-urgent
-    // This allows React to show loading states immediately
-    startTransition(() => {
-      router.push(href);
-    });
   };
 
-  // prefetch={false} prevents Next.js from prefetching on hover
-  return <Link {...props} onClick={handleClick} prefetch={false} />;
+  return (
+    <button
+      {...props}
+      className={`text-blue-600 hover:underline ${className}`}
+      onClick={handleClick}
+    >
+      {children}
+    </button>
+  );
 }

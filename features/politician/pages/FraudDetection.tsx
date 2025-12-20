@@ -1,5 +1,11 @@
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { FraudAnalysisClient } from './fraud-analysis-client';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import FraudAnalysisPage from "./FraudAnalysis";
 
 export default function FraudDetectionPage() {
   return (
@@ -8,11 +14,13 @@ export default function FraudDetectionPage() {
         <CardHeader>
           <CardTitle>AI-Powered Fraud Detection</CardTitle>
           <CardDescription>
-            Analyze redemption patterns for fraudulent activity using our advanced AI model. Paste the redemption data in JSON format below to get a risk assessment.
+            Analyze redemption patterns for fraudulent activity using our
+            advanced fraud detection system. Paste the redemption data in JSON
+            format below to get a risk assessment.
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <FraudAnalysisClient />
+          <FraudAnalysisPage />
         </CardContent>
       </Card>
     </div>

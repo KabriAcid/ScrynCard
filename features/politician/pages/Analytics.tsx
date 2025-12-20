@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import {
   RedemptionOverviewChart,
   GeographicDistributionChart,
@@ -11,13 +12,33 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Users, MapPin, PartyPopper, Wallet } from "lucide-react";
-import { simulateDelay } from "@/lib/dev-utils";
-import { Suspense } from "react";
 import { DashboardSkeleton } from "@/components/dashboard/skeletons";
+import { usePoliticianStore } from "@/stores/politicianStore";
 
-async function AnalysisContent() {
-  // Simulate data fetching delay (only in development)
-  await simulateDelay(800);
+export default function AnalyticsPage() {
+  const { fetchOrderAnalytics } = usePoliticianStore();
+  const [loading, setLoading] = useState(true);
+  const [analyticsData, setAnalyticsData] = useState<any>(null);
+
+  useEffect(() => {
+    const loadAnalytics = async () => {
+      try {
+        setLoading(true);
+        const data = await fetchOrderAnalytics();
+        setAnalyticsData(data);
+      } catch (error) {
+        console.error("Failed to load analytics:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadAnalytics();
+  }, [fetchOrderAnalytics]);
+
+  if (loading) {
+    return <DashboardSkeleton />;
+  }
 
   return (
     <div className="grid gap-6">
@@ -81,13 +102,5 @@ async function AnalysisContent() {
         <GeographicDistributionChart />
       </div>
     </div>
-  );
-}
-
-export default function AnalysisPage() {
-  return (
-    <Suspense fallback={<DashboardSkeleton />}>
-      <AnalysisContent />
-    </Suspense>
   );
 }

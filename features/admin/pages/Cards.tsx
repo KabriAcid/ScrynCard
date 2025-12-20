@@ -1,5 +1,3 @@
-"use client";
-
 import { CreditCard, Layers, CheckCircle, XCircle } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { KPICard } from "@/components/admin/kpi-card";

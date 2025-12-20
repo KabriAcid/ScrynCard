@@ -1,5 +1,3 @@
-"use client";
-
 import { Megaphone } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { DashboardSkeleton } from "@/components/dashboard/skeletons";
