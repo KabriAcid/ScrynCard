@@ -1,4 +1,4 @@
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import {
   Gift,
   History,
@@ -43,6 +43,7 @@ interface DashboardNavProps {
 
 export function DashboardNav({ onNavigate }: DashboardNavProps = {}) {
   const location = useLocation();
+  const navigate = useNavigate();
 
   return (
     <nav className="grid items-start px-2 text-sm font-medium lg:px-4">
@@ -51,11 +52,11 @@ export function DashboardNav({ onNavigate }: DashboardNavProps = {}) {
           key={item.label}
           variant="ghost"
           onClick={() => {
+            navigate(item.href);
             // Close mobile sheet immediately when clicked
             if (onNavigate) {
               onNavigate();
             }
-            // Navigate to the item (would be handled by parent route)
           }}
           className={cn(
             "flex items-center justify-start gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary w-full",

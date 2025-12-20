@@ -230,6 +230,19 @@ export function OrderForm() {
   const form = useForm<OrderFormValues>({
     resolver: zodResolver(OrderSchema),
     mode: "onChange",
+    defaultValues: {
+      title: "",
+      politicianName: "",
+      politicalParty: "",
+      politicalRole: "",
+      email: "",
+      phone: "",
+      state: "",
+      lga: "",
+      ward: "",
+      photo: undefined,
+      orderItems: [],
+    },
   });
 
   const watchedValues = form.watch();
@@ -270,27 +283,6 @@ export function OrderForm() {
 
   const selectedState = form.watch("state");
   const selectedLga = form.watch("lga");
-
-  useEffect(() => {
-    if (state.status === "error" && state.message) {
-      toast({
-        variant: "destructive",
-        title: "Order Failed",
-        description: state.message,
-      });
-    }
-
-    if (state.status === "success" && state.message) {
-      toast({
-        title: "Order Successful!",
-        description: state.message,
-      });
-      // Redirect to dashboard after a short delay to allow toast to be seen
-      setTimeout(() => {
-        router.push("/dashboard");
-      }, 1000);
-    }
-  }, [state, toast, router]);
 
   const nextStep = async () => {
     const fields = STEPS[step - 1].fields;
@@ -344,9 +336,14 @@ export function OrderForm() {
     0
   );
 
-  const handleFormSubmit = (formData: FormData) => {
-    const orderItems = form.getValues("orderItems");
-    formData.append("orderItems", JSON.stringify(orderItems));
+  const handleFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    // Validate all fields before submission
+    const isValid = await form.trigger();
+    if (!isValid) return;
+
+    const formValues = form.getValues();
 
     // Clear storage before submitting
     try {
@@ -852,7 +849,7 @@ export function OrderForm() {
               Next <ArrowRight className="ml-2 h-4 w-4" />
             </Button>
           )}
-          {step === STEPS.length && <SubmitButton pending={isPending} />}
+          {step === STEPS.length && <SubmitButton pending={isLoading} />}
         </div>
       </form>
     </Form>

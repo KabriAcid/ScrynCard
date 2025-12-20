@@ -1,4 +1,4 @@
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import {
   LayoutDashboard,
   Users,
@@ -84,6 +84,7 @@ interface AdminNavProps {
 
 export function AdminNav({ onNavigate }: AdminNavProps = {}) {
   const location = useLocation();
+  const navigate = useNavigate();
 
   return (
     <nav className="grid items-start px-2 text-sm font-medium lg:px-4">
@@ -92,6 +93,7 @@ export function AdminNav({ onNavigate }: AdminNavProps = {}) {
           key={item.label}
           variant="ghost"
           onClick={() => {
+            navigate(item.href);
             if (onNavigate) {
               onNavigate();
             }

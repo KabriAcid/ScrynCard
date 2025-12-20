@@ -1,4 +1,4 @@
-import { Suspense } from "react";
+import { useState, useEffect } from "react";
 import { Bell, Mail, MessageSquare } from "lucide-react";
 import {
   Card,
@@ -11,10 +11,21 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { DashboardSkeleton } from "@/components/dashboard/skeletons";
-import { simulateDelay } from "@/lib/dev-utils";
 
-async function NotificationsContent() {
-  await simulateDelay(800);
+export default function NotificationsPage() {
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    // Simulate loading
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+    }, 800);
+    return () => clearTimeout(timer);
+  }, []);
+
+  if (isLoading) {
+    return <DashboardSkeleton />;
+  }
 
   const templates = [
     {
@@ -208,13 +219,5 @@ async function NotificationsContent() {
         </TabsContent>
       </Tabs>
     </div>
-  );
-}
-
-export default function NotificationsPage() {
-  return (
-    <Suspense fallback={<DashboardSkeleton />}>
-      <NotificationsContent />
-    </Suspense>
   );
 }

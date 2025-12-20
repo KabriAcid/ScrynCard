@@ -40,7 +40,9 @@ export default function PoliticianDashboardPage() {
     return <DashboardSkeleton />;
   }
 
-  const { politician, recentOrders } = stats;
+  const politician = stats?.politician;
+  const recentOrders = stats?.recentOrders || [];
+  const dashboardStats = stats?.stats || {};
 
   return (
     <div className="space-y-6">
@@ -62,7 +64,7 @@ export default function PoliticianDashboardPage() {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">
-              ₦{stats.stats?.totalOrderValue.toLocaleString() || "0"}
+              ₦{dashboardStats.totalOrderValue?.toLocaleString() || "0"}
             </div>
             <p className="text-xs text-muted-foreground">Total card value</p>
           </CardContent>
@@ -75,7 +77,7 @@ export default function PoliticianDashboardPage() {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">
-              {stats.stats?.activeOrders || 0}
+              {dashboardStats.activeOrders || 0}
             </div>
             <p className="text-xs text-muted-foreground">In circulation</p>
           </CardContent>
@@ -88,7 +90,7 @@ export default function PoliticianDashboardPage() {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">
-              {stats.stats?.totalRedemptions || 0}
+              {dashboardStats.totalRedemptions || 0}
             </div>
             <p className="text-xs text-muted-foreground">
               Successful transfers
@@ -105,7 +107,7 @@ export default function PoliticianDashboardPage() {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">
-              {Math.round(stats.stats?.redemptionRate || 0)}%
+              {Math.round(dashboardStats.redemptionRate || 0)}%
             </div>
             <p className="text-xs text-muted-foreground">Cards redeemed</p>
           </CardContent>
@@ -135,32 +137,40 @@ export default function PoliticianDashboardPage() {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {recentOrders.map((order: any) => (
-                <TableRow key={order.id}>
-                  <TableCell className="font-mono text-sm">
-                    {order.batchId}
-                  </TableCell>
-                  <TableCell>
-                    ₦{order.totalCardValue.toLocaleString()}
-                  </TableCell>
-                  <TableCell>
-                    <Badge
-                      variant={
-                        order.status === "completed"
-                          ? "default"
-                          : order.status === "processing"
-                          ? "secondary"
-                          : "outline"
-                      }
-                    >
-                      {order.status}
-                    </Badge>
-                  </TableCell>
-                  <TableCell>
-                    {new Date(order.createdAt).toLocaleDateString()}
+              {recentOrders && recentOrders.length > 0 ? (
+                recentOrders.map((order: any) => (
+                  <TableRow key={order.id}>
+                    <TableCell className="font-mono text-sm">
+                      {order.batchId}
+                    </TableCell>
+                    <TableCell>
+                      ₦{order.totalCardValue.toLocaleString()}
+                    </TableCell>
+                    <TableCell>
+                      <Badge
+                        variant={
+                          order.status === "completed"
+                            ? "default"
+                            : order.status === "processing"
+                            ? "secondary"
+                            : "outline"
+                        }
+                      >
+                        {order.status}
+                      </Badge>
+                    </TableCell>
+                    <TableCell>
+                      {new Date(order.createdAt).toLocaleDateString()}
+                    </TableCell>
+                  </TableRow>
+                ))
+              ) : (
+                <TableRow>
+                  <TableCell colSpan={4} className="text-center py-8">
+                    <p className="text-muted-foreground">No orders yet</p>
                   </TableCell>
                 </TableRow>
-              ))}
+              )}
             </TableBody>
           </Table>
         </CardContent>

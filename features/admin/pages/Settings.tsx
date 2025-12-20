@@ -1,4 +1,4 @@
-import { Suspense } from "react";
+import { useState, useEffect } from "react";
 import { Settings as SettingsIcon, Shield, Users, Key } from "lucide-react";
 import {
   Card,
@@ -11,10 +11,21 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { DashboardSkeleton } from "@/components/dashboard/skeletons";
-import { simulateDelay } from "@/lib/dev-utils";
 
-async function SettingsContent() {
-  await simulateDelay(800);
+export default function SettingsPage() {
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    // Simulate loading
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+    }, 800);
+    return () => clearTimeout(timer);
+  }, []);
+
+  if (isLoading) {
+    return <DashboardSkeleton />;
+  }
 
   const adminUsers = [
     {
@@ -205,13 +216,5 @@ async function SettingsContent() {
         </TabsContent>
       </Tabs>
     </div>
-  );
-}
-
-export default function SettingsPage() {
-  return (
-    <Suspense fallback={<DashboardSkeleton />}>
-      <SettingsContent />
-    </Suspense>
   );
 }
