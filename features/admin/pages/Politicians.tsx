@@ -1,68 +1,79 @@
-import { Suspense } from "react";
+"use client";
+
+import { useEffect } from "react";
 import { DashboardSkeleton } from "@/components/dashboard/skeletons";
-import { simulateDelay } from "@/lib/dev-utils";
-import prisma from "@/lib/prisma";
-import { PoliticiansClient } from "./politicians-client";
-
-async function getPoliticiansData() {
-  await simulateDelay(800);
-
-  const politicians = await prisma.politician.findMany({
-    include: {
-      _count: {
-        select: {
-          orders: true,
-        },
-      },
-    },
-  });
-
-  // Get redemption counts per politician through their orders
-  const politiciansWithStats = await Promise.all(
-    politicians.map(async (politician) => {
-      const redemptions = await prisma.redemption.count({
-        where: {
-          scratchCard: {
-            order: {
-              politicianId: politician.id,
-            },
-          },
-        },
-      });
-
-      const cardsIssued = await prisma.scratchCard.count({
-        where: {
-          order: {
-            politicianId: politician.id,
-          },
-        },
-      });
-
-      return {
-        id: politician.id,
-        name: politician.name,
-        party: politician.party,
-        status: politician.status,
-        createdAt: politician.createdAt,
-        cardsIssued,
-        redemptions,
-        alerts: politician._count.fraudAlerts,
-      };
-    })
-  );
-
-  return politiciansWithStats;
-}
-
-async function PoliticiansContent() {
-  const politicians = await getPoliticiansData();
-
-  return <PoliticiansClient politicians={politicians} />;
-}
+import { useAdminStore } from "@/stores/adminStore";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { Badge } from "@/components/ui/badge";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Users } from "lucide-react";
 
 export default function PoliticiansPage() {
+  const { politicians, isLoading, fetchPoliticians } = useAdminStore();
+
+  useEffect(() => {
+    fetchPoliticians();
+  }, [fetchPoliticians]);
+
+  if (isLoading) {
+    return <DashboardSkeleton />;
+  }
+
   return (
-    <Suspense fallback={<DashboardSkeleton />}>
+    <div className="space-y-6">
+      <div>
+        <h1 className="text-3xl font-bold flex items-center gap-2">
+          <Users className="h-8 w-8" />
+          Politicians
+        </h1>
+        <p className="mt-2 text-muted-foreground">
+          Manage all registered politicians on the platform
+        </p>
+      </div>
+
+      <Card>
+        <CardHeader>
+          <CardTitle>All Politicians ({politicians.length})</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Name</TableHead>
+                <TableHead>Party</TableHead>
+                <TableHead>Position</TableHead>
+                <TableHead>State</TableHead>
+                <TableHead>Status</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {politicians.map((politician) => (
+                <TableRow key={politician.id}>
+                  <TableCell className="font-medium">{politician.fullName}</TableCell>
+                  <TableCell>{politician.party}</TableCell>
+                  <TableCell>{politician.position}</TableCell>
+                  <TableCell>{politician.state}</TableCell>
+                  <TableCell>
+                    <Badge variant={politician.verified ? "default" : "secondary"}>
+                      {politician.verified ? "Verified" : "Pending"}
+                    </Badge>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </CardContent>
+      </Card>
+    </div>
+  );
+}
       <PoliticiansContent />
     </Suspense>
   );

@@ -1,44 +1,28 @@
-import { Suspense } from "react";
-import { UserCheck } from "lucide-react";
-import { DataTable } from "@/components/admin/data-table";
+"use client";
+
+import { UserCheck, Users, CheckCircle2, Activity } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { KPICard } from "@/components/admin/kpi-card";
-import { DashboardSkeleton } from "@/components/dashboard/skeletons";
-import { simulateDelay } from "@/lib/dev-utils";
-import prisma from "@/lib/prisma";
-import { Users, CheckCircle2, Activity } from "lucide-react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { mockCitizens } from "@/lib/mockData";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 
-async function getCitizensData() {
-  await simulateDelay(800);
+export default function CitizensPage() {
+  const citizens = mockCitizens;
+  const totalCitizens = citizens.length;
+  const verifiedCitizens = citizens.filter((c) => c.verified).length;
 
-  const [citizens, totalCitizens, citizensWithRedemptions] = await Promise.all([
-    prisma.citizen.findMany({
-      take: 100,
-      orderBy: { createdAt: "desc" },
-      include: {
-        _count: {
-          select: {
-            redemptions: true,
-          },
-        },
-      },
-    }),
-    prisma.citizen.count(),
-    prisma.citizen.count({
-      where: {
-        redemptions: {
-          some: {},
-        },
-      },
-    }),
-  ]);
-
-  return { citizens, totalCitizens, citizensWithRedemptions };
-}
-
-async function CitizensContent() {
-  const { citizens, totalCitizens, citizensWithRedemptions } =
-    await getCitizensData();
+export default function CitizensPage() {
+  const citizens = mockCitizens;
+  const totalCitizens = citizens.length;
+  const verifiedCitizens = citizens.filter((c) => c.verified).length;
 
   const kpis = [
     {
@@ -48,58 +32,21 @@ async function CitizensContent() {
     },
     {
       icon: CheckCircle2,
-      label: "With Redemptions",
-      value: citizensWithRedemptions.toLocaleString(),
+      label: "Verified Citizens",
+      value: verifiedCitizens.toLocaleString(),
     },
     {
       icon: Activity,
-      label: "Redemption Rate",
+      label: "Verification Rate",
       value:
         totalCitizens > 0
-          ? `${Math.round((citizensWithRedemptions / totalCitizens) * 100)}%`
+          ? `${Math.round((verifiedCitizens / totalCitizens) * 100)}%`
           : "0%",
     },
     {
       icon: UserCheck,
       label: "Active Users",
-      value: citizens.filter((c) => c._count.redemptions > 0).length.toString(),
-    },
-  ];
-
-  const columns = [
-    {
-      key: "name",
-      label: "Name",
-    },
-    {
-      key: "phone",
-      label: "Phone",
-      render: (value: string) => `***${value.slice(-4)}`,
-    },
-    {
-      key: "nin",
-      label: "NIN",
-      render: (value: string | null) =>
-        value ? `***${value.slice(-4)}` : "N/A",
-    },
-    {
-      key: "isVerified",
-      label: "KYC Status",
-      render: (value: boolean) => (
-        <Badge variant={value ? "default" : "secondary"}>
-          {value ? "Verified" : "Unverified"}
-        </Badge>
-      ),
-    },
-    {
-      key: "_count",
-      label: "Redemptions",
-      render: (value: any) => value.redemptions,
-    },
-    {
-      key: "createdAt",
-      label: "Joined",
-      render: (value: Date) => new Date(value).toLocaleDateString(),
+      value: citizens.filter((c) => c.kycStatus === "verified").length.toString(),
     },
   ];
 
@@ -118,20 +65,45 @@ async function CitizensContent() {
         ))}
       </div>
 
-      <DataTable
-        title="All Citizens"
-        description={`Showing ${citizens.length} citizens`}
-        columns={columns}
-        data={citizens}
-      />
+      <Card>
+        <CardHeader>
+          <CardTitle>All Citizens ({citizens.length})</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Name</TableHead>
+                <TableHead>Phone</TableHead>
+                <TableHead>KYC Status</TableHead>
+                <TableHead>Verified</TableHead>
+                <TableHead>Joined</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {citizens.map((citizen) => (
+                <TableRow key={citizen.id}>
+                  <TableCell className="font-medium">{citizen.fullName}</TableCell>
+                  <TableCell>***{citizen.phone.slice(-4)}</TableCell>
+                  <TableCell>
+                    <Badge variant="secondary" className="capitalize">
+                      {citizen.kycStatus}
+                    </Badge>
+                  </TableCell>
+                  <TableCell>
+                    <Badge variant={citizen.verified ? "default" : "secondary"}>
+                      {citizen.verified ? "Yes" : "No"}
+                    </Badge>
+                  </TableCell>
+                  <TableCell>
+                    {new Date(citizen.createdAt).toLocaleDateString()}
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </CardContent>
+      </Card>
     </div>
-  );
-}
-
-export default function CitizensPage() {
-  return (
-    <Suspense fallback={<DashboardSkeleton />}>
-      <CitizensContent />
-    </Suspense>
   );
 }

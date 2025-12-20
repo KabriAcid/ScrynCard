@@ -1,40 +1,24 @@
-import { Suspense } from "react";
-import { CreditCard, Plus } from "lucide-react";
-import { DataTable } from "@/components/admin/data-table";
+"use client";
+
+import { CreditCard, Layers, CheckCircle, XCircle } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import { KPICard } from "@/components/admin/kpi-card";
-import { DashboardSkeleton } from "@/components/dashboard/skeletons";
-import { simulateDelay } from "@/lib/dev-utils";
-import prisma from "@/lib/prisma";
-import { Layers, CheckCircle, XCircle } from "lucide-react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { mockScratchCards } from "@/lib/mockData";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 
-async function getCardsData() {
-  await simulateDelay(800);
-
-  const [cards, totalCards, activeCards, redeemedCards] = await Promise.all([
-    prisma.scratchCard.findMany({
-      take: 100,
-      orderBy: { createdAt: "desc" },
-      include: {
-        order: {
-          include: {
-            politician: true,
-          },
-        },
-      },
-    }),
-    prisma.scratchCard.count(),
-    prisma.scratchCard.count({ where: { status: "ACTIVE" } }),
-    prisma.scratchCard.count({ where: { status: "REDEEMED" } }),
-  ]);
-
-  return { cards, totalCards, activeCards, redeemedCards };
-}
-
-async function CardsContent() {
-  const { cards, totalCards, activeCards, redeemedCards } =
-    await getCardsData();
+export default function CardsPage() {
+  const cards = mockScratchCards;
+  const totalCards = cards.length;
+  const activeCards = cards.filter((c) => c.status === "active").length;
+  const redeemedCards = cards.filter((c) => c.status === "redeemed").length;
 
   const kpis = [
     {
@@ -62,53 +46,13 @@ async function CardsContent() {
     },
   ];
 
-  const columns = [
-    {
-      key: "code",
-      label: "Card Code",
-      render: (value: string) => (
-        <span className="font-mono text-xs">****-{value.slice(-4)}</span>
-      ),
-    },
-    {
-      key: "denomination",
-      label: "Amount",
-      render: (value: number) => `₦${value.toLocaleString()}`,
-    },
-    {
-      key: "order",
-      label: "Politician",
-      render: (value: any) => value?.politician?.name || "Unknown",
-    },
-    {
-      key: "isRedeemed",
-      label: "Status",
-      render: (value: boolean) => (
-        <Badge variant={value ? "default" : "secondary"}>
-          {value ? "Redeemed" : "Active"}
-        </Badge>
-      ),
-    },
-    {
-      key: "createdAt",
-      label: "Issued",
-      render: (value: Date) => new Date(value).toLocaleDateString(),
-    },
-  ];
-
   return (
     <div className="space-y-6">
-      <div className="flex items-start justify-between">
-        <div>
-          <h1 className="text-3xl font-bold">Card Batches</h1>
-          <p className="mt-2 text-muted-foreground">
-            Manage scratch card inventory
-          </p>
-        </div>
-        <Button>
-          <Plus className="mr-2 h-4 w-4" />
-          Generate Batch
-        </Button>
+      <div>
+        <h1 className="text-3xl font-bold">Card Batches</h1>
+        <p className="mt-2 text-muted-foreground">
+          Manage scratch card inventory
+        </p>
       </div>
 
       <div className="grid gap-4 md:grid-cols-2 md:gap-8 lg:grid-cols-4">
@@ -117,20 +61,43 @@ async function CardsContent() {
         ))}
       </div>
 
-      <DataTable
-        title="Recent Cards"
-        description={`Showing ${cards.length} cards`}
-        columns={columns}
-        data={cards}
-      />
+      <Card>
+        <CardHeader>
+          <CardTitle>Scratch Cards ({cards.length})</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Card Code</TableHead>
+                <TableHead>Amount</TableHead>
+                <TableHead>Status</TableHead>
+                <TableHead>Created</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {cards.map((card) => (
+                <TableRow key={card.id}>
+                  <TableCell className="font-mono text-xs">
+                    ****-{card.code.slice(-4)}
+                  </TableCell>
+                  <TableCell>₦{card.denomination.toLocaleString()}</TableCell>
+                  <TableCell>
+                    <Badge
+                      variant={card.status === "active" ? "secondary" : "default"}
+                    >
+                      {card.status}
+                    </Badge>
+                  </TableCell>
+                  <TableCell>
+                    {new Date(card.createdAt).toLocaleDateString()}
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </CardContent>
+      </Card>
     </div>
-  );
-}
-
-export default function CardsPage() {
-  return (
-    <Suspense fallback={<DashboardSkeleton />}>
-      <CardsContent />
-    </Suspense>
   );
 }

@@ -1,40 +1,39 @@
-import { Suspense } from "react";
-import { ShieldAlert } from "lucide-react";
-import { DataTable } from "@/components/admin/data-table";
+"use client";
+
+import { useEffect } from "react";
+import { ShieldAlert, AlertTriangle, CheckCircle, Clock } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { KPICard } from "@/components/admin/kpi-card";
 import { DashboardSkeleton } from "@/components/dashboard/skeletons";
-import { simulateDelay } from "@/lib/dev-utils";
-import prisma from "@/lib/prisma";
-import { AlertTriangle, CheckCircle, Clock } from "lucide-react";
+import { useAdminStore } from "@/stores/adminStore";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 
-async function getFraudData() {
-  await simulateDelay(800);
+export default function FraudPage() {
+  const { fraudAlerts, isLoading, fetchFraudAlerts, reviewFraud } =
+    useAdminStore();
 
-  const [alerts, totalAlerts, openAlerts, resolvedAlerts] = await Promise.all([
-    prisma.fraudAlert.findMany({
-      take: 50,
-      orderBy: { createdAt: "desc" },
-      include: {
-        redemption: {
-          include: {
-            citizen: true,
-          },
-        },
-        politician: true,
-      },
-    }),
-    prisma.fraudAlert.count(),
-    prisma.fraudAlert.count({ where: { resolved: false } }),
-    prisma.fraudAlert.count({ where: { resolved: true } }),
-  ]);
+  useEffect(() => {
+    fetchFraudAlerts();
+  }, [fetchFraudAlerts]);
 
-  return { alerts, totalAlerts, openAlerts, resolvedAlerts };
-}
+  if (isLoading) {
+    return <DashboardSkeleton />;
+  }
 
-async function FraudContent() {
-  const { alerts, totalAlerts, openAlerts, resolvedAlerts } =
-    await getFraudData();
+  const totalAlerts = fraudAlerts.length;
+  const openAlerts = fraudAlerts.filter(
+    (a) => a.decision === "pending_review"
+  ).length;
+  const resolvedAlerts = totalAlerts - openAlerts;
 
   const kpis = [
     {
@@ -62,60 +61,6 @@ async function FraudContent() {
     },
   ];
 
-  const columns = [
-    {
-      key: "id",
-      label: "Alert ID",
-      render: (value: string) => (
-        <span className="font-mono text-xs">{value.slice(0, 8)}...</span>
-      ),
-    },
-    {
-      key: "createdAt",
-      label: "Created",
-      render: (value: Date) => new Date(value).toLocaleDateString(),
-    },
-    {
-      key: "severity",
-      label: "Severity",
-      render: (value: string) => (
-        <Badge
-          variant={
-            value === "HIGH"
-              ? "destructive"
-              : value === "MEDIUM"
-              ? "secondary"
-              : "default"
-          }
-          className="capitalize"
-        >
-          {value.toLowerCase()}
-        </Badge>
-      ),
-    },
-    {
-      key: "reason",
-      label: "Reason",
-    },
-    {
-      key: "politician",
-      label: "Politician",
-      render: (value: any) => value?.name || "N/A",
-    },
-    {
-      key: "status",
-      label: "Status",
-      render: (value: string) => (
-        <Badge
-          variant={value === "OPEN" ? "destructive" : "default"}
-          className="capitalize"
-        >
-          {value.toLowerCase()}
-        </Badge>
-      ),
-    },
-  ];
-
   return (
     <div className="space-y-6">
       <div>
@@ -131,20 +76,94 @@ async function FraudContent() {
         ))}
       </div>
 
-      <DataTable
-        title="Fraud Alerts"
-        description={`Showing ${alerts.length} alerts`}
-        columns={columns}
-        data={alerts}
-      />
+      <Card>
+        <CardHeader>
+          <CardTitle>Fraud Alerts ({fraudAlerts.length})</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Alert ID</TableHead>
+                <TableHead>Risk Level</TableHead>
+                <TableHead>Flags</TableHead>
+                <TableHead>Decision</TableHead>
+                <TableHead>Actions</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {fraudAlerts.map((alert) => (
+                <TableRow key={alert.id}>
+                  <TableCell className="font-mono text-xs">
+                    {alert.id.slice(0, 8)}...
+                  </TableCell>
+                  <TableCell>
+                    <Badge
+                      variant={
+                        alert.riskLevel === "critical"
+                          ? "destructive"
+                          : alert.riskLevel === "high"
+                          ? "secondary"
+                          : "default"
+                      }
+                      className="capitalize"
+                    >
+                      {alert.riskLevel}
+                    </Badge>
+                  </TableCell>
+                  <TableCell>
+                    <div className="flex gap-1 flex-wrap">
+                      {alert.flags.slice(0, 2).map((flag) => (
+                        <Badge key={flag.code} variant="outline" className="text-xs">
+                          {flag.code}
+                        </Badge>
+                      ))}
+                      {alert.flags.length > 2 && (
+                        <Badge variant="outline" className="text-xs">
+                          +{alert.flags.length - 2}
+                        </Badge>
+                      )}
+                    </div>
+                  </TableCell>
+                  <TableCell>
+                    <Badge
+                      variant={
+                        alert.decision === "approved"
+                          ? "default"
+                          : alert.decision === "rejected"
+                          ? "destructive"
+                          : "secondary"
+                      }
+                      className="capitalize"
+                    >
+                      {alert.decision}
+                    </Badge>
+                  </TableCell>
+                  <TableCell>
+                    {alert.decision === "pending_review" && (
+                      <div className="flex gap-2">
+                        <Button
+                          size="sm"
+                          onClick={() => reviewFraud(alert.id, "approved")}
+                        >
+                          Approve
+                        </Button>
+                        <Button
+                          size="sm"
+                          variant="destructive"
+                          onClick={() => reviewFraud(alert.id, "rejected")}
+                        >
+                          Reject
+                        </Button>
+                      </div>
+                    )}
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </CardContent>
+      </Card>
     </div>
-  );
-}
-
-export default function FraudPage() {
-  return (
-    <Suspense fallback={<DashboardSkeleton />}>
-      <FraudContent />
-    </Suspense>
   );
 }

@@ -1,129 +1,87 @@
-import { Suspense } from "react";
+"use client";
+
+import { useEffect } from "react";
 import { Gift } from "lucide-react";
-import { DataTable } from "@/components/admin/data-table";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import { DashboardSkeleton } from "@/components/dashboard/skeletons";
-import { simulateDelay } from "@/lib/dev-utils";
-import { InstantLink } from "@/components/instant-link";
-import prisma from "@/lib/prisma";
-import { cn } from "@/lib/utils";
+import { useAdminStore } from "@/stores/adminStore";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 
-async function getRedemptionsData() {
-  await simulateDelay(800);
+export default function RedemptionsPage() {
+  const { redemptions, isLoading, fetchRedemptions } = useAdminStore();
 
-  const redemptions = await prisma.redemption.findMany({
-    take: 50,
-    orderBy: { createdAt: "desc" },
-    include: {
-      citizen: true,
-      scratchCard: {
-        include: {
-          order: {
-            include: {
-              politician: true,
-            },
-          },
-        },
-      },
-    },
-  });
+  useEffect(() => {
+    fetchRedemptions();
+  }, [fetchRedemptions]);
 
-  return redemptions;
-}
+  if (isLoading) {
+    return <DashboardSkeleton />;
+  }
 
-async function RedemptionsContent() {
-  const redemptions = await getRedemptionsData();
-
-  const columns = [
-    {
-      key: "id",
-      label: "ID",
-      render: (value: string) => (
-        <span className="font-mono text-xs">{value.slice(0, 8)}...</span>
-      ),
-    },
-    {
-      key: "createdAt",
-      label: "Date",
-      render: (value: Date) => new Date(value).toLocaleDateString(),
-    },
-    {
-      key: "citizen",
-      label: "Citizen",
-      render: (value: any) => value?.name || "Unknown",
-    },
-    {
-      key: "amount",
-      label: "Amount",
-      render: (value: number) => `₦${value.toLocaleString()}`,
-    },
-    {
-      key: "scratchCard",
-      label: "Politician",
-      render: (value: any) => value?.order?.politician?.name || "Unknown",
-    },
-    {
-      key: "bankName",
-      label: "Bank",
-    },
-    {
-      key: "status",
-      label: "Status",
-      render: (value: string) => (
-        <Badge
-          variant={
-            value === "COMPLETED"
-              ? "default"
-              : value === "PENDING"
-              ? "secondary"
-              : "destructive"
-          }
-          className={cn("capitalize", {
-            "bg-green-100 text-green-800 dark:bg-green-900/50 dark:text-green-300":
-              value === "COMPLETED",
-            "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/50 dark:text-yellow-300":
-              value === "PENDING",
-            "bg-red-100 text-red-800 dark:bg-red-900/50 dark:text-red-300":
-              value === "FAILED",
-          })}
-        >
-          {value.toLowerCase()}
-        </Badge>
-      ),
-    },
-    {
-      key: "id",
-      label: "Actions",
-      render: (value: string) => (
-        <Button asChild variant="outline" size="sm">
-          <InstantLink href={`/admin/redemptions/${value}`}>View</InstantLink>
-        </Button>
-      ),
-    },
-  ];
+  if (isLoading) {
+    return <DashboardSkeleton />;
+  }
 
   return (
     <div className="space-y-6">
-      <div className="flex items-start justify-between">
-        <div>
-          <h1 className="text-3xl font-bold">Redemptions</h1>
-          <p className="mt-2 text-muted-foreground">
-            All platform redemptions across politicians
-          </p>
-        </div>
-        <Button variant="outline">
-          <Gift className="mr-2 h-4 w-4" />
-          Export CSV
-        </Button>
+      <div>
+        <h1 className="text-3xl font-bold">Redemptions</h1>
+        <p className="mt-2 text-muted-foreground">
+          All platform redemptions across politicians
+        </p>
       </div>
 
-      <DataTable
-        title="All Redemptions"
-        description={`Showing ${redemptions.length} redemptions`}
-        columns={columns}
-        data={redemptions}
-      />
+      <Card>
+        <CardHeader>
+          <CardTitle>All Redemptions ({redemptions.length})</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Date</TableHead>
+                <TableHead>Citizen</TableHead>
+                <TableHead>Amount</TableHead>
+                <TableHead>Bank</TableHead>
+                <TableHead>Status</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {redemptions.map((redemption) => (
+                <TableRow key={redemption.id}>
+                  <TableCell>
+                    {new Date(redemption.createdAt).toLocaleDateString()}
+                  </TableCell>
+                  <TableCell>{redemption.citizen?.fullName || "Unknown"}</TableCell>
+                  <TableCell>₦{redemption.amount.toLocaleString()}</TableCell>
+                  <TableCell>{redemption.bankName}</TableCell>
+                  <TableCell>
+                    <Badge
+                      variant={
+                        redemption.status === "completed"
+                          ? "default"
+                          : redemption.status === "processing"
+                          ? "secondary"
+                          : "destructive"
+                      }
+                    >
+                      {redemption.status}
+                    </Badge>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </CardContent>
+      </Card>
     </div>
   );
 }

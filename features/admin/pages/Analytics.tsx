@@ -1,4 +1,6 @@
-import { Suspense } from "react";
+"use client";
+
+import { useEffect } from "react";
 import {
   BarChart3,
   TrendingUp,
@@ -12,38 +14,22 @@ import {
   RedemptionOverviewChart,
 } from "@/components/dashboard/analytics-charts";
 import { DashboardSkeleton } from "@/components/dashboard/skeletons";
-import { simulateDelay } from "@/lib/dev-utils";
-import prisma from "@/lib/prisma";
+import { useAdminStore } from "@/stores/adminStore";
 
-async function getAnalyticsData() {
-  await simulateDelay(800);
+export default function AnalyticsPage() {
+  const { stats, isLoading, fetchStats } = useAdminStore();
 
-  const [totalRedemptions, totalAmount, activePoliticians, totalCitizens] =
-    await Promise.all([
-      prisma.redemption.count(),
-      prisma.redemption.aggregate({
-        _sum: { amount: true },
-      }),
-      prisma.politician.count({
-        where: {
-          orders: {
-            some: {},
-          },
-        },
-      }),
-      prisma.citizen.count(),
-    ]);
+  useEffect(() => {
+    fetchStats();
+  }, [fetchStats]);
 
-  return {
-    totalRedemptions,
-    totalAmount: totalAmount._sum.amount || 0,
-    activePoliticians,
-    totalCitizens,
-  };
-}
+  if (isLoading) {
+    return <DashboardSkeleton />;
+  }
 
-async function AnalyticsContent() {
-  const stats = await getAnalyticsData();
+  if (!stats) {
+    return <div>Failed to load analytics</div>;
+  }
 
   const kpis = [
     {
@@ -56,21 +42,21 @@ async function AnalyticsContent() {
     {
       icon: DollarSign,
       label: "Total Value",
-      value: `₦${stats.totalAmount.toLocaleString()}`,
+      value: `₦${stats.totalRedemptionAmount.toLocaleString()}`,
       change: "23%",
       trend: "up" as const,
     },
     {
       icon: Users,
       label: "Active Politicians",
-      value: stats.activePoliticians.toString(),
+      value: stats.totalPoliticians.toString(),
       change: "8%",
       trend: "up" as const,
     },
     {
       icon: Activity,
-      label: "Total Citizens",
-      value: stats.totalCitizens.toLocaleString(),
+      label: "Cards Circulating",
+      value: stats.totalCardsCirculation.toLocaleString(),
       change: "12%",
       trend: "up" as const,
     },
@@ -96,13 +82,5 @@ async function AnalyticsContent() {
         <PartyAffiliationChart />
       </div>
     </div>
-  );
-}
-
-export default function AnalyticsPage() {
-  return (
-    <Suspense fallback={<DashboardSkeleton />}>
-      <AnalyticsContent />
-    </Suspense>
   );
 }
