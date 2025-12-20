@@ -10,12 +10,12 @@ import { useEffect, useState } from "react";
 
 export function AdminMobileNav() {
   const [open, setOpen] = useState(false);
-  const pathname = usePathname();
+  const location = useLocation();
 
-  // Close mobile nav when route changes
+  // Close sidebar when route changes
   useEffect(() => {
     setOpen(false);
-  }, [pathname]);
+  }, [location.pathname]);
 
   return (
     <Sheet open={open} onOpenChange={setOpen}>

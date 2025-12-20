@@ -1,21 +1,19 @@
-"use client";
-
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
 import { Menu } from "lucide-react";
 import { Logo } from "@/components/logo";
 import { DashboardNav } from "@/components/dashboard/nav";
 import { useState, useEffect } from "react";
-import { usePathname } from "next/navigation";
+import { useLocation } from "react-router-dom";
 
 export function MobileNav() {
   const [open, setOpen] = useState(false);
-  const pathname = usePathname();
+  const location = useLocation();
 
   // Close sidebar when route changes
   useEffect(() => {
     setOpen(false);
-  }, [pathname]);
+  }, [location.pathname]);
 
   return (
     <Sheet open={open} onOpenChange={setOpen}>

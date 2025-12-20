@@ -15,11 +15,7 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { useToast } from "@/hooks/use-toast";
 import { useAuthStore } from "@/stores/authStore";
 
-function SubmitButton({
-  isLoading,
-}: {
-  isLoading: boolean;
-}) {
+function SubmitButton({ isLoading }: { isLoading: boolean }) {
   return (
     <Button type="submit" className="w-full" disabled={isLoading}>
       {isLoading ? (
@@ -48,7 +44,7 @@ export function LoginForm() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
-    
+
     if (!email || !password) {
       setError("Please enter both email and password");
       return;
@@ -58,7 +54,7 @@ export function LoginForm() {
       setIsLoading(true);
       // Mock login using Zustand store
       const success = await login(email, password);
-      
+
       if (success) {
         toast({
           title: "Success",

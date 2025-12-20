@@ -1,6 +1,4 @@
-"use client";
-
-import { usePathname } from "next/navigation";
+import { useLocation } from "react-router-dom";
 import {
   LayoutDashboard,
   Users,
@@ -15,7 +13,7 @@ import {
 } from "lucide-react";
 import type { NavItem } from "@/lib/types";
 import { cn } from "@/lib/utils";
-import { InstantLink } from "@/components/instant-link";
+import { Button } from "@/components/ui/button";
 
 const navItems: NavItem[] = [
   {
@@ -85,31 +83,31 @@ interface AdminNavProps {
 }
 
 export function AdminNav({ onNavigate }: AdminNavProps = {}) {
-  const pathname = usePathname();
+  const location = useLocation();
 
   return (
     <nav className="grid items-start px-2 text-sm font-medium lg:px-4">
       {navItems.map((item) => (
-        <InstantLink
+        <Button
           key={item.label}
-          href={item.href}
+          variant="ghost"
           onClick={() => {
             if (onNavigate) {
               onNavigate();
             }
           }}
           className={cn(
-            "flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary",
+            "flex items-center justify-start gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary w-full",
             {
               "bg-muted text-primary":
-                pathname.startsWith(item.href) &&
-                (item.href !== "/admin" || pathname === "/admin"),
+                location.pathname.startsWith(item.href) &&
+                (item.href !== "/admin" || location.pathname === "/admin"),
             }
           )}
         >
           <item.icon className="h-4 w-4" />
           {item.label}
-        </InstantLink>
+        </Button>
       ))}
     </nav>
   );

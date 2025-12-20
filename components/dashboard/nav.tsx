@@ -62,7 +62,8 @@ export function DashboardNav({ onNavigate }: DashboardNavProps = {}) {
             {
               "bg-muted text-primary":
                 location.pathname.startsWith(item.href) &&
-                (item.href !== "/politician" || location.pathname === "/politician"),
+                (item.href !== "/politician" ||
+                  location.pathname === "/politician"),
             }
           )}
         >

@@ -1,6 +1,4 @@
-'use client';
-
-import React, { useActionState, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useForm, useFieldArray } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -10,14 +8,13 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
-import { createOrder } from '@/app/order/actions';
 import { useToast } from '@/hooks/use-toast';
 import { Alert, AlertDescription, AlertTitle } from '../ui/alert';
 import { cn } from '@/lib/utils';
 import { DenominationPicker } from '../ui/form-elements/denomination-picker';
 import { QuantityInput } from '../ui/form-elements/quantity-input';
 import { Card } from '../ui/card';
-import { useRouter } from 'next/navigation';
+import { useNavigate } from 'react-router-dom';
 
 const politicalParties = ["ACN", "PDP", "APC", "LP", "NNPP", "APGA"];
 const titles = ["Hon.", "Chief", "Dr.", "Mr.", "Mrs.", "Ms."];
@@ -139,9 +136,9 @@ const stepVariants = {
 const FORM_STORAGE_KEY = 'scryn-order-form';
 
 export function OrderForm() {
-  const [state, formAction, isPending] = useActionState(createOrder, initialState);
+  const navigate = useNavigate();
   const { toast } = useToast();
-  const router = useRouter();
+  const [isLoading, setIsLoading] = useState(false);
   const [step, setStep] = useState(1);
   const [direction, setDirection] = useState(1);
   const [photoPreview, setPhotoPreview] = useState<string | null>(null);
