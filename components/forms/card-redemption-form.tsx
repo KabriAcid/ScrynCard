@@ -152,7 +152,7 @@ export function CardRedemptionForm() {
       <form onSubmit={form.handleSubmit(onSubmit)} className="w-full">
         {/* Premium Step Indicator */}
         <motion.div
-          className="mb-8 bg-card border border-border rounded-lg p-6"
+          className="mb-8 bg-gradient-to-r from-blue-600/10 to-blue-500/10 border border-blue-500/30 rounded-lg p-6 backdrop-blur-sm"
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
@@ -163,10 +163,10 @@ export function CardRedemptionForm() {
               <motion.div
                 className={`flex items-center justify-center w-12 h-12 rounded-full font-bold text-sm transition-all ${
                   step === 1
-                    ? "bg-primary text-primary-foreground ring-4 ring-primary/30"
+                    ? "bg-blue-600 text-white ring-4 ring-blue-400/50"
                     : step > 1
-                    ? "bg-primary text-primary-foreground"
-                    : "bg-muted text-muted-foreground"
+                    ? "bg-green-600 text-white"
+                    : "bg-slate-700 text-slate-400"
                 }`}
                 animate={{
                   scale: step === 1 ? 1 : 1,
@@ -176,9 +176,9 @@ export function CardRedemptionForm() {
               </motion.div>
 
               {/* Progress Bar */}
-              <div className="h-1 flex-1 bg-border rounded-full overflow-hidden">
+              <div className="h-1 flex-1 bg-slate-700 rounded-full overflow-hidden">
                 <motion.div
-                  className="h-full bg-primary"
+                  className="h-full bg-gradient-to-r from-blue-600 to-blue-500"
                   initial={{ width: "0%" }}
                   animate={{ width: step > 1 ? "100%" : "0%" }}
                   transition={{ duration: 0.6, ease: "easeInOut" }}
@@ -189,10 +189,10 @@ export function CardRedemptionForm() {
               <motion.div
                 className={`flex items-center justify-center w-12 h-12 rounded-full font-bold text-sm transition-all ${
                   step === 2
-                    ? "bg-primary text-primary-foreground ring-4 ring-primary/30"
+                    ? "bg-blue-600 text-white ring-4 ring-blue-400/50"
                     : step > 2
-                    ? "bg-primary text-primary-foreground"
-                    : "bg-muted text-muted-foreground"
+                    ? "bg-green-600 text-white"
+                    : "bg-slate-700 text-slate-400"
                 }`}
                 animate={{
                   scale: step === 2 ? 1 : 1,
@@ -204,8 +204,10 @@ export function CardRedemptionForm() {
 
             {/* Step Label */}
             <div className="ml-4 text-right">
-              <p className="text-sm font-medium">Step {step} of 2</p>
-              <p className="text-xs text-muted-foreground mt-1">
+              <p className="text-sm text-slate-300 font-medium">
+                Step {step} of 2
+              </p>
+              <p className="text-xs text-slate-400 mt-1">
                 {step === 1 ? "Card Information" : "Bank Details"}
               </p>
             </div>
@@ -228,12 +230,14 @@ export function CardRedemptionForm() {
                 className="flex items-center gap-3 mb-6"
                 variants={itemVariants}
               >
-                <div className="p-2 bg-primary/10 rounded-lg">
-                  <CreditCard className="h-5 w-5 text-primary" />
+                <div className="p-2 bg-blue-600/20 rounded-lg">
+                  <CreditCard className="h-5 w-5 text-blue-400" />
                 </div>
                 <div>
-                  <h3 className="font-semibold text-lg">Verify Your Card</h3>
-                  <p className="text-muted-foreground text-sm">
+                  <h3 className="text-white font-semibold text-lg">
+                    Verify Your Card
+                  </h3>
+                  <p className="text-slate-400 text-sm">
                     Enter your scratch card details
                   </p>
                 </div>
@@ -251,7 +255,7 @@ export function CardRedemptionForm() {
                   type="button"
                   onClick={handleNextStep}
                   disabled={!cardValid || isLoading}
-                  className="w-full"
+                  className="w-full bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-700 hover:to-blue-600 disabled:from-slate-700 disabled:to-slate-700 text-white font-semibold py-2 h-12 rounded-lg transition-all shadow-lg"
                   size="lg"
                 >
                   {isLoading ? (
@@ -284,14 +288,14 @@ export function CardRedemptionForm() {
                 className="flex items-center gap-3 mb-6"
                 variants={itemVariants}
               >
-                <div className="p-2 bg-primary/10 rounded-lg">
-                  <Building2 className="h-5 w-5 text-primary" />
+                <div className="p-2 bg-green-600/20 rounded-lg">
+                  <Building2 className="h-5 w-5 text-green-400" />
                 </div>
                 <div>
-                  <h3 className="font-semibold text-lg">
+                  <h3 className="text-white font-semibold text-lg">
                     Bank Account Details
                   </h3>
-                  <p className="text-muted-foreground text-sm">
+                  <p className="text-slate-400 text-sm">
                     Where should we send your funds?
                   </p>
                 </div>
@@ -306,16 +310,16 @@ export function CardRedemptionForm() {
                     <FormItem>
                       <FormControl>
                         <div className="relative group">
-                          <Building2 className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground group-focus-within:text-primary transition-colors" />
+                          <Building2 className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-500 group-focus-within:text-blue-400 transition-colors" />
                           <Input
                             placeholder="Bank Name (e.g., Zenith Bank)"
                             {...field}
                             disabled={isLoading}
-                            className="pl-10"
+                            className="pl-10 bg-slate-800 border-slate-700 text-white placeholder:text-slate-500 focus:border-blue-500 focus:ring-blue-500/30 h-11"
                           />
                         </div>
                       </FormControl>
-                      <FormMessage className="text-xs" />
+                      <FormMessage className="text-red-400 text-xs" />
                     </FormItem>
                   )}
                 />
@@ -330,17 +334,17 @@ export function CardRedemptionForm() {
                     <FormItem>
                       <FormControl>
                         <div className="relative group">
-                          <DollarSign className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground group-focus-within:text-primary transition-colors" />
+                          <DollarSign className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-500 group-focus-within:text-blue-400 transition-colors" />
                           <Input
                             placeholder="Account Number (10 digits)"
                             {...field}
                             disabled={isLoading}
                             maxLength={10}
-                            className="pl-10"
+                            className="pl-10 bg-slate-800 border-slate-700 text-white placeholder:text-slate-500 focus:border-blue-500 focus:ring-blue-500/30 h-11"
                           />
                         </div>
                       </FormControl>
-                      <FormMessage className="text-xs" />
+                      <FormMessage className="text-red-400 text-xs" />
                     </FormItem>
                   )}
                 />
@@ -355,16 +359,16 @@ export function CardRedemptionForm() {
                     <FormItem>
                       <FormControl>
                         <div className="relative group">
-                          <User className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground group-focus-within:text-primary transition-colors" />
+                          <User className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-500 group-focus-within:text-blue-400 transition-colors" />
                           <Input
                             placeholder="Full Name on Account"
                             {...field}
                             disabled={isLoading}
-                            className="pl-10"
+                            className="pl-10 bg-slate-800 border-slate-700 text-white placeholder:text-slate-500 focus:border-blue-500 focus:ring-blue-500/30 h-11"
                           />
                         </div>
                       </FormControl>
-                      <FormMessage className="text-xs" />
+                      <FormMessage className="text-red-400 text-xs" />
                     </FormItem>
                   )}
                 />
@@ -379,16 +383,16 @@ export function CardRedemptionForm() {
                     <FormItem>
                       <FormControl>
                         <div className="relative group">
-                          <Phone className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground group-focus-within:text-primary transition-colors" />
+                          <Phone className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-500 group-focus-within:text-blue-400 transition-colors" />
                           <Input
                             placeholder="Phone Number"
                             {...field}
                             disabled={isLoading}
-                            className="pl-10"
+                            className="pl-10 bg-slate-800 border-slate-700 text-white placeholder:text-slate-500 focus:border-blue-500 focus:ring-blue-500/30 h-11"
                           />
                         </div>
                       </FormControl>
-                      <FormMessage className="text-xs" />
+                      <FormMessage className="text-red-400 text-xs" />
                     </FormItem>
                   )}
                 />
@@ -401,7 +405,7 @@ export function CardRedemptionForm() {
                   variant="outline"
                   onClick={() => setStep(1)}
                   disabled={isLoading}
-                  className="flex-1"
+                  className="flex-1 bg-slate-800 border-slate-700 text-slate-300 hover:bg-slate-700 hover:text-white h-11"
                   size="lg"
                 >
                   ← Back
@@ -409,7 +413,7 @@ export function CardRedemptionForm() {
                 <Button
                   type="submit"
                   disabled={isLoading}
-                  className="flex-1"
+                  className="flex-1 bg-gradient-to-r from-green-600 to-green-500 hover:from-green-700 hover:to-green-600 disabled:from-slate-700 disabled:to-slate-700 text-white font-semibold h-11 rounded-lg transition-all shadow-lg"
                   size="lg"
                 >
                   {isLoading ? (

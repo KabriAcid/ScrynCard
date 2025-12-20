@@ -8,6 +8,7 @@ import {
   formatCardCode,
   formatSerialNumber,
 } from "@/lib/card-security";
+import { CheckCircle2, AlertCircle } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 interface CardRedemptionInputProps {
@@ -101,19 +102,41 @@ export function CardRedemptionInput({
           <Label htmlFor="serial-number" className="text-sm">
             Serial
           </Label>
-          <Input
-            id="serial-number"
-            type="text"
-            placeholder="123456"
-            value={serialNumber}
-            onChange={handleSerialChange}
-            disabled={disabled}
-            maxLength={6}
-            className={cn(
-              "font-mono text-base tracking-wider h-10 w-full lg:w-32",
-              serialValid ? "border-primary/50 bg-primary/5" : ""
+          <div className="relative">
+            <Input
+              id="serial-number"
+              type="text"
+              placeholder="123456"
+              value={serialNumber}
+              onChange={handleSerialChange}
+              disabled={disabled}
+              maxLength={6}
+              className={cn(
+                "font-mono text-base tracking-wider h-10 w-full lg:w-32",
+                serialValid ? "border-green-500 bg-green-50" : "border-gray-300"
+              )}
+            />
+            {serialValid && (
+              <motion.div
+                initial="hidden"
+                animate="visible"
+                variants={checkmarkVariants}
+                className="absolute right-3 top-1/2 -translate-y-1/2"
+              >
+                <CheckCircle2 className="h-4 w-4 text-green-500" />
+              </motion.div>
             )}
-          />
+            {serialNumber.length > 0 && !serialValid && (
+              <motion.div
+                initial="hidden"
+                animate="visible"
+                variants={checkmarkVariants}
+                className="absolute right-3 top-1/2 -translate-y-1/2"
+              >
+                <AlertCircle className="h-4 w-4 text-amber-500" />
+              </motion.div>
+            )}
+          </div>
         </motion.div>
 
         {/* Card Code Input */}
@@ -124,19 +147,41 @@ export function CardRedemptionInput({
           <Label htmlFor="card-code" className="text-sm">
             Card Code
           </Label>
-          <Input
-            id="card-code"
-            type="text"
-            placeholder="XXX-HHHH-HHHH-HHHH-HHHH"
-            value={cardCode}
-            onChange={handleCodeChange}
-            disabled={disabled}
-            maxLength={23}
-            className={cn(
-              "font-mono text-base tracking-wider h-10",
-              codeValid ? "border-primary/50 bg-primary/5" : ""
+          <div className="relative">
+            <Input
+              id="card-code"
+              type="text"
+              placeholder="XXX-HHHH-HHHH-HHHH-HHHH"
+              value={cardCode}
+              onChange={handleCodeChange}
+              disabled={disabled}
+              maxLength={23}
+              className={cn(
+                "font-mono text-base tracking-wider h-10",
+                codeValid ? "border-green-500 bg-green-50" : "border-gray-300"
+              )}
+            />
+            {codeValid && (
+              <motion.div
+                initial="hidden"
+                animate="visible"
+                variants={checkmarkVariants}
+                className="absolute right-3 top-1/2 -translate-y-1/2"
+              >
+                <CheckCircle2 className="h-4 w-4 text-green-500" />
+              </motion.div>
             )}
-          />
+            {cardCode.length > 0 && !codeValid && (
+              <motion.div
+                initial="hidden"
+                animate="visible"
+                variants={checkmarkVariants}
+                className="absolute right-3 top-1/2 -translate-y-1/2"
+              >
+                <AlertCircle className="h-4 w-4 text-amber-500" />
+              </motion.div>
+            )}
+          </div>
         </motion.div>
       </div>
 
@@ -146,9 +191,10 @@ export function CardRedemptionInput({
           initial={{ opacity: 0, y: -5 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ type: "spring", stiffness: 100 }}
-          className="flex items-center gap-2 text-primary text-sm"
+          className="flex items-center gap-2 text-green-600 text-sm"
         >
-          <span className="font-medium">✓ Card validated successfully</span>
+          <CheckCircle2 className="h-4 w-4" />
+          <span className="font-medium">Ready to redeem</span>
         </motion.div>
       )}
     </motion.div>
