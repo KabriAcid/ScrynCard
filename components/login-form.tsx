@@ -52,30 +52,31 @@ export function LoginForm() {
 
     try {
       setIsLoading(true);
-      // Mock login using Zustand store
-      const success = await login(email, password);
+      // Auto-login without auth validation
+      await login(email, password);
 
-      if (success) {
+      // Get user from store and navigate
+      const user = useAuthStore.getState().user;
+
+      if (user) {
         toast({
           title: "Success",
           description: "You have been logged in",
         });
-        // Navigate based on role
-        const user = useAuthStore.getState().user;
-        if (user?.role === "admin") {
+
+        // Auto-redirect based on role
+        if (user.role === "admin") {
           navigate("/admin");
-        } else if (user?.role === "politician") {
+        } else if (user.role === "politician") {
           navigate("/politician");
         }
-      } else {
-        setError("Login failed. Please try again.");
       }
-    } catch (err) {
-      setError("An error occurred during login");
+    } catch (err: any) {
+      setError(err.message || "An error occurred during login");
       toast({
         variant: "destructive",
         title: "Login Failed",
-        description: error || "An error occurred",
+        description: err.message || "An error occurred",
       });
     } finally {
       setIsLoading(false);
