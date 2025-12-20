@@ -23,6 +23,7 @@ interface PersonalDetailsStepProps {
   isLoading: boolean;
   onNext: () => void;
   onPrev: () => void;
+  isFirstStep?: boolean;
 }
 
 const itemVariants = {
@@ -45,6 +46,7 @@ export function PersonalDetailsStep({
   isLoading,
   onNext,
   onPrev,
+  isFirstStep = false,
 }: PersonalDetailsStepProps) {
   return (
     <motion.div
@@ -194,21 +196,23 @@ export function PersonalDetailsStep({
       </div>
 
       <motion.div className="flex gap-3 pt-4" variants={itemVariants}>
-        <Button
-          type="button"
-          variant="outline"
-          onClick={onPrev}
-          disabled={isLoading}
-          className="flex-1 h-11"
-          size="lg"
-        >
-          ← Back
-        </Button>
+        {!isFirstStep && (
+          <Button
+            type="button"
+            variant="outline"
+            onClick={onPrev}
+            disabled={isLoading}
+            className="flex-1 h-11"
+            size="lg"
+          >
+            ← Back
+          </Button>
+        )}
         <Button
           type="button"
           onClick={onNext}
           disabled={isLoading}
-          className="flex-1 h-11"
+          className={isFirstStep ? "w-full h-11" : "flex-1 h-11"}
           size="lg"
         >
           {isLoading ? (

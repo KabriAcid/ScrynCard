@@ -1,5 +1,6 @@
+import React from "react";
 import { motion } from "framer-motion";
-import { Heart, LoaderCircle } from "lucide-react";
+import { Heart, LoaderCircle, AlertCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   FormControl,
@@ -40,6 +41,7 @@ export function PartySelectionStep({
   onPrev,
 }: PartySelectionStepProps) {
   const selectedParty = form.watch("favoriteParty");
+  const [logoErrors, setLogoErrors] = React.useState<Set<string>>(new Set());
 
   return (
     <motion.div
@@ -88,15 +90,24 @@ export function PartySelectionStep({
                       disabled={isLoading}
                     >
                       <div className="flex flex-col items-center gap-2">
-                        <img
-                          src={party.logo}
-                          alt={party.name}
-                          className="h-12 w-12 object-contain"
-                          onError={(e) => {
-                            const target = e.target as HTMLImageElement;
-                            target.style.display = "none";
-                          }}
-                        />
+                        {!logoErrors.has(party.name) ? (
+                          <img
+                            src={party.logo}
+                            alt={party.name}
+                            className="h-12 w-12 object-contain"
+                            onError={() => {
+                              setLogoErrors(
+                                (prev) => new Set([...prev, party.name])
+                              );
+                            }}
+                          />
+                        ) : (
+                          <div className="h-12 w-12 bg-muted rounded flex items-center justify-center">
+                            <span className="text-xs font-bold text-muted-foreground">
+                              {party.name}
+                            </span>
+                          </div>
+                        )}
                         <span className="text-xs font-semibold text-foreground text-center">
                           {party.name}
                         </span>

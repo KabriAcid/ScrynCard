@@ -55,7 +55,7 @@ export function CardVerificationStep({
             Verify Your Card
           </h3>
           <p className="text-muted-foreground text-sm">
-            Standalone Step: Enter your scratch card details to proceed
+            Enter your scratch card details to proceed
           </p>
         </div>
       </motion.div>
