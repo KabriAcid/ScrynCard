@@ -92,12 +92,12 @@ export function validateCardCode(code: string): boolean {
     return false;
   }
 
-  // Validate each hash segment: 4 hex characters each
+  // Validate each hash segment: 4 hex characters each (case-insensitive)
   if (
-    !h1.match(/^[A-F0-9]{4}$/) ||
-    !h2.match(/^[A-F0-9]{4}$/) ||
-    !h3.match(/^[A-F0-9]{4}$/) ||
-    !h4.match(/^[A-F0-9]{4}$/)
+    !h1.match(/^[A-Fa-f0-9]{4}$/i) ||
+    !h2.match(/^[A-Fa-f0-9]{4}$/i) ||
+    !h3.match(/^[A-Fa-f0-9]{4}$/i) ||
+    !h4.match(/^[A-Fa-f0-9]{4}$/i)
   ) {
     return false;
   }
