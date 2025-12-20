@@ -32,7 +32,13 @@ export interface Politician extends User {
   nin: string;
 }
 
-export interface Citizen extends User {
+export interface Citizen {
+  id: string;
+  fullName: string;
+  email: string;
+  phone: string;
+  verified: boolean;
+  createdAt: string;
   bvn: string;
   kycStatus: "pending" | "verified" | "rejected";
 }
