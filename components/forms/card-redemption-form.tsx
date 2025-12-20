@@ -305,7 +305,7 @@ export function CardRedemptionForm() {
                   render={({ field }) => (
                     <FormItem>
                       <FormControl>
-                      <div className="relative group">
+                        <div className="relative group">
                           <Building2 className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground group-focus-within:text-primary transition-colors" />
                           <Input
                             placeholder="Bank Name (e.g., Zenith Bank)"
@@ -315,7 +315,7 @@ export function CardRedemptionForm() {
                           />
                         </div>
                       </FormControl>
-                      <FormMessage className="text-red-400 text-xs" />
+                      <FormMessage className="text-xs" />
                     </FormItem>
                   )}
                 />
@@ -329,7 +329,7 @@ export function CardRedemptionForm() {
                   render={({ field }) => (
                     <FormItem>
                       <FormControl>
-                      <div className="relative group">
+                        <div className="relative group">
                           <DollarSign className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground group-focus-within:text-primary transition-colors" />
                           <Input
                             placeholder="Account Number (10 digits)"
@@ -340,7 +340,7 @@ export function CardRedemptionForm() {
                           />
                         </div>
                       </FormControl>
-                      <FormMessage className="text-red-400 text-xs" />
+                      <FormMessage className="text-xs" />
                     </FormItem>
                   )}
                 />
@@ -354,7 +354,7 @@ export function CardRedemptionForm() {
                   render={({ field }) => (
                     <FormItem>
                       <FormControl>
-                      <div className="relative group">
+                        <div className="relative group">
                           <User className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground group-focus-within:text-primary transition-colors" />
                           <Input
                             placeholder="Full Name on Account"
@@ -364,7 +364,7 @@ export function CardRedemptionForm() {
                           />
                         </div>
                       </FormControl>
-                      <FormMessage className="text-red-400 text-xs" />
+                      <FormMessage className="text-xs" />
                     </FormItem>
                   )}
                 />
@@ -378,7 +378,7 @@ export function CardRedemptionForm() {
                   render={({ field }) => (
                     <FormItem>
                       <FormControl>
-                      <div className="relative group">
+                        <div className="relative group">
                           <Phone className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground group-focus-within:text-primary transition-colors" />
                           <Input
                             placeholder="Phone Number"
@@ -388,7 +388,7 @@ export function CardRedemptionForm() {
                           />
                         </div>
                       </FormControl>
-                      <FormMessage className="text-red-400 text-xs" />
+                      <FormMessage className="text-xs" />
                     </FormItem>
                   )}
                 />
@@ -401,7 +401,7 @@ export function CardRedemptionForm() {
                   variant="outline"
                   onClick={() => setStep(1)}
                   disabled={isLoading}
-                  className="flex-1 bg-slate-800 border-slate-700 text-slate-300 hover:bg-slate-700 hover:text-white h-11"
+                  className="flex-1"
                   size="lg"
                 >
                   ← Back
@@ -409,7 +409,7 @@ export function CardRedemptionForm() {
                 <Button
                   type="submit"
                   disabled={isLoading}
-                  className="flex-1 bg-gradient-to-r from-green-600 to-green-500 hover:from-green-700 hover:to-green-600 disabled:from-slate-700 disabled:to-slate-700 text-white font-semibold h-11 rounded-lg transition-all shadow-lg"
+                  className="flex-1"
                   size="lg"
                 >
                   {isLoading ? (
