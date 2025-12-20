@@ -51,13 +51,17 @@ export interface Admin extends User {
 // Card Types
 export interface ScratchCard {
   id: string;
-  code: string;
-  fullCode: string;
+  serialNumber: string; // Unique, unguessable identifier
+  code: string; // Card code (e.g., "APC-5K-B001-A3F7B9C2-X7")
+  codeHash?: string; // SHA-256 hash of code (for DB lookup)
+  checksum?: string; // CRC/Luhn checksum (e.g., "X7")
   denomination: number;
   status: CardStatus;
   orderId: string;
+  batchId?: string; // Links to order batch
   redeemedAt?: string;
   redeemedBy?: string;
+  expiresAt?: string;
   createdAt: string;
 }
 

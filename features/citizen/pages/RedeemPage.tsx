@@ -7,7 +7,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Logo } from "@/components/logo";
-import { RedemptionForm } from "@/components/redemption-form";
+import { CardRedemptionForm } from "@/components/forms/card-redemption-form";
 import { ArrowLeft } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
@@ -19,25 +19,25 @@ export default function RedeemPage() {
       <header className="absolute top-0 left-0 w-full p-4 md:p-6">
         <div className="flex items-center justify-between">
           <Logo />
-          <Button variant="ghost" onClick={() => navigate("/redeem")}>
+          <Button variant="ghost" onClick={() => navigate("/")}>
             <ArrowLeft className="mr-2 h-4 w-4" />
             Back to Home
           </Button>
         </div>
       </header>
-      <main className="w-full max-w-2xl">
+      <main className="w-full max-w-2xl mt-20">
         <Card className="shadow-2xl">
           <CardHeader className="text-center">
             <CardTitle className="text-3xl font-bold">
               Redeem Your Card
             </CardTitle>
             <CardDescription>
-              Enter your scratch card code and bank details to receive funds
-              securely to your account.
+              Enter your scratch card serial number and code, then provide your
+              bank details to receive funds securely.
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <RedemptionForm />
+            <CardRedemptionForm />
           </CardContent>
         </Card>
       </main>
