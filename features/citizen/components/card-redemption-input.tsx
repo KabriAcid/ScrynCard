@@ -30,7 +30,7 @@ export function CardRedemptionInput({
   // Validate when either field changes
   useEffect(() => {
     const serialValid =
-      serialNumber.length === 6 && /^\d{6}$/.test(serialNumber);
+      serialNumber.length === 9 && /^[A-Z]{2}-[A-Z0-9]{6}$/.test(serialNumber);
     const codeValid = validateCardCode(cardCode);
     const valid = serialValid && codeValid;
 
@@ -53,7 +53,7 @@ export function CardRedemptionInput({
     setCardCode(formatted);
   };
 
-  const serialValid = serialNumber.length === 6;
+  const serialValid = serialNumber.length === 9;
   const codeValid = validateCardCode(cardCode);
 
   const containerVariants = {
@@ -106,13 +106,13 @@ export function CardRedemptionInput({
             <Input
               id="serial-number"
               type="text"
-              placeholder="123456"
+              placeholder="AB-123456"
               value={serialNumber}
               onChange={handleSerialChange}
               disabled={disabled}
-              maxLength={6}
+              maxLength={9}
               className={cn(
-                "font-mono text-base tracking-wider h-10 w-full lg:w-32",
+                "font-mono text-base tracking-wider h-10 w-full lg:w-40",
                 serialValid ? "border-green-500 bg-green-50" : "border-gray-300"
               )}
             />
@@ -151,11 +151,11 @@ export function CardRedemptionInput({
             <Input
               id="card-code"
               type="text"
-              placeholder="XXX-HHHH-HHHH-HHHH-HHHH"
+              placeholder="XXX-HHHH-HHHH-HHHH"
               value={cardCode}
               onChange={handleCodeChange}
               disabled={disabled}
-              maxLength={23}
+              maxLength={18}
               className={cn(
                 "font-mono text-base tracking-wider h-10",
                 codeValid ? "border-green-500 bg-green-50" : "border-gray-300"

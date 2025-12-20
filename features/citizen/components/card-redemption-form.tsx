@@ -26,8 +26,8 @@ import { CardRedemptionInput } from "./card-redemption-input";
 import { motion, AnimatePresence } from "framer-motion";
 
 const RedemptionSchema = z.object({
-  serialNumber: z.string().length(6, "Serial number must be 6 digits"),
-  cardCode: z.string().min(19, "Card code must be valid format"),
+  serialNumber: z.string().length(9, "Serial number must be XX-XXXXXX format"),
+  cardCode: z.string().length(18, "Card code must be 15 characters"),
   bankName: z.string().min(2, "Please enter bank name"),
   accountNumber: z.string().min(10, "Please enter valid account number"),
   accountName: z.string().min(3, "Please enter account name"),
