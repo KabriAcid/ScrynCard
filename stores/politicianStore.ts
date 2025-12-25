@@ -29,6 +29,11 @@ export const usePoliticianStore = create<PoliticianState>((set) => ({
       );
       if (response.success) {
         set({ stats: response.data, isLoading: false });
+      } else {
+        set({
+          error: response.error || "Failed to fetch dashboard",
+          isLoading: false,
+        });
       }
     } catch (error: any) {
       set({ error: error.message, isLoading: false });
@@ -43,6 +48,11 @@ export const usePoliticianStore = create<PoliticianState>((set) => ({
       );
       if (response.success) {
         set({ orders: response.data?.recentOrders || [], isLoading: false });
+      } else {
+        set({
+          error: response.error || "Failed to fetch orders",
+          isLoading: false,
+        });
       }
     } catch (error: any) {
       set({ error: error.message, isLoading: false });
@@ -58,6 +68,11 @@ export const usePoliticianStore = create<PoliticianState>((set) => ({
           orders: [...state.orders, response.data!],
           isLoading: false,
         }));
+      } else {
+        set({
+          error: response.error || "Failed to create order",
+          isLoading: false,
+        });
       }
     } catch (error: any) {
       set({ error: error.message, isLoading: false });
@@ -71,6 +86,11 @@ export const usePoliticianStore = create<PoliticianState>((set) => ({
       if (response.success) {
         // Store analytics in a separate property or update stats
         set({ isLoading: false });
+      } else {
+        set({
+          error: response.error || "Failed to fetch analytics",
+          isLoading: false,
+        });
       }
     } catch (error: any) {
       set({ error: error.message, isLoading: false });

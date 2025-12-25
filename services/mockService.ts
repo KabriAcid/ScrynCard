@@ -147,13 +147,20 @@ export const adminService = {
 export const politicianService = {
   async getPoliticianDashboard(politicianId: string) {
     await delay();
-    const politician = mockPoliticians.find((p) => p.id === politicianId);
+    // Try to find politician by ID first, then by using the first politician as demo
+    let politician = mockPoliticians.find((p) => p.id === politicianId);
+
+    // If not found by ID, use the first politician for demo purposes
+    if (!politician) {
+      politician = mockPoliticians[0];
+    }
+
     if (!politician) {
       return { success: false, error: "Politician not found" };
     }
 
     const politicianOrders = mockOrders.filter(
-      (o) => o.politicianId === politicianId
+      (o) => o.politicianId === politician!.id
     );
     const totalOrderValue = politicianOrders.reduce(
       (sum, o) => sum + o.totalCardValue,
@@ -180,7 +187,7 @@ export const politicianService = {
               : 0,
         },
         recentOrders: getRecentOrders(5).filter(
-          (o) => o.politicianId === politicianId
+          (o) => o.politicianId === politician!.id
         ),
       },
     };
