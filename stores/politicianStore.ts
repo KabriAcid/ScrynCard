@@ -9,7 +9,7 @@ interface PoliticianState {
   isLoading: boolean;
   error: string | null;
   fetchDashboard: (politicianId: string) => Promise<void>;
-  fetchOrders: (politicianId: string) => Promise<void>;
+  fetchOrders: (politicianId: string) => Promise<Order[]>;
   createOrder: (politicianId: string, data: any) => Promise<void>;
   fetchOrderAnalytics: (orderId: string) => Promise<void>;
 }
