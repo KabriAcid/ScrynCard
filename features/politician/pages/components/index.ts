@@ -6,3 +6,7 @@ export { RecentOrdersSection } from "./RecentOrdersSection";
 export { RedemptionStats } from "./RedemptionStats";
 export { RedemptionTable } from "./RedemptionTable";
 export { RedemptionPageSkeleton } from "./RedemptionPageSkeleton";
+export { PersonalInfoSection } from "./PersonalInfoSection";
+export { BankDetailsSection } from "./BankDetailsSection";
+export { LocationTimeSection } from "./LocationTimeSection";
+export { RedemptionDetailsSkeleton } from "./RedemptionDetailsSkeleton";

@@ -1,4 +1,5 @@
 import { useParams } from "react-router-dom";
+import { useState, useEffect } from "react";
 import {
   Card,
   CardContent,
@@ -9,16 +10,11 @@ import {
 import { Separator } from "@/components/ui/separator";
 import type { Redeemer } from "@/lib/types";
 import {
-  Banknote,
-  Calendar,
-  CreditCard,
-  Landmark,
-  Mail,
-  MapPin,
-  Phone,
-  User,
-  Globe,
-} from "lucide-react";
+  PersonalInfoSection,
+  BankDetailsSection,
+  LocationTimeSection,
+  RedemptionDetailsSkeleton,
+} from "./components";
 
 // Mock data - in a real app, you would fetch this based on the ID
 const redeemers: Redeemer[] = [
@@ -124,30 +120,92 @@ const redeemers: Redeemer[] = [
   },
 ];
 
-function InfoRow({
-  icon: Icon,
-  label,
-  value,
-}: {
-  icon: React.ElementType;
-  label: string;
-  value?: string;
-}) {
-  if (!value) return null;
-  return (
-    <div className="flex items-start">
-      <Icon className="h-5 w-5 text-muted-foreground mr-4 mt-1" />
-      <div className="flex flex-col">
-        <span className="text-sm text-muted-foreground">{label}</span>
-        <span className="font-medium">{value}</span>
-      </div>
-    </div>
-  );
-}
-
 export default function RedemptionDetailsPage() {
   const { id } = useParams();
-  const redeemer = redeemers.find((r) => r.id === id);
+  const [redeemer, setRedeemer] = useState<Redeemer | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [hasLoaded, setHasLoaded] = useState(false);
+
+  useEffect(() => {
+    const fetchRedemption = async () => {
+      setIsLoading(true);
+      // Simulate API call
+      await new Promise((resolve) => setTimeout(resolve, 500));
+
+      // Try to find by exact ID match first
+      let foundRedeemer = redeemers.find((r) => r.id === id);
+
+      // If not found, generate mock data based on the order ID
+      if (!foundRedeemer && id) {
+        // Generate mock redeemer data for any order ID
+        const mockNames = [
+          "Aisha Bello",
+          "Chinedu Okoro",
+          "Fatima Garba",
+          "Yusuf Ahmed",
+          "Ngozi Eze",
+        ];
+        const mockBanks = [
+          "Zenith Bank",
+          "GTBank",
+          "First Bank",
+          "UBA",
+          "Access Bank",
+        ];
+        const mockStates = ["Lagos", "Kano", "Abuja (FCT)", "Oyo", "Rivers"];
+        const mockLGAs = [
+          "Ikeja",
+          "Kano Municipal",
+          "Abuja Municipal",
+          "Ibadan North",
+          "Port Harcourt",
+        ];
+
+        const index = parseInt(id.split("-")[1] || "0") % 5;
+
+        foundRedeemer = {
+          id,
+          personalInfo: {
+            name: mockNames[index],
+            email: `${mockNames[index]
+              .toLowerCase()
+              .replace(" ", ".")}@example.com`,
+            phone: `080${Math.floor(10000000 + Math.random() * 90000000)}`,
+            nin: `${Math.floor(10000000000 + Math.random() * 90000000000)}`,
+          },
+          bankDetails: {
+            accountNumber: `${Math.floor(
+              1000000000 + Math.random() * 9000000000
+            )}`,
+            bankName: mockBanks[index],
+            bvn: `${Math.floor(10000000000 + Math.random() * 90000000000)}`,
+          },
+          location: {
+            state: mockStates[index],
+            lga: mockLGAs[index],
+            ipAddress: `${Math.floor(100 + Math.random() * 155)}.${Math.floor(
+              1 + Math.random() * 254
+            )}.${Math.floor(1 + Math.random() * 254)}.${Math.floor(
+              1 + Math.random() * 254
+            )}`,
+            redemptionDate: new Date(
+              Date.now() - Math.random() * 10000000000
+            ).toISOString(),
+          },
+        };
+      }
+
+      setRedeemer(foundRedeemer || null);
+      setIsLoading(false);
+      setHasLoaded(true);
+    };
+
+    fetchRedemption();
+  }, [id]);
+
+  if (isLoading || !hasLoaded) {
+    return <RedemptionDetailsSkeleton />;
+  }
 
   if (!redeemer) {
     return (
@@ -162,17 +220,6 @@ export default function RedemptionDetailsPage() {
     );
   }
 
-  const formattedRedemptionDate = redeemer.location.redemptionDate
-    ? new Date(redeemer.location.redemptionDate).toLocaleString("en-US", {
-        year: "numeric",
-        month: "long",
-        day: "numeric",
-        hour: "2-digit",
-        minute: "2-digit",
-        second: "2-digit",
-      })
-    : "N/A";
-
   return (
     <Card>
       <CardHeader>
@@ -182,88 +229,11 @@ export default function RedemptionDetailsPage() {
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-8">
-        <div>
-          <h3 className="text-lg font-semibold mb-4 flex items-center">
-            <User className="mr-2 h-5 w-5" /> Personal Information
-          </h3>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            <InfoRow
-              icon={User}
-              label="Full Name"
-              value={redeemer.personalInfo.name}
-            />
-            <InfoRow
-              icon={Mail}
-              label="Email Address"
-              value={redeemer.personalInfo.email}
-            />
-            <InfoRow
-              icon={Phone}
-              label="Phone Number"
-              value={redeemer.personalInfo.phone}
-            />
-            <InfoRow
-              icon={CreditCard}
-              label="National ID (NIN)"
-              value={`****-****-${redeemer.personalInfo.nin.slice(-4)}`}
-            />
-          </div>
-        </div>
-
+        <PersonalInfoSection personalInfo={redeemer.personalInfo} />
         <Separator />
-
-        <div>
-          <h3 className="text-lg font-semibold mb-4 flex items-center">
-            <Landmark className="mr-2 h-5 w-5" /> Bank Details
-          </h3>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            <InfoRow
-              icon={Landmark}
-              label="Bank Name"
-              value={redeemer.bankDetails.bankName}
-            />
-            <InfoRow
-              icon={Banknote}
-              label="Account Number"
-              value={`******${redeemer.bankDetails.accountNumber.slice(-4)}`}
-            />
-            <InfoRow
-              icon={CreditCard}
-              label="BVN"
-              value={`****-****-${redeemer.bankDetails.bvn.slice(-4)}`}
-            />
-          </div>
-        </div>
-
+        <BankDetailsSection bankDetails={redeemer.bankDetails} />
         <Separator />
-
-        <div>
-          <h3 className="text-lg font-semibold mb-4 flex items-center">
-            <MapPin className="mr-2 h-5 w-5" /> Location & Time
-          </h3>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            <InfoRow
-              icon={MapPin}
-              label="State"
-              value={redeemer.location.state}
-            />
-            <InfoRow
-              icon={MapPin}
-              label="Local Government Area"
-              value={redeemer.location.lga}
-            />
-            <InfoRow
-              icon={Globe}
-              label="IP Address"
-              value={redeemer.location.ipAddress}
-            />
-            <InfoRow
-              icon={Calendar}
-              label="Redemption Time"
-              value={formattedRedemptionDate}
-            />
-          </div>
-        </div>
+        <LocationTimeSection location={redeemer.location} />
       </CardContent>
     </Card>
   );
