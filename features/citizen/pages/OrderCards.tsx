@@ -5,7 +5,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { OrderForm } from "@/components/dashboard/order-form";
+import { OrderForm } from "@/features/citizen/components/order/OrderForm";
 import { Logo } from "@/components/logo";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft } from "lucide-react";
