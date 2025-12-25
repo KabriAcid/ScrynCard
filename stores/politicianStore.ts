@@ -42,7 +42,7 @@ export const usePoliticianStore = create<PoliticianState>((set) => ({
         politicianId
       );
       if (response.success) {
-        set({ orders: response.data.recentOrders || [], isLoading: false });
+        set({ orders: response.data?.recentOrders || [], isLoading: false });
       }
     } catch (error: any) {
       set({ error: error.message, isLoading: false });
