@@ -118,15 +118,15 @@ export function validateSerialNumber(serial: string): boolean {
 }
 
 /**
- * Format card code with automatic hyphen insertion every 4 digits
- * Input: "KPNA3F7B9C2D4E5" -> Output: "KPN-A3F7-B9C2-D4E5"
- * Removes spaces and non-hex characters automatically
+ * Format card code with automatic hyphen insertion
+ * Input: "CDDFD939DLD0393" (15 chars) -> Output: "CDD-FD93-9DLD-0393"
+ * Format: XXX-XXXX-XXXX-XXXX (3+4+4+4 = 15 characters)
  */
 export function formatCardCode(input: string): string {
   // Remove all non-alphanumeric characters
   const cleaned = input.toUpperCase().replace(/[^A-Z0-9]/g, "");
 
-  // Format: XXX-HHHH-HHHH-HHHH
+  // Format: XXX-XXXX-XXXX-XXXX (3+4+4+4 = 15 characters total)
   if (cleaned.length <= 3) {
     return cleaned;
   }

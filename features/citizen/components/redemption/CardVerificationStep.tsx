@@ -42,11 +42,11 @@ export function CardVerificationStep({
   const serialValid =
     serialNumber.length === 9 && /^[A-Z]{2}-[A-Z0-9]{6}$/.test(serialNumber);
 
-  // Validate card code - must be 16 characters total (with hyphens: XXX-HHHH-HHHH-HHHH = 18 chars)
+  // Validate card code - must be 15 characters total (without hyphens)
   // Remove hyphens to count actual characters
   const cleanCode = cardCode.replace(/-/g, "");
   const codeValid =
-    cleanCode.length === 16 && /^[A-Z]{3}[A-Za-z0-9]{13}$/.test(cleanCode);
+    cleanCode.length === 15 && /^[A-Z]{3}[A-Za-z0-9]{12}$/.test(cleanCode);
 
   const isValid = serialValid && codeValid;
 

@@ -34,10 +34,10 @@ export function CardRedemptionInput({
   const serialValid =
     serialNumber.length === 9 && /^[A-Z]{2}-[A-Z0-9]{6}$/.test(serialNumber);
 
-  // Validate card code - must be exactly 16 characters (without hyphens)
+  // Validate card code - must be exactly 15 characters (without hyphens)
   const cleanCode = cardCode.replace(/-/g, "");
   const codeValid =
-    cleanCode.length === 16 && /^[A-Z]{3}[A-Za-z0-9]{13}$/.test(cleanCode);
+    cleanCode.length === 15 && /^[A-Z]{3}[A-Za-z0-9]{12}$/.test(cleanCode);
 
   const handleSerialChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const formatted = formatSerialNumber(e.target.value);
@@ -48,6 +48,16 @@ export function CardRedemptionInput({
     const formatted = formatCardCode(e.target.value);
     onCodeChange(formatted);
   };
+
+  // Determine error messages
+  const serialError =
+    touched.serial && serialNumber.length > 0 && !serialValid
+      ? "Format: 2 letters, hyphen, 6 alphanumeric"
+      : null;
+  const codeError =
+    touched.code && cardCode.length > 0 && !codeValid
+      ? "Card code must be exactly 15 characters"
+      : null;
 
   const checkmarkVariants = {
     hidden: { scale: 0, opacity: 0 },
@@ -95,6 +105,7 @@ export function CardRedemptionInput({
             <Input
               id="serial-number"
               type="text"
+              name="serial_number"
               placeholder="ABC-123456"
               value={serialNumber}
               onChange={handleSerialChange}
@@ -129,11 +140,6 @@ export function CardRedemptionInput({
               </motion.div>
             )}
           </div>
-          {touched.serial && serialNumber.length > 0 && !serialValid && (
-            <p className="text-xs text-red-500 mt-1">
-              Format: 2 letters, hyphen, 6 alphanumeric
-            </p>
-          )}
         </motion.div>
 
         {/* Card Code Input */}
@@ -148,7 +154,8 @@ export function CardRedemptionInput({
             <Input
               id="card-code"
               type="text"
-              placeholder="ABC-1234-5678-9000"
+              name="card_code"
+              placeholder="ABC-1234-5678-9012"
               value={cardCode}
               onChange={handleCodeChange}
               onBlur={() => setTouched({ ...touched, code: true })}
@@ -171,7 +178,7 @@ export function CardRedemptionInput({
                 <CheckCircle2 className="h-4 w-4 text-green-500" />
               </motion.div>
             )}
-            {touched.code && cardCode.length > 0 && !codeValid && (
+            {codeError && (
               <motion.div
                 initial="hidden"
                 animate="visible"
@@ -182,28 +189,45 @@ export function CardRedemptionInput({
               </motion.div>
             )}
           </div>
-          {touched.code && cardCode.length > 0 && !codeValid && (
-            <p className="text-xs text-red-500 mt-1">
-              Card code must be exactly 16 characters (e.g., ABC1234567890123)
-            </p>
-          )}
         </motion.div>
       </div>
 
-      {/* Status Message */}
-      {serialValid && codeValid && (
-        <motion.div
-          initial={{ opacity: 0, y: -5 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ type: "spring", stiffness: 100 }}
-          className="flex items-center gap-2 text-green-600 text-sm"
-        >
-          <CheckCircle2 className="h-4 w-4" />
-          <span className="font-medium">
-            Both fields valid - ready to continue
-          </span>
-        </motion.div>
-      )}
+      {/* Unified Status/Error Messages Section - Fixed Height */}
+      <div className="h-6">
+        {serialError && (
+          <motion.div
+            initial={{ opacity: 0, y: -5 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -5 }}
+            className="flex items-center gap-2 text-red-600 text-xs"
+          >
+            <AlertCircle className="h-3 w-3 flex-shrink-0" />
+            <span>{serialError}</span>
+          </motion.div>
+        )}
+        {codeError && (
+          <motion.div
+            initial={{ opacity: 0, y: -5 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -5 }}
+            className="flex items-center gap-2 text-red-600 text-xs"
+          >
+            <AlertCircle className="h-3 w-3 flex-shrink-0" />
+            <span>{codeError}</span>
+          </motion.div>
+        )}
+        {serialValid && codeValid && (
+          <motion.div
+            initial={{ opacity: 0, y: -5 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -5 }}
+            className="flex items-center gap-2 text-green-600 text-xs"
+          >
+            <CheckCircle2 className="h-3 w-3 flex-shrink-0" />
+            <span>Both fields valid - ready to continue</span>
+          </motion.div>
+        )}
+      </div>
     </motion.div>
   );
 }

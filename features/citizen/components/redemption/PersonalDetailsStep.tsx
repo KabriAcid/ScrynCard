@@ -88,6 +88,8 @@ export function PersonalDetailsStep({
                     {...field}
                     disabled={isLoading}
                     className="pl-10 h-11"
+                    name="fullname"
+                    id="fullName"
                   />
                 </div>
               </FormControl>
@@ -162,6 +164,8 @@ export function PersonalDetailsStep({
                       {...field}
                       disabled={isLoading}
                       className="pl-10 h-11"
+                                name="nin"
+                                maxLength={11}
                     />
                   </div>
                 </FormControl>
