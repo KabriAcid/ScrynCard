@@ -31,6 +31,10 @@ import AdminCampaigns from "@/features/admin/pages/Campaigns";
 
 // Politician Pages
 import PoliticianDashboard from "@/features/politician/pages/Dashboard";
+import PoliticianRedemption from "@/features/politician/pages/Redemption";
+import PoliticianRedemptionDetails from "@/features/politician/pages/RedemptionDetails";
+import PoliticianAnalytics from "@/features/politician/pages/Analytics";
+import PoliticianFraudDetection from "@/features/politician/pages/FraudDetection";
 
 // Protected Route Component
 interface ProtectedRouteProps {
@@ -100,6 +104,19 @@ function App() {
               <PoliticianLayout>
                 <Routes>
                   <Route path="/" element={<PoliticianDashboard />} />
+                  <Route
+                    path="/redemption"
+                    element={<PoliticianRedemption />}
+                  />
+                  <Route
+                    path="/redemption/:id"
+                    element={<PoliticianRedemptionDetails />}
+                  />
+                  <Route path="/analytics" element={<PoliticianAnalytics />} />
+                  <Route
+                    path="/fraud-detection"
+                    element={<PoliticianFraudDetection />}
+                  />
                 </Routes>
               </PoliticianLayout>
             </ProtectedRoute>
