@@ -186,7 +186,7 @@ export const politicianService = {
               ? (totalRedemptions / politicianOrders.length) * 100
               : 0,
         },
-        recentOrders: getRecentOrders(5).filter(
+        recentOrders: getRecentOrders(10).filter(
           (o) => o.politicianId === politician!.id
         ),
       },

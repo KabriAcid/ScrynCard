@@ -47,15 +47,19 @@ export const usePoliticianStore = create<PoliticianState>((set) => ({
         politicianId
       );
       if (response.success) {
-        set({ orders: response.data?.recentOrders || [], isLoading: false });
+        const orders = response.data?.recentOrders || [];
+        set({ orders, isLoading: false });
+        return orders;
       } else {
         set({
           error: response.error || "Failed to fetch orders",
           isLoading: false,
         });
+        return [];
       }
     } catch (error: any) {
       set({ error: error.message, isLoading: false });
+      return [];
     }
   },
 
