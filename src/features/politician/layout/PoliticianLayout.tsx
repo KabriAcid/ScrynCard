@@ -39,10 +39,10 @@ export default function PoliticianLayout({
               </Avatar>
               <div className="flex flex-col">
                 <span className="font-semibold text-sm">
-                  {user?.name || "Politician"}
+                  {user?.fullName || "Governor"}
                 </span>
                 <span className="text-xs text-muted-foreground">
-                  Politician
+                  {user?.email || ""}
                 </span>
               </div>
             </div>

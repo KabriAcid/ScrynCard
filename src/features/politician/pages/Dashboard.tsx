@@ -18,9 +18,9 @@ export default function PoliticianDashboardPage() {
     if (user?.id) {
       fetchDashboard(user.id);
     }
-  }, [user?.id, fetchDashboard]);
+  }, [user?.id]);
 
-  if (isLoading || !stats) {
+  if (!stats || (isLoading && !stats)) {
     return <DashboardSkeleton />;
   }
 

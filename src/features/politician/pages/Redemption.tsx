@@ -30,8 +30,8 @@ export default function RedemptionPage() {
         status:
           redemption.status === "completed"
             ? "Completed"
-            : redemption.status === "processing"
-              ? "Processing"
+            : redemption.status === "failed"
+              ? "Failed"
               : "Pending",
         citizenName: redemption.citizen?.fullName || "Unknown",
         cardCode: redemption.card?.code || "N/A",
