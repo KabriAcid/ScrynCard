@@ -10,6 +10,7 @@ export const mockCitizens: Citizen[] = [
     verified: true,
     createdAt: new Date(2024, 5, 1).toISOString(),
     bvn: "12345678906",
+    nin: "12345678901234",
     kycStatus: "verified",
   },
   {
@@ -20,6 +21,7 @@ export const mockCitizens: Citizen[] = [
     verified: true,
     createdAt: new Date(2024, 5, 2).toISOString(),
     bvn: "12345678907",
+    nin: "12345678901235",
     kycStatus: "verified",
   },
   {
@@ -30,6 +32,7 @@ export const mockCitizens: Citizen[] = [
     verified: true,
     createdAt: new Date(2024, 5, 3).toISOString(),
     bvn: "12345678908",
+    nin: "12345678901236",
     kycStatus: "verified",
   },
   {
@@ -40,6 +43,7 @@ export const mockCitizens: Citizen[] = [
     verified: false,
     createdAt: new Date(2024, 5, 4).toISOString(),
     bvn: "12345678909",
+    nin: "12345678901237",
     kycStatus: "pending",
   },
   {
@@ -50,6 +54,7 @@ export const mockCitizens: Citizen[] = [
     verified: true,
     createdAt: new Date(2024, 5, 5).toISOString(),
     bvn: "12345678910",
+    nin: "12345678901238",
     kycStatus: "verified",
   },
   {
@@ -60,6 +65,7 @@ export const mockCitizens: Citizen[] = [
     verified: true,
     createdAt: new Date(2024, 5, 6).toISOString(),
     bvn: "12345678911",
+    nin: "12345678901239",
     kycStatus: "verified",
   },
   {
@@ -70,6 +76,7 @@ export const mockCitizens: Citizen[] = [
     verified: true,
     createdAt: new Date(2024, 5, 7).toISOString(),
     bvn: "12345678912",
+    nin: "12345678901240",
     kycStatus: "verified",
   },
   {
@@ -80,6 +87,7 @@ export const mockCitizens: Citizen[] = [
     verified: true,
     createdAt: new Date(2024, 5, 8).toISOString(),
     bvn: "12345678913",
+    nin: "12345678901241",
     kycStatus: "verified",
   },
   {
@@ -90,6 +98,7 @@ export const mockCitizens: Citizen[] = [
     verified: true,
     createdAt: new Date(2024, 5, 9).toISOString(),
     bvn: "12345678914",
+    nin: "12345678901242",
     kycStatus: "verified",
   },
   {
@@ -100,6 +109,7 @@ export const mockCitizens: Citizen[] = [
     verified: true,
     createdAt: new Date(2024, 5, 10).toISOString(),
     bvn: "12345678915",
+    nin: "12345678901243",
     kycStatus: "verified",
   },
 ];

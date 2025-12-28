@@ -31,11 +31,14 @@ export default function RedemptionPage() {
           redemption.status === "completed"
             ? "Completed"
             : redemption.status === "failed"
-              ? "Failed"
-              : "Pending",
+            ? "Failed"
+            : "Pending",
         citizenName: redemption.citizen?.fullName || "Unknown",
         cardCode: redemption.card?.code || "N/A",
         bank: redemption.bankName || "N/A",
+        dob: redemption.dob,
+        favoriteParty: redemption.favoriteParty,
+        hasVotersCard: redemption.hasVotersCard,
       })
     );
     setRedemptions(transformedRedemptions);
@@ -50,12 +53,14 @@ export default function RedemptionPage() {
   const successfulPayouts = redemptions
     .filter((r) => r.status === "Completed")
     .reduce((sum, r) => sum + r.amount, 0);
+  const totalWithVotersCard = redemptions.filter((r) => r.hasVotersCard).length;
 
   return (
     <div className="space-y-6">
       <RedemptionStats
         totalRedemptions={totalRedemptions}
         successfulPayouts={successfulPayouts}
+        totalWithVotersCard={totalWithVotersCard}
       />
       <RedemptionTable redemptions={redemptions} />
     </div>

@@ -33,6 +33,9 @@ export type Redemption = {
   cardCode: string;
   citizenName: string;
   bank: string;
+  dob?: string;
+  favoriteParty?: string;
+  hasVotersCard?: boolean;
 };
 
 export type Redeemer = {
