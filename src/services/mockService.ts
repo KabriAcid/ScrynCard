@@ -159,9 +159,8 @@ export const politicianService = {
       return { success: false, error: "Politician not found" };
     }
 
-    const politicianOrders = mockOrders.filter(
-      (o) => o.politicianId === politician!.id
-    );
+    // Use all mockOrders for demo (since we're using mockPoliticians[0] as demo)
+    const politicianOrders = mockOrders;
     const totalOrderValue = politicianOrders.reduce(
       (sum, o) => sum + o.totalCardValue,
       0
@@ -189,9 +188,7 @@ export const politicianService = {
               ? (completedRedemptions / totalRedemptions) * 100
               : 0,
         },
-        recentOrders: getRecentOrders(10).filter(
-          (o) => o.politicianId === politician!.id
-        ),
+        recentOrders: getRecentOrders(10),
       },
     };
   },
