@@ -31,6 +31,7 @@ import AdminCitizens from "@/features/admin/pages/Citizens";
 import AdminCampaigns from "@/features/admin/pages/Campaigns";
 import AdminProfile from "@/features/admin/pages/Profile";
 import AdminAccountSettings from "@/features/admin/pages/AccountSettings";
+import AdminPoliticianDetails from "@/features/admin/pages/PoliticianDetails";
 
 // Politician Pages
 import PoliticianDashboard from "@/features/politician/pages/Dashboard";
@@ -102,6 +103,10 @@ function App() {
                 <Routes>
                   <Route path="/" element={<AdminDashboard />} />
                   <Route path="/politicians" element={<AdminPoliticians />} />
+                  <Route
+                    path="/politicians/:id"
+                    element={<AdminPoliticianDetails />}
+                  />
                   <Route path="/analytics" element={<AdminAnalytics />} />
                   <Route path="/fraud" element={<AdminFraud />} />
                   <Route path="/cards" element={<AdminCards />} />
