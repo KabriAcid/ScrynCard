@@ -1,0 +1,10 @@
+{
+  "placeholderImages": [
+    {
+      "id": "hero-nigeria",
+      "description": "A vibrant street market in Nigeria, showing community and commerce",
+      "imageUrl": "https://images.unsplash.com/photo-1761370980657-22586ea44093?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw4fHxuaWdlcmlhJTIwbWFya2V0fGVufDB8fHx8MTc2MTUyMjYxOXww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "nigeria market"
+    }
+  ]
+}
