@@ -18,7 +18,7 @@ export const usePoliticianStore = create<PoliticianState>((set) => ({
   politicianId: null,
   stats: null,
   orders: [],
-  isLoading: false,
+  isLoading: true,
   error: null,
 
   fetchDashboard: async (politicianId: string) => {

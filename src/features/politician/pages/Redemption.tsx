@@ -13,17 +13,11 @@ export default function RedemptionPage() {
   const { user } = useAuthStore();
   const { orders, isLoading, fetchOrders } = usePoliticianStore();
   const [redemptions, setRedemptions] = useState<Redemption[]>([]);
-  const [hasLoaded, setHasLoaded] = useState(false);
 
   useEffect(() => {
-    const loadRedemptions = async () => {
-      if (user?.id) {
-        await fetchOrders(user.id);
-        setHasLoaded(true);
-      }
-    };
-
-    loadRedemptions();
+    if (user?.id) {
+      fetchOrders(user.id);
+    }
   }, [user?.id, fetchOrders]);
 
   useEffect(() => {
@@ -37,8 +31,8 @@ export default function RedemptionPage() {
           redemption.status === "completed"
             ? "Completed"
             : redemption.status === "processing"
-            ? "Processing"
-            : "Pending",
+              ? "Processing"
+              : "Pending",
         citizenName: redemption.citizen?.fullName || "Unknown",
         cardCode: redemption.card?.code || "N/A",
         bank: redemption.bankName || "N/A",
@@ -47,8 +41,8 @@ export default function RedemptionPage() {
     setRedemptions(transformedRedemptions);
   }, []);
 
-  // Show skeleton while loading OR if data hasn't loaded yet (matching Dashboard pattern)
-  if (isLoading || !hasLoaded) {
+  // Show skeleton while loading
+  if (isLoading) {
     return <RedemptionPageSkeleton />;
   }
 
