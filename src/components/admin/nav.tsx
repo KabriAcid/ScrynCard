@@ -10,6 +10,7 @@ import {
   BarChart3,
   Settings,
   Bell,
+  Activity,
 } from "lucide-react";
 import type { NavItem } from "@/lib/types";
 import { cn } from "@/lib/utils";
@@ -75,6 +76,12 @@ const navItems: NavItem[] = [
     label: "Notifications",
     icon: Bell,
     tooltip: "Notification Center",
+  },
+  {
+    href: "/admin/activity-log",
+    label: "Activity Log",
+    icon: Activity,
+    tooltip: "Platform Activity Log",
   },
 ];
 

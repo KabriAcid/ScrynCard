@@ -37,6 +37,7 @@ import AdminProfile from "@/features/admin/pages/Profile";
 import AdminAccountSettings from "@/features/admin/pages/AccountSettings";
 import AdminPoliticianDetails from "@/features/admin/pages/PoliticianDetails";
 import AdminNotifications from "@/features/admin/pages/Notifications";
+import AdminActivityLog from "@/features/admin/pages/ActivityLog";
 
 // Politician Pages
 import PoliticianDashboard from "@/features/politician/pages/Dashboard";
@@ -136,6 +137,10 @@ function App() {
                   <Route
                     path="/notifications"
                     element={<AdminNotifications />}
+                  />
+                  <Route
+                    path="/activity-log"
+                    element={<AdminActivityLog />}
                   />
                 </Routes>
               </AdminLayout>
