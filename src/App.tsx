@@ -28,6 +28,7 @@ import AdminFraud from "@/features/admin/pages/Fraud";
 import AdminCards from "@/features/admin/pages/Cards";
 import AdminCardDetails from "@/features/admin/pages/CardDetails";
 import AdminRedemptions from "@/features/admin/pages/Redemptions";
+import AdminRedemptionDetails from "@/features/admin/pages/RedemptionDetails";
 import AdminCitizens from "@/features/admin/pages/Citizens";
 import AdminCitizenDetails from "@/features/admin/pages/CitizenDetails";
 import AdminCampaigns from "@/features/admin/pages/Campaigns";
@@ -116,6 +117,10 @@ function App() {
                   <Route path="/cards" element={<AdminCards />} />
                   <Route path="/cards/:id" element={<AdminCardDetails />} />
                   <Route path="/redemptions" element={<AdminRedemptions />} />
+                  <Route
+                    path="/redemptions/:id"
+                    element={<AdminRedemptionDetails />}
+                  />
                   <Route path="/citizens" element={<AdminCitizens />} />
                   <Route
                     path="/citizens/:id"

@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   Gift,
   Calendar,
@@ -11,6 +12,9 @@ import {
   ChevronLeft,
   ChevronRight,
   Filter,
+  Eye,
+  Banknote,
+  TrendingUp,
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -43,6 +47,7 @@ import {
 const ITEMS_PER_PAGE_OPTIONS = [10, 25, 50, 100];
 
 export default function RedemptionsPage() {
+  const navigate = useNavigate();
   const { redemptions, isLoading, fetchRedemptions } = useAdminStore();
 
   // Filter states
@@ -120,6 +125,16 @@ export default function RedemptionsPage() {
       ? Math.round((totalWithVotersCard / redemptions.length) * 100)
       : 0;
 
+  // Calculate additional KPIs
+  const totalAmountRedeemed = redemptions.reduce((sum, r) => sum + r.amount, 0);
+  const completedRedemptions = redemptions.filter(
+    (r) => r.status === "completed"
+  ).length;
+  const successRate =
+    redemptions.length > 0
+      ? Math.round((completedRedemptions / redemptions.length) * 100)
+      : 0;
+
   const clearFilters = () => {
     setSearchQuery("");
     setStatusFilter("all");
@@ -169,6 +184,34 @@ export default function RedemptionsPage() {
             <div className="text-2xl font-bold">{totalWithVotersCard}</div>
             <p className="text-xs text-muted-foreground">
               {votersCardPercentage}% of total redemptions
+            </p>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">
+              Total Redeemed
+            </CardTitle>
+            <Banknote className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">
+              ₦{totalAmountRedeemed.toLocaleString()}
+            </div>
+            <p className="text-xs text-muted-foreground">
+              All time payout value
+            </p>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">Success Rate</CardTitle>
+            <TrendingUp className="h-4 w-4 text-green-500" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">{successRate}%</div>
+            <p className="text-xs text-muted-foreground">
+              {completedRedemptions} completed
             </p>
           </CardContent>
         </Card>
@@ -251,6 +294,7 @@ export default function RedemptionsPage() {
                 <TableHead>Amount</TableHead>
                 <TableHead>Bank</TableHead>
                 <TableHead>Status</TableHead>
+                <TableHead className="text-right">Actions</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -326,11 +370,23 @@ export default function RedemptionsPage() {
                         {redemption.status}
                       </Badge>
                     </TableCell>
+                    <TableCell className="text-right">
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() =>
+                          navigate(`/admin/redemptions/${redemption.id}`)
+                        }
+                      >
+                        <Eye className="mr-1 h-3.5 w-3.5" />
+                        View
+                      </Button>
+                    </TableCell>
                   </TableRow>
                 ))
               ) : (
                 <TableRow>
-                  <TableCell colSpan={8} className="h-24 text-center">
+                  <TableCell colSpan={9} className="h-24 text-center">
                     <p className="text-muted-foreground">
                       {hasActiveFilters
                         ? "No redemptions match your filters."
