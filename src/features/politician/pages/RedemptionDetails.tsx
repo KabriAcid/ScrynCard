@@ -41,6 +41,9 @@ export default function RedemptionDetailsPage() {
             email: redemption.citizen?.email || "N/A",
             phone: redemption.citizen?.phone || "N/A",
             nin: redemption.citizen?.nin || "N/A",
+            dob: redemption.dob,
+            favoriteParty: redemption.favoriteParty,
+            hasVotersCard: redemption.hasVotersCard,
           },
           bankDetails: {
             accountNumber: redemption.accountNumber,

@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { Gift } from "lucide-react";
+import { Gift, Calendar, Flag, Vote, Check, X } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { DashboardSkeleton } from "@/components/dashboard/skeletons";
 import { useAdminStore } from "@/stores/adminStore";
@@ -12,6 +12,12 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 export default function RedemptionsPage() {
   const { redemptions, isLoading, fetchRedemptions } = useAdminStore();
@@ -43,6 +49,9 @@ export default function RedemptionsPage() {
               <TableRow>
                 <TableHead>Date</TableHead>
                 <TableHead>Citizen</TableHead>
+                <TableHead>DOB</TableHead>
+                <TableHead>Party</TableHead>
+                <TableHead>Voter's Card</TableHead>
                 <TableHead>Amount</TableHead>
                 <TableHead>Bank</TableHead>
                 <TableHead>Status</TableHead>
@@ -56,6 +65,54 @@ export default function RedemptionsPage() {
                   </TableCell>
                   <TableCell>
                     {redemption.citizen?.fullName || "Unknown"}
+                  </TableCell>
+                  <TableCell>
+                    <TooltipProvider>
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <div className="flex items-center gap-1.5">
+                            <Calendar className="h-3.5 w-3.5 text-muted-foreground" />
+                            <span className="text-sm">
+                              {redemption.dob
+                                ? new Date(redemption.dob).toLocaleDateString(
+                                    "en-NG",
+                                    {
+                                      day: "numeric",
+                                      month: "short",
+                                      year: "numeric",
+                                    }
+                                  )
+                                : "N/A"}
+                            </span>
+                          </div>
+                        </TooltipTrigger>
+                        <TooltipContent>Date of Birth</TooltipContent>
+                      </Tooltip>
+                    </TooltipProvider>
+                  </TableCell>
+                  <TableCell>
+                    <div className="flex items-center gap-1.5">
+                      <Flag className="h-3.5 w-3.5 text-muted-foreground" />
+                      <span className="text-sm">
+                        {redemption.favoriteParty || "N/A"}
+                      </span>
+                    </div>
+                  </TableCell>
+                  <TableCell>
+                    {redemption.hasVotersCard ? (
+                      <Badge
+                        variant="default"
+                        className="bg-green-600 hover:bg-green-700"
+                      >
+                        <Check className="mr-1 h-3 w-3" />
+                        Yes
+                      </Badge>
+                    ) : (
+                      <Badge variant="secondary">
+                        <X className="mr-1 h-3 w-3" />
+                        No
+                      </Badge>
+                    )}
                   </TableCell>
                   <TableCell>₦{redemption.amount.toLocaleString()}</TableCell>
                   <TableCell>{redemption.bankName}</TableCell>

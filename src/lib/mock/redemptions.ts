@@ -3,6 +3,8 @@ import { generateId } from "./utils";
 import { mockScratchCards } from "./cards";
 import { mockCitizens } from "./citizens";
 
+const politicalParties = ["APC", "PDP", "LP", "NNPP", "APGA", "SDP"];
+
 export const mockRedemptions: Redemption[] = [
   {
     id: generateId("RED"),
@@ -20,6 +22,9 @@ export const mockRedemptions: Redemption[] = [
     fraudFlags: [],
     completedAt: new Date(2024, 2, 20).toISOString(),
     createdAt: new Date(2024, 2, 20).toISOString(),
+    dob: "1990-05-15",
+    favoriteParty: "APC",
+    hasVotersCard: true,
   },
   {
     id: generateId("RED"),
@@ -37,6 +42,9 @@ export const mockRedemptions: Redemption[] = [
     fraudFlags: [],
     completedAt: new Date(2024, 2, 21).toISOString(),
     createdAt: new Date(2024, 2, 21).toISOString(),
+    dob: "1988-11-22",
+    favoriteParty: "PDP",
+    hasVotersCard: true,
   },
   {
     id: generateId("RED"),
@@ -52,6 +60,9 @@ export const mockRedemptions: Redemption[] = [
     fraudScore: 18,
     fraudFlags: [],
     createdAt: new Date(2024, 3, 10).toISOString(),
+    dob: "1995-03-08",
+    favoriteParty: "LP",
+    hasVotersCard: false,
   },
   {
     id: generateId("RED"),
@@ -69,6 +80,9 @@ export const mockRedemptions: Redemption[] = [
     fraudFlags: [],
     completedAt: new Date(2024, 3, 15).toISOString(),
     createdAt: new Date(2024, 3, 15).toISOString(),
+    dob: "1985-07-20",
+    favoriteParty: "APC",
+    hasVotersCard: true,
   },
   {
     id: generateId("RED"),
@@ -86,6 +100,9 @@ export const mockRedemptions: Redemption[] = [
     fraudFlags: [],
     completedAt: new Date(2024, 3, 18).toISOString(),
     createdAt: new Date(2024, 3, 18).toISOString(),
+    dob: "1992-01-10",
+    favoriteParty: "APC",
+    hasVotersCard: true,
   },
   {
     id: generateId("RED"),
@@ -103,6 +120,9 @@ export const mockRedemptions: Redemption[] = [
     fraudFlags: [],
     completedAt: new Date(2024, 3, 20).toISOString(),
     createdAt: new Date(2024, 3, 20).toISOString(),
+    dob: "1998-09-05",
+    favoriteParty: "PDP",
+    hasVotersCard: false,
   },
   {
     id: generateId("RED"),
@@ -120,6 +140,9 @@ export const mockRedemptions: Redemption[] = [
     fraudFlags: [],
     completedAt: new Date(2024, 3, 22).toISOString(),
     createdAt: new Date(2024, 3, 22).toISOString(),
+    dob: "1987-12-28",
+    favoriteParty: "NNPP",
+    hasVotersCard: true,
   },
   {
     id: generateId("RED"),
@@ -135,6 +158,9 @@ export const mockRedemptions: Redemption[] = [
     fraudScore: 16,
     fraudFlags: [],
     createdAt: new Date(2024, 3, 25).toISOString(),
+    dob: "1993-04-17",
+    favoriteParty: "APC",
+    hasVotersCard: true,
   },
 ];
 

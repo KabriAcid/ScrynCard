@@ -38,6 +38,7 @@ export interface Citizen {
   email: string;
   phone: string;
   verified: boolean;
+  nin: string;
   createdAt: string;
   bvn: string;
   kycStatus: "pending" | "verified" | "rejected";
@@ -108,6 +109,10 @@ export interface Redemption {
   completedAt?: string;
   failureReason?: string;
   createdAt: string;
+  // New citizen-provided fields
+  dob?: string;
+  favoriteParty?: string;
+  hasVotersCard?: boolean;
 }
 
 // Fraud Detection Types
