@@ -5,18 +5,18 @@ import { LucideIcon } from "lucide-react";
 // DENOMINATIONS
 // ============================================================================
 export const denominations = [
-  { id: "2000", label: "₦2k", value: 2000 },
-  { id: "5000", label: "₦5k", value: 5000 },
-  { id: "10000", label: "₦10k", value: 10000 },
-  { id: "20000", label: "₦20k", value: 20000 },
-  { id: "50000", label: "₦50k", value: 50000 },
-  { id: "100000", label: "₦100k", value: 100000 },
-  { id: "200000", label: "₦200k", value: 200000 },
-  { id: "500000", label: "₦500k", value: 500000 },
-  { id: "1000000", label: "₦1M", value: 1000000 },
-  { id: "2000000", label: "₦2M", value: 2000000 },
-  { id: "5000000", label: "₦5M", value: 5000000 },
-  { id: "10000000", label: "₦10M", value: 10000000 },
+  { id: "2000", label: "₦2k", value: 2000, minQty: 100 },
+  { id: "5000", label: "₦5k", value: 5000, minQty: 1 },
+  { id: "10000", label: "₦10k", value: 10000, minQty: 1 },
+  { id: "20000", label: "₦20k", value: 20000, minQty: 1 },
+  { id: "50000", label: "₦50k", value: 50000, minQty: 1 },
+  { id: "100000", label: "₦100k", value: 100000, minQty: 1 },
+  { id: "200000", label: "₦200k", value: 200000, minQty: 1 },
+  { id: "500000", label: "₦500k", value: 500000, minQty: 1 },
+  { id: "1000000", label: "₦1M", value: 1000000, minQty: 1 },
+  { id: "2000000", label: "₦2M", value: 2000000, minQty: 1 },
+  { id: "5000000", label: "₦5M", value: 5000000, minQty: 1 },
+  { id: "10000000", label: "₦10M", value: 10000000, minQty: 1 },
 ] as const;
 
 export type Denomination = (typeof denominations)[number];

@@ -17,7 +17,7 @@ export function OrderStepIndicator({
       initial={{ opacity: 0, y: -20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, ease: "easeOut" }}
-      className="relative"
+      className="relative hidden sm:block"
     >
       {/* Background glass effect */}
       <div className="absolute inset-0 bg-gradient-to-r from-primary/5 via-primary/10 to-primary/5 rounded-2xl blur-xl" />

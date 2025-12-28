@@ -28,7 +28,7 @@ export default function OrderCardsPage() {
       <main className="w-full max-w-2xl mt-20">
         <Card className="shadow-2xl">
           <CardHeader className="text-center">
-            <CardTitle className="text-3xl font-bold">
+            <CardTitle className="text-2xl font-bold">
               Create a New Card Order
             </CardTitle>
             <CardDescription>
