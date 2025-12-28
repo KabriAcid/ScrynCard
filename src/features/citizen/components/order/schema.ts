@@ -1,21 +1,62 @@
 import { z } from "zod";
 import { LucideIcon } from "lucide-react";
 
+// ============================================================================
+// DENOMINATIONS
+// ============================================================================
 export const denominations = [
-  { id: "2000", label: "₦2k" },
-  { id: "5000", label: "₦5k" },
-  { id: "10000", label: "₦10k" },
-  { id: "20000", label: "₦20k" },
-  { id: "50000", label: "₦50k" },
-  { id: "100000", label: "₦100k" },
-  { id: "200000", label: "₦200k" },
-  { id: "500000", label: "₦500k" },
-  { id: "1000000", label: "₦1M" },
-  { id: "2000000", label: "₦2M" },
-  { id: "5000000", label: "₦5M" },
-  { id: "10000000", label: "₦10M" },
+  { id: "2000", label: "₦2k", value: 2000 },
+  { id: "5000", label: "₦5k", value: 5000 },
+  { id: "10000", label: "₦10k", value: 10000 },
+  { id: "20000", label: "₦20k", value: 20000 },
+  { id: "50000", label: "₦50k", value: 50000 },
+  { id: "100000", label: "₦100k", value: 100000 },
+  { id: "200000", label: "₦200k", value: 200000 },
+  { id: "500000", label: "₦500k", value: 500000 },
+  { id: "1000000", label: "₦1M", value: 1000000 },
+  { id: "2000000", label: "₦2M", value: 2000000 },
+  { id: "5000000", label: "₦5M", value: 5000000 },
+  { id: "10000000", label: "₦10M", value: 10000000 },
 ] as const;
 
+export type Denomination = (typeof denominations)[number];
+export type DenominationType = Denomination["id"];
+
+// ============================================================================
+// ORDER CALCULATIONS
+// ============================================================================
+export const SERVICE_FEE_RATE = 0.15; // 15%
+export const PRINTING_COST_PER_CARD = 200; // ₦200 per card
+
+export interface OrderCalculations {
+  totalCards: number;
+  cardValue: number;
+  serviceFee: number;
+  printingCost: number;
+  totalToPay: number;
+}
+
+export const calculateOrderTotals = (
+  items: { denomination: string; quantity: number }[]
+): OrderCalculations => {
+  const totalCards = items.reduce(
+    (sum, item) => sum + (Number(item.quantity) || 0),
+    0
+  );
+  const cardValue = items.reduce((sum, item) => {
+    const denom = denominations.find((d) => d.id === item.denomination);
+    return sum + (denom?.value || 0) * (Number(item.quantity) || 0);
+  }, 0);
+  const serviceFee = cardValue * SERVICE_FEE_RATE;
+  const printingCost = totalCards * PRINTING_COST_PER_CARD;
+  const totalToPay = cardValue + serviceFee + printingCost;
+
+  return { totalCards, cardValue, serviceFee, printingCost, totalToPay };
+};
+
+// ============================================================================
+// VALIDATION SCHEMA
+// ============================================================================
 const denominationEnum = denominations.map((d) => d.id) as [
   string,
   ...string[]
@@ -37,7 +78,6 @@ export const OrderSchema = z.object({
   }),
   state: z.string({ required_error: "Please select a state." }),
   lga: z.string({ required_error: "Please select an LGA." }),
-  ward: z.string({ required_error: "Please select a ward." }),
   orderItems: z
     .array(
       z.object({
@@ -73,8 +113,31 @@ export const OrderSchema = z.object({
 
 export type OrderFormValues = z.infer<typeof OrderSchema>;
 
-export const politicalParties = ["ACN", "PDP", "APC", "LP", "NNPP", "APGA"];
-export const titles = ["Hon.", "Chief", "Dr.", "Mr.", "Mrs.", "Ms."];
+// ============================================================================
+// SELECT OPTIONS
+// ============================================================================
+export const politicalParties = [
+  "APC",
+  "PDP",
+  "LP",
+  "NNPP",
+  "APGA",
+  "SDP",
+  "ADC",
+  "YPP",
+];
+export const titles = [
+  "Hon.",
+  "Chief",
+  "Dr.",
+  "Engr.",
+  "Barr.",
+  "Alh.",
+  "Hajiya",
+  "Mr.",
+  "Mrs.",
+  "Ms.",
+];
 export const politicalRoles = [
   "President",
   "Vice President",
@@ -85,43 +148,114 @@ export const politicalRoles = [
   "State Assembly Member",
   "Local Government Chairman",
   "Councillor",
+  "Party Chairman",
+  "Women Leader",
+  "Youth Leader",
 ];
 
+// ============================================================================
+// STATES AND LGAs (Katsina first, then alphabetical)
+// ============================================================================
 export const statesAndLgas: Record<string, string[]> = {
-  "Abuja (FCT)": ["Abuja Municipal", "Bwari", "Gwagwalada", "Kuje", "Kwali"],
-  Lagos: ["Agege", "Ikeja", "Kosofe", "Mushin", "Oshodi-Isolo"],
-  Rivers: ["Port Harcourt", "Obio-Akpor", "Eleme", "Ikwerre", "Oyigbo"],
-  Kano: ["Kano Municipal", "Fagge", "Dala", "Gwale", "Tarauni"],
+  Katsina: [
+    "Katsina",
+    "Daura",
+    "Funtua",
+    "Malumfashi",
+    "Kankara",
+    "Jibia",
+    "Kafur",
+    "Dutsin-Ma",
+    "Mani",
+    "Bakori",
+    "Batsari",
+    "Baure",
+    "Bindawa",
+    "Charanchi",
+    "Dan-Musa",
+    "Dandume",
+    "Danja",
+    "Ingawa",
+    "Kaita",
+    "Kurfi",
+    "Kusada",
+    "Mai'adua",
+    "Mashi",
+    "Matazu",
+    "Musawa",
+    "Rimi",
+    "Sabuwa",
+    "Safana",
+    "Sandamu",
+    "Zango",
+  ],
+  "Abuja (FCT)": [
+    "Abuja Municipal (AMAC)",
+    "Bwari",
+    "Gwagwalada",
+    "Kuje",
+    "Kwali",
+    "Abaji",
+  ],
+  Kaduna: [
+    "Kaduna North",
+    "Kaduna South",
+    "Chikun",
+    "Igabi",
+    "Zaria",
+    "Sabon Gari",
+    "Giwa",
+    "Soba",
+  ],
+  Kano: [
+    "Kano Municipal",
+    "Fagge",
+    "Dala",
+    "Gwale",
+    "Tarauni",
+    "Nassarawa",
+    "Ungogo",
+    "Kumbotso",
+  ],
+  Lagos: [
+    "Ikeja",
+    "Lagos Island",
+    "Lagos Mainland",
+    "Eti-Osa",
+    "Surulere",
+    "Kosofe",
+    "Agege",
+    "Alimosho",
+  ],
   Oyo: [
     "Ibadan North",
     "Ibadan South-West",
     "Ibadan North-West",
     "Ibadan North-East",
     "Ibadan South-East",
+    "Ogbomosho North",
+    "Oyo East",
+  ],
+  Rivers: [
+    "Port Harcourt",
+    "Obio-Akpor",
+    "Eleme",
+    "Ikwerre",
+    "Oyigbo",
+    "Okrika",
+    "Bonny",
   ],
 };
 
 export const stateNames = Object.keys(statesAndLgas);
 
-export const wardsByLga: Record<string, string[]> = {
-  "Abuja Municipal": [
-    "City Centre",
-    "Garki",
-    "Wuse",
-    "Maitama",
-    "Asokoro",
-    "Guzape",
-  ],
-  Bwari: ["Bwari Central", "Dutse", "Kubwa", "Ushafa", "Byazhin"],
-  Ikeja: ["Alausa", "Oregun", "Ojodu", "Agidingbi", "GRA", "Opebi"],
-  "Port Harcourt": ["Old GRA", "New GRA", "D-Line", "Diobu", "Borokiri"],
-  "Kano Municipal": ["Sabo Gari", "Nassarawa", "Tarauni", "Fagge", "Gwale"],
-  "Ibadan North": ["Agodi", "Bodija", "Sango", "UI", "Mokola"],
-};
-
+// ============================================================================
+// STEP CONFIGURATION
+// ============================================================================
 export interface StepConfig {
   id: number;
   title: string;
+  description: string;
   fields: readonly (keyof OrderFormValues)[];
   icon: LucideIcon;
 }

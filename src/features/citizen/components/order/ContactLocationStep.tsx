@@ -1,5 +1,13 @@
 import { motion } from "framer-motion";
-import { Mail, Phone, MapPin } from "lucide-react";
+import {
+  Mail,
+  Phone,
+  MapPin,
+  Building2,
+  ArrowRight,
+  ArrowLeft,
+  Globe,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -17,13 +25,16 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { UseFormReturn } from "react-hook-form";
+import { OrderFormValues, stateNames, statesAndLgas } from "./schema";
 import {
-  OrderFormValues,
-  stateNames,
-  statesAndLgas,
-  wardsByLga,
-} from "./schema";
-import { ArrowLeft } from "lucide-react";
+  containerVariants,
+  itemVariants,
+  stepTransition,
+  StepHeader,
+  FormSection,
+  FormGrid,
+  GlassCard,
+} from "./shared";
 
 interface ContactLocationStepProps {
   form: UseFormReturn<OrderFormValues>;
@@ -31,214 +42,240 @@ interface ContactLocationStepProps {
   onPrev: () => void;
 }
 
-const itemVariants = {
-  hidden: { opacity: 0, y: 12 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: { type: "spring", stiffness: 100, damping: 12 },
-  },
-};
-
-const stepVariants = {
-  hidden: { opacity: 0, x: 20 },
-  visible: { opacity: 1, x: 0, transition: { duration: 0.4 } },
-  exit: { opacity: 0, x: -20, transition: { duration: 0.3 } },
-};
-
 export function ContactLocationStep({
   form,
   onNext,
   onPrev,
 }: ContactLocationStepProps) {
   const selectedState = form.watch("state");
-  const selectedLga = form.watch("lga");
+
+  // Get LGAs for selected state
+  const availableLgas = selectedState ? statesAndLgas[selectedState] || [] : [];
 
   return (
     <motion.div
       key="step-2"
-      className="space-y-5"
-      variants={stepVariants}
+      variants={stepTransition}
       initial="hidden"
       animate="visible"
       exit="exit"
+      className="space-y-6"
     >
-      <motion.div
-        className="flex items-center gap-3 mb-6"
-        variants={itemVariants}
-      >
-        <div className="p-2 bg-primary/20 rounded-lg">
-          <MapPin className="h-5 w-5 text-primary" />
-        </div>
-        <div>
-          <h3 className="text-foreground font-semibold text-lg">
-            Contact & Location
-          </h3>
-          <p className="text-muted-foreground text-sm">
-            Provide your contact details and order location
-          </p>
-        </div>
-      </motion.div>
+      {/* Step Header */}
+      <StepHeader
+        icon={MapPin}
+        title="Contact & Location"
+        description="How can we reach you and where should we deliver?"
+        step={2}
+        totalSteps={3}
+      />
 
+      {/* Main Content */}
       <motion.div
-        variants={itemVariants}
-        className="grid grid-cols-1 gap-4 sm:grid-cols-2"
+        variants={containerVariants}
+        initial="hidden"
+        animate="visible"
+        className="space-y-6"
       >
-        <FormField
-          control={form.control}
-          name="email"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Email Address</FormLabel>
-              <FormControl>
-                <div className="relative">
-                  <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground pointer-events-none" />
-                  <Input
-                    type="email"
-                    placeholder="you@example.com"
-                    {...field}
-                    className="pl-10 bg-background border-input transition-all focus:ring-2 focus:ring-primary/20"
-                  />
+        {/* Contact Information Section */}
+        <GlassCard>
+          <FormSection
+            title="Contact Information"
+            description="We'll use this to send order updates and delivery notifications"
+          >
+            <FormGrid>
+              {/* Email Input */}
+              <motion.div variants={itemVariants}>
+                <FormField
+                  control={form.control}
+                  name="email"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="text-foreground font-medium">
+                        Email Address
+                      </FormLabel>
+                      <FormControl>
+                        <div className="relative">
+                          <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground pointer-events-none" />
+                          <Input
+                            type="email"
+                            placeholder="you@example.com"
+                            {...field}
+                            className="h-11 pl-10 bg-background/50 border-border/50 hover:border-primary/50 focus:border-primary transition-colors"
+                          />
+                        </div>
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </motion.div>
+
+              {/* Phone Input */}
+              <motion.div variants={itemVariants}>
+                <FormField
+                  control={form.control}
+                  name="phone"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="text-foreground font-medium">
+                        Phone Number
+                      </FormLabel>
+                      <FormControl>
+                        <div className="relative">
+                          <Phone className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground pointer-events-none" />
+                          <Input
+                            type="tel"
+                            placeholder="08012345678"
+                            {...field}
+                            className="h-11 pl-10 bg-background/50 border-border/50 hover:border-primary/50 focus:border-primary transition-colors"
+                          />
+                        </div>
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </motion.div>
+            </FormGrid>
+          </FormSection>
+        </GlassCard>
+
+        {/* Location Section */}
+        <GlassCard>
+          <FormSection
+            title="Delivery Location"
+            description="Select your state and local government area for delivery"
+          >
+            <FormGrid>
+              {/* State Select */}
+              <motion.div variants={itemVariants}>
+                <FormField
+                  control={form.control}
+                  name="state"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="text-foreground font-medium">
+                        State
+                      </FormLabel>
+                      <Select
+                        onValueChange={(value) => {
+                          field.onChange(value);
+                          // Reset LGA when state changes
+                          form.setValue("lga", "");
+                        }}
+                        value={field.value}
+                      >
+                        <FormControl>
+                          <div className="relative">
+                            <Globe className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground z-10 pointer-events-none" />
+                            <SelectTrigger className="h-11 pl-10 bg-background/50 border-border/50 hover:border-primary/50 transition-colors">
+                              <SelectValue placeholder="Select your state" />
+                            </SelectTrigger>
+                          </div>
+                        </FormControl>
+                        <SelectContent>
+                          {stateNames.map((state) => (
+                            <SelectItem key={state} value={state}>
+                              {state}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </motion.div>
+
+              {/* LGA Select */}
+              <motion.div variants={itemVariants}>
+                <FormField
+                  control={form.control}
+                  name="lga"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="text-foreground font-medium">
+                        Local Government Area
+                      </FormLabel>
+                      <Select
+                        onValueChange={field.onChange}
+                        value={field.value ?? ""}
+                        disabled={!selectedState}
+                      >
+                        <FormControl>
+                          <div className="relative">
+                            <Building2 className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground z-10 pointer-events-none" />
+                            <SelectTrigger className="h-11 pl-10 bg-background/50 border-border/50 hover:border-primary/50 transition-colors disabled:opacity-50">
+                              <SelectValue
+                                placeholder={
+                                  selectedState
+                                    ? "Select your LGA"
+                                    : "First select a state"
+                                }
+                              />
+                            </SelectTrigger>
+                          </div>
+                        </FormControl>
+                        <SelectContent>
+                          {availableLgas.map((lga) => (
+                            <SelectItem key={lga} value={lga}>
+                              {lga}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </motion.div>
+            </FormGrid>
+
+            {/* Location Preview */}
+            {selectedState && (
+              <motion.div
+                initial={{ opacity: 0, height: 0 }}
+                animate={{ opacity: 1, height: "auto" }}
+                exit={{ opacity: 0, height: 0 }}
+                className="mt-4 p-3 rounded-lg bg-primary/5 border border-primary/10"
+              >
+                <div className="flex items-center gap-2 text-sm">
+                  <MapPin className="h-4 w-4 text-primary" />
+                  <span className="text-muted-foreground">Delivery to:</span>
+                  <span className="font-medium text-foreground">
+                    {form.watch("lga")
+                      ? `${form.watch("lga")}, ${selectedState}`
+                      : selectedState}
+                  </span>
                 </div>
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="phone"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Phone Number</FormLabel>
-              <FormControl>
-                <div className="relative">
-                  <Phone className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground pointer-events-none" />
-                  <Input
-                    type="tel"
-                    placeholder="08012345678"
-                    {...field}
-                    className="pl-10 bg-background border-input transition-all focus:ring-2 focus:ring-primary/20"
-                  />
-                </div>
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-      </motion.div>
+              </motion.div>
+            )}
+          </FormSection>
+        </GlassCard>
 
-      <motion.div
-        variants={itemVariants}
-        className="grid grid-cols-1 gap-4 sm:grid-cols-2"
-      >
-        <FormField
-          control={form.control}
-          name="state"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>State</FormLabel>
-              <Select
-                onValueChange={(value) => {
-                  field.onChange(value);
-                  form.resetField("lga");
-                  form.resetField("ward");
-                }}
-                value={field.value}
-              >
-                <FormControl>
-                  <SelectTrigger className="bg-background border-input transition-all focus:ring-2 focus:ring-primary/20">
-                    <SelectValue placeholder="Select your state" />
-                  </SelectTrigger>
-                </FormControl>
-                <SelectContent>
-                  {stateNames.map((state) => (
-                    <SelectItem key={state} value={state}>
-                      {state}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="lga"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>LGA (Local Government)</FormLabel>
-              <Select
-                onValueChange={(value) => {
-                  field.onChange(value);
-                  form.resetField("ward");
-                }}
-                value={field.value ?? ""}
-                disabled={!selectedState}
-              >
-                <FormControl>
-                  <SelectTrigger className="bg-background border-input transition-all focus:ring-2 focus:ring-primary/20">
-                    <SelectValue placeholder="Select your LGA" />
-                  </SelectTrigger>
-                </FormControl>
-                <SelectContent>
-                  {(statesAndLgas[selectedState] || []).map((lga) => (
-                    <SelectItem key={lga} value={lga}>
-                      {lga}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-      </motion.div>
-
-      <motion.div variants={itemVariants}>
-        <FormField
-          control={form.control}
-          name="ward"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Ward</FormLabel>
-              <Select
-                onValueChange={field.onChange}
-                value={field.value ?? ""}
-                disabled={!selectedLga}
-              >
-                <FormControl>
-                  <SelectTrigger className="bg-background border-input transition-all focus:ring-2 focus:ring-primary/20">
-                    <SelectValue placeholder="Select your ward" />
-                  </SelectTrigger>
-                </FormControl>
-                <SelectContent>
-                  {(wardsByLga[selectedLga] || []).map((ward) => (
-                    <SelectItem key={ward} value={ward}>
-                      {ward}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-      </motion.div>
-
-      <motion.div variants={itemVariants} className="flex gap-3 pt-4">
-        <Button
-          type="button"
-          variant="outline"
-          onClick={onPrev}
-          className="flex-1"
-        >
-          <ArrowLeft className="mr-2 h-4 w-4" /> Previous
-        </Button>
-        <Button type="button" onClick={onNext} className="flex-1">
-          Next Step
-        </Button>
+        {/* Navigation */}
+        <motion.div variants={itemVariants} className="flex gap-3 pt-4">
+          <Button
+            type="button"
+            variant="outline"
+            onClick={onPrev}
+            size="lg"
+            className="flex-1 h-12 text-base font-semibold group"
+          >
+            <ArrowLeft className="mr-2 h-5 w-5 group-hover:-translate-x-1 transition-transform" />
+            <span>Previous</span>
+          </Button>
+          <Button
+            type="button"
+            onClick={onNext}
+            size="lg"
+            className="flex-1 h-12 text-base font-semibold group"
+          >
+            <span>Continue to Card Details</span>
+            <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
+          </Button>
+        </motion.div>
       </motion.div>
     </motion.div>
   );
