@@ -6,3 +6,8 @@ export { mockScratchCards } from "./cards";
 export { mockRedemptions, getRecentRedemptions } from "./redemptions";
 export { mockFraudChecks } from "./fraud";
 export { generateAdminStats } from "./stats";
+export {
+  getUserProfileByEmail,
+  getDemoUserProfile,
+  type UserProfile,
+} from "./users";
