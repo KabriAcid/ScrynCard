@@ -35,6 +35,7 @@ import AdminCampaignDetails from "@/features/admin/pages/CampaignDetails";
 import AdminProfile from "@/features/admin/pages/Profile";
 import AdminAccountSettings from "@/features/admin/pages/AccountSettings";
 import AdminPoliticianDetails from "@/features/admin/pages/PoliticianDetails";
+import AdminNotifications from "@/features/admin/pages/Notifications";
 
 // Politician Pages
 import PoliticianDashboard from "@/features/politician/pages/Dashboard";
@@ -127,6 +128,10 @@ function App() {
                   />
                   <Route path="/profile" element={<AdminProfile />} />
                   <Route path="/settings" element={<AdminAccountSettings />} />
+                  <Route
+                    path="/notifications"
+                    element={<AdminNotifications />}
+                  />
                 </Routes>
               </AdminLayout>
             </ProtectedRoute>

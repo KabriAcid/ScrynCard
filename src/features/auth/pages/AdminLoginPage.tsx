@@ -77,7 +77,7 @@ export default function AdminLoginPage() {
 
         {/* Login Card */}
         <Card className="shadow-2xl border-2">
-          <CardHeader>
+          <CardHeader className="text-center">
             <CardTitle className="text-2xl">Admin Login</CardTitle>
             <CardDescription>
               Enter your admin credentials to access the control panel
@@ -91,15 +91,6 @@ export default function AdminLoginPage() {
                   <AlertDescription>{error}</AlertDescription>
                 </Alert>
               )}
-
-              {/* Dev Mode Notice */}
-              <Alert>
-                <Shield className="h-4 w-4" />
-                <AlertDescription>
-                  <strong>Dev Mode:</strong> Press "Sign In" to auto-login as
-                  admin
-                </AlertDescription>
-              </Alert>
 
               <div className="space-y-2">
                 <Label htmlFor="email">Admin Email</Label>
@@ -147,16 +138,6 @@ export default function AdminLoginPage() {
                 )}
               </Button>
             </form>
-
-            <div className="mt-6 text-center">
-              <Button
-                variant="link"
-                onClick={() => navigate("/login")}
-                className="text-sm"
-              >
-                Login as Politician instead
-              </Button>
-            </div>
           </CardContent>
         </Card>
 
