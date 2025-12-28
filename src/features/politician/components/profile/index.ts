@@ -1,7 +1,7 @@
 export { ProfileHeader } from "./ProfileHeader";
 export { BioCard } from "./BioCard";
 export { PersonalInfoCard } from "./PersonalInfoCard";
-export { SocialLinksCard } from "./SocialLinksCard";
+export { PoliticalPresenceCard } from "./PoliticalPresenceCard";
 export { ContactInfoCard } from "./ContactInfoCard";
 export { StatisticsCards } from "./StatisticsCards";
 export { ActivityMetricsCard } from "./ActivityMetricsCard";

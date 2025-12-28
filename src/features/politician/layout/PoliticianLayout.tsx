@@ -29,7 +29,10 @@ export default function PoliticianLayout({
           <div className="mt-auto p-4 border-t">
             <div className="flex items-center gap-3">
               <Avatar>
-                <AvatarImage src={`https://i.pravatar.cc/150?u=${user?.id}`} />
+                <AvatarImage
+                  src="/img/dikko-radda.png"
+                  alt="Dikko Umar Radda"
+                />
                 <AvatarFallback>
                   <User />
                 </AvatarFallback>

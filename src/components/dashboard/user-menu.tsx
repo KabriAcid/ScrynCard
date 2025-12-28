@@ -61,7 +61,7 @@ export function UserMenu() {
           className="relative h-10 w-10 rounded-full ring-2 ring-offset-2 ring-primary/10 hover:ring-primary/30 transition-all"
         >
           <Avatar className="h-10 w-10">
-            <AvatarImage src={avatar} alt={displayName} />
+            <AvatarImage src="/img/dikko-radda.png" alt={displayName} />
             <AvatarFallback className="bg-primary text-primary-foreground">
               {initials}
             </AvatarFallback>

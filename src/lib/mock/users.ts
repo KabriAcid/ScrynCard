@@ -26,7 +26,7 @@ export function getDemoUserProfile(): UserProfile {
 function enrichPoliticianProfile(politician: Politician): UserProfile {
   return {
     ...politician,
-    avatar: `https://i.pravatar.cc/150?u=${politician.email}`,
+    avatar: `/img/dikko-radda.png`,
     bio: "Dedicated public servant committed to development and innovation",
     statistics: {
       totalOrders: Math.floor(Math.random() * 50) + 10,

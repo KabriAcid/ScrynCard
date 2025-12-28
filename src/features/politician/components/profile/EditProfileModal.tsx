@@ -44,11 +44,6 @@ export function EditProfileModal({
     email: userProfile.email,
     phone: userProfile.phone,
     bio: userProfile.bio || "",
-    website: userProfile.website || "",
-    twitter: userProfile.socialMedia?.twitter || "",
-    facebook: userProfile.socialMedia?.facebook || "",
-    instagram: userProfile.socialMedia?.instagram || "",
-    linkedin: userProfile.socialMedia?.linkedin || "",
   });
 
   const getInitials = (name: string) => {
@@ -88,7 +83,7 @@ export function EditProfileModal({
             <div className="relative">
               <Avatar className="h-20 w-20">
                 <AvatarImage
-                  src={userProfile.avatar}
+                  src="/img/dikko-radda.png"
                   alt={userProfile.fullName}
                 />
                 <AvatarFallback className="text-lg">
@@ -223,71 +218,6 @@ export function EditProfileModal({
               }
               placeholder="Tell us about yourself..."
             />
-          </div>
-
-          {/* Social Media */}
-          <div className="space-y-4">
-            <h4 className="font-medium">Social Media & Website</h4>
-            <div className="space-y-2">
-              <Label htmlFor="website">Website</Label>
-              <Input
-                id="website"
-                type="url"
-                placeholder="https://example.com"
-                value={formData.website}
-                onChange={(e) =>
-                  setFormData({ ...formData, website: e.target.value })
-                }
-              />
-            </div>
-            <div className="grid gap-4 md:grid-cols-2">
-              <div className="space-y-2">
-                <Label htmlFor="twitter">Twitter</Label>
-                <Input
-                  id="twitter"
-                  placeholder="@username"
-                  value={formData.twitter}
-                  onChange={(e) =>
-                    setFormData({ ...formData, twitter: e.target.value })
-                  }
-                />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="facebook">Facebook</Label>
-                <Input
-                  id="facebook"
-                  placeholder="username"
-                  value={formData.facebook}
-                  onChange={(e) =>
-                    setFormData({ ...formData, facebook: e.target.value })
-                  }
-                />
-              </div>
-            </div>
-            <div className="grid gap-4 md:grid-cols-2">
-              <div className="space-y-2">
-                <Label htmlFor="instagram">Instagram</Label>
-                <Input
-                  id="instagram"
-                  placeholder="@username"
-                  value={formData.instagram}
-                  onChange={(e) =>
-                    setFormData({ ...formData, instagram: e.target.value })
-                  }
-                />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="linkedin">LinkedIn</Label>
-                <Input
-                  id="linkedin"
-                  placeholder="username"
-                  value={formData.linkedin}
-                  onChange={(e) =>
-                    setFormData({ ...formData, linkedin: e.target.value })
-                  }
-                />
-              </div>
-            </div>
           </div>
         </div>
 
