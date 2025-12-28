@@ -12,7 +12,7 @@ import { PersonalDetailsStep } from "./redemption/PersonalDetailsStep";
 import { LocationStep } from "./redemption/LocationStep";
 import { PartySelectionStep } from "./redemption/PartySelectionStep";
 import { BankDetailsStep } from "./redemption/BankDetailsStep";
-import { StepIndicator } from "./redemption/StepIndicator";
+// import { StepIndicator } from "./redemption/StepIndicator";
 import { SuccessConfirmation } from "./redemption/SuccessConfirmation";
 
 export function CardRedemptionForm() {
@@ -182,7 +182,7 @@ export function CardRedemptionForm() {
               transition={{ duration: 0.4 }}
               className="space-y-8"
             >
-              <StepIndicator currentStep={step} totalSteps={4} />
+              {/* <StepIndicator currentStep={step} totalSteps={4} /> */}
 
               <AnimatePresence mode="wait">
                 {step === 1 && (
