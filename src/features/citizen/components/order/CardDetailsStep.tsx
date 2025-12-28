@@ -25,11 +25,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { UseFormReturn, useFieldArray } from "react-hook-form";
-import {
-  OrderFormValues,
-  denominations,
-  calculateOrderTotals,
-} from "./schema";
+import { OrderFormValues, denominations, calculateOrderTotals } from "./schema";
 import { formatCurrency } from "@/lib/utils";
 import { stepTransition, StepHeader } from "./shared";
 
@@ -255,7 +251,9 @@ export function CardDetailsStep({
                 </span>
               </div>
               <div className="flex justify-between text-sm">
-                <span className="text-muted-foreground">Service Fee (15%):</span>
+                <span className="text-muted-foreground">
+                  Service Fee (15%):
+                </span>
                 <span className="font-semibold text-orange-600 dark:text-orange-400">
                   {formatCurrency(calculations.serviceFee)}
                 </span>
