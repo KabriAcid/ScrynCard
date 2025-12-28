@@ -166,8 +166,11 @@ export const politicianService = {
       (sum, o) => sum + o.totalCardValue,
       0
     );
-    const totalRedemptions = mockRedemptions.filter((r) =>
-      politicianOrders.some((o) => o.id === r.cardId)
+
+    // Calculate total redemptions from mockRedemptions
+    const totalRedemptions = mockRedemptions.length;
+    const completedRedemptions = mockRedemptions.filter(
+      (r) => r.status === "completed"
     ).length;
 
     return {
@@ -180,10 +183,10 @@ export const politicianService = {
             (o) => o.status === "processing"
           ).length,
           totalOrders: politicianOrders.length,
-          totalRedemptions,
+          totalRedemptions: completedRedemptions,
           redemptionRate:
-            politicianOrders.length > 0
-              ? (totalRedemptions / politicianOrders.length) * 100
+            totalRedemptions > 0
+              ? (completedRedemptions / totalRedemptions) * 100
               : 0,
         },
         recentOrders: getRecentOrders(10).filter(

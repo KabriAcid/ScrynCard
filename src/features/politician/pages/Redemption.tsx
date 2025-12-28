@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import type { Redemption } from "@/lib/types";
+import { mockRedemptions } from "@/lib/mock";
 import { usePoliticianStore } from "@/stores/politicianStore";
 import { useAuthStore } from "@/stores/authStore";
 import {
@@ -26,20 +27,25 @@ export default function RedemptionPage() {
   }, [user?.id, fetchOrders]);
 
   useEffect(() => {
-    // Transform orders to redemption format for display
-    const transformedRedemptions: Redemption[] = orders.map(
-      (order: any, index: number) => ({
-        id: order.id,
-        date: new Date(order.createdAt).toLocaleDateString(),
-        amount: order.totalCardValue || 0,
-        status: "Completed",
-        citizenName: `Citizen ${index + 1}`,
-        cardCode: `****-${Math.random().toString().slice(2, 6)}`,
-        bank: "Zenith Bank",
+    // Transform mock redemptions to display format
+    const transformedRedemptions: Redemption[] = mockRedemptions.map(
+      (redemption) => ({
+        id: redemption.id,
+        date: new Date(redemption.createdAt).toLocaleDateString(),
+        amount: redemption.amount,
+        status:
+          redemption.status === "completed"
+            ? "Completed"
+            : redemption.status === "processing"
+            ? "Processing"
+            : "Pending",
+        citizenName: redemption.citizen?.fullName || "Unknown",
+        cardCode: redemption.card?.code || "N/A",
+        bank: redemption.bankName || "N/A",
       })
     );
     setRedemptions(transformedRedemptions);
-  }, [orders]);
+  }, []);
 
   // Show skeleton while loading OR if data hasn't loaded yet (matching Dashboard pattern)
   if (isLoading || !hasLoaded) {

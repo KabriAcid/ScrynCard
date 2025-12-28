@@ -38,13 +38,13 @@ const redemptionData = [
 ];
 
 const geoData = [
-  { location: "Lagos", redemptions: 4000 },
-  { location: "Kano", redemptions: 3000 },
-  { location: "Abuja", redemptions: 2000 },
-  { location: "Ibadan", redemptions: 2780 },
-  { location: "Kaduna", redemptions: 1890 },
-  { location: "P.H.", redemptions: 2390 },
-  { location: "Benin", redemptions: 3490 },
+  { location: "Rimi", redemptions: 3500 },
+  { location: "Daura", redemptions: 2800 },
+  { location: "Kankara", redemptions: 2100 },
+  { location: "Funtua", redemptions: 2450 },
+  { location: "Kafur", redemptions: 1750 },
+  { location: "Malumfashi", redemptions: 1920 },
+  { location: "Jibia", redemptions: 2640 },
 ];
 
 const partyData = [
@@ -235,7 +235,7 @@ export function GeographicDistributionChart() {
     <Card>
       <CardHeader>
         <CardTitle>Geographic Distribution</CardTitle>
-        <CardDescription>Redemptions by major cities.</CardDescription>
+        <CardDescription>Redemptions by Katsina LGAs.</CardDescription>
       </CardHeader>
       <CardContent>
         <ResponsiveContainer width="100%" height={350}>
