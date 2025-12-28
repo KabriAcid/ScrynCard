@@ -83,7 +83,11 @@ export function OrderForm() {
     try {
       const savedState = localStorage.getItem(FORM_STORAGE_KEY);
       if (savedState) {
-        const { values, step: savedStep, photoPreview: savedPhoto } = JSON.parse(savedState);
+        const {
+          values,
+          step: savedStep,
+          photoPreview: savedPhoto,
+        } = JSON.parse(savedState);
         // Remove ward if it exists in old data
         const { ward, ...cleanedValues } = values;
         form.reset(cleanedValues);

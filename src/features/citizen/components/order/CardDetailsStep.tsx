@@ -308,7 +308,10 @@ export function CardDetailsStep({
                                       <FormItem>
                                         <FormControl>
                                           <QuantityControl
-                                            value={Number(qtyField.value) || minQuantity}
+                                            value={
+                                              Number(qtyField.value) ||
+                                              minQuantity
+                                            }
                                             onChange={(val) =>
                                               qtyField.onChange(val)
                                             }
