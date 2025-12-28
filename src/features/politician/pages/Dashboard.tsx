@@ -1,4 +1,4 @@
-﻿import { useEffect } from "react";
+﻿import { useEffect, useCallback } from "react";
 import { DashboardSkeleton } from "@/components/dashboard/skeletons";
 import { usePoliticianStore } from "@/stores/politicianStore";
 import { useAuthStore } from "@/stores/authStore";
@@ -15,10 +15,12 @@ export default function PoliticianDashboardPage() {
   const { stats, isLoading, fetchDashboard } = usePoliticianStore();
 
   useEffect(() => {
+    console.log("Dashboard useEffect - user:", user?.id, "stats:", !!stats);
     if (user?.id) {
+      console.log("Calling fetchDashboard with:", user.id);
       fetchDashboard(user.id);
     }
-  }, [user?.id]);
+  }, [user?.id, fetchDashboard]);
 
   if (!stats || (isLoading && !stats)) {
     return <DashboardSkeleton />;
