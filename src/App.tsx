@@ -29,6 +29,7 @@ import AdminCards from "@/features/admin/pages/Cards";
 import AdminCardDetails from "@/features/admin/pages/CardDetails";
 import AdminRedemptions from "@/features/admin/pages/Redemptions";
 import AdminCitizens from "@/features/admin/pages/Citizens";
+import AdminCitizenDetails from "@/features/admin/pages/CitizenDetails";
 import AdminCampaigns from "@/features/admin/pages/Campaigns";
 import AdminCampaignDetails from "@/features/admin/pages/CampaignDetails";
 import AdminProfile from "@/features/admin/pages/Profile";
@@ -115,6 +116,10 @@ function App() {
                   <Route path="/cards/:id" element={<AdminCardDetails />} />
                   <Route path="/redemptions" element={<AdminRedemptions />} />
                   <Route path="/citizens" element={<AdminCitizens />} />
+                  <Route
+                    path="/citizens/:id"
+                    element={<AdminCitizenDetails />}
+                  />
                   <Route path="/campaigns" element={<AdminCampaigns />} />
                   <Route
                     path="/campaigns/:id"
