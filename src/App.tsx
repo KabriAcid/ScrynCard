@@ -26,9 +26,11 @@ import AdminPoliticians from "@/features/admin/pages/Politicians";
 import AdminAnalytics from "@/features/admin/pages/Analytics";
 import AdminFraud from "@/features/admin/pages/Fraud";
 import AdminCards from "@/features/admin/pages/Cards";
+import AdminCardDetails from "@/features/admin/pages/CardDetails";
 import AdminRedemptions from "@/features/admin/pages/Redemptions";
 import AdminCitizens from "@/features/admin/pages/Citizens";
 import AdminCampaigns from "@/features/admin/pages/Campaigns";
+import AdminCampaignDetails from "@/features/admin/pages/CampaignDetails";
 import AdminProfile from "@/features/admin/pages/Profile";
 import AdminAccountSettings from "@/features/admin/pages/AccountSettings";
 import AdminPoliticianDetails from "@/features/admin/pages/PoliticianDetails";
@@ -110,9 +112,14 @@ function App() {
                   <Route path="/analytics" element={<AdminAnalytics />} />
                   <Route path="/fraud" element={<AdminFraud />} />
                   <Route path="/cards" element={<AdminCards />} />
+                  <Route path="/cards/:id" element={<AdminCardDetails />} />
                   <Route path="/redemptions" element={<AdminRedemptions />} />
                   <Route path="/citizens" element={<AdminCitizens />} />
                   <Route path="/campaigns" element={<AdminCampaigns />} />
+                  <Route
+                    path="/campaigns/:id"
+                    element={<AdminCampaignDetails />}
+                  />
                   <Route path="/profile" element={<AdminProfile />} />
                   <Route path="/settings" element={<AdminAccountSettings />} />
                 </Routes>
