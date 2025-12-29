@@ -76,11 +76,11 @@ export default function AnalyticsPage() {
       </div>
 
       {/* Main KPIs */}
-      <div className="grid gap-4 md:grid-cols-2 md:gap-8 lg:grid-cols-4">
+      {/* <div className="grid gap-4 md:grid-cols-2 md:gap-8 lg:grid-cols-4">
         {kpis.map((kpi) => (
           <KPICard key={kpi.label} {...kpi} />
         ))}
-      </div>
+      </div> */}
 
       {/* Tabbed Analytics Sections */}
       <Tabs defaultValue="redemptions" className="space-y-6">
