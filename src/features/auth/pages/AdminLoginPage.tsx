@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Shield, Mail, KeyRound, Loader2, AlertCircle } from "lucide-react";
+import { Mail, Shield, KeyRound, Loader2, AlertCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -14,6 +14,7 @@ import {
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { useAuthStore } from "@/stores/authStore";
 import { useToast } from "@/hooks/use-toast";
+import { Logo } from "@/components/logo";
 
 export default function AdminLoginPage() {
   const navigate = useNavigate();
@@ -66,7 +67,7 @@ export default function AdminLoginPage() {
         <div className="text-center space-y-2">
           <div className="flex justify-center">
             <div className="rounded-full bg-primary p-4">
-              <Shield className="h-8 w-8 text-primary-foreground" />
+              <Logo />
             </div>
           </div>
           <h1 className="text-3xl font-bold tracking-tight">Admin Portal</h1>
@@ -77,7 +78,7 @@ export default function AdminLoginPage() {
 
         {/* Login Card */}
         <Card className="shadow-2xl border-2">
-          <CardHeader>
+          <CardHeader className="text-center">
             <CardTitle className="text-2xl">Admin Login</CardTitle>
             <CardDescription>
               Enter your admin credentials to access the control panel
@@ -91,15 +92,6 @@ export default function AdminLoginPage() {
                   <AlertDescription>{error}</AlertDescription>
                 </Alert>
               )}
-
-              {/* Dev Mode Notice */}
-              <Alert>
-                <Shield className="h-4 w-4" />
-                <AlertDescription>
-                  <strong>Dev Mode:</strong> Press "Sign In" to auto-login as
-                  admin
-                </AlertDescription>
-              </Alert>
 
               <div className="space-y-2">
                 <Label htmlFor="email">Admin Email</Label>
@@ -147,16 +139,6 @@ export default function AdminLoginPage() {
                 )}
               </Button>
             </form>
-
-            <div className="mt-6 text-center">
-              <Button
-                variant="link"
-                onClick={() => navigate("/login")}
-                className="text-sm"
-              >
-                Login as Politician instead
-              </Button>
-            </div>
           </CardContent>
         </Card>
 
