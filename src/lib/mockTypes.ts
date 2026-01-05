@@ -11,6 +11,7 @@ export type RedemptionStatus =
   | "completed"
   | "failed";
 export type FraudLevel = "low" | "medium" | "high" | "critical";
+export type MobileOperator = "MTN" | "Airtel" | "Glo" | "9Mobile";
 
 // User/Auth Types
 export interface User {
@@ -53,16 +54,19 @@ export interface Admin extends User {
 export interface ScratchCard {
   id: string;
   serialNumber: string; // Unique, unguessable identifier
-  code: string; // Card code (e.g., "APC-5K-B001-A3F7B9C2-X7")
+  giftCode: string; // Gift code (formerly "code")
   codeHash?: string; // SHA-256 hash of code (for DB lookup)
   checksum?: string; // CRC/Luhn checksum (e.g., "X7")
   denomination: number;
+  giftType: "airtime" | "data";
+  dataSize?: number; // MB if giftType="data"
   status: CardStatus;
   orderId: string;
   batchId?: string; // Links to order batch
+  mobileOperator?: MobileOperator; // Can be pre-assigned
   redeemedAt?: string;
-  redeemedBy?: string;
-  expiresAt?: string;
+  redeemedBy?: string; // Phone number or citizen ID
+  expiryDate?: string; // When gift code expires
   createdAt: string;
 }
 
@@ -96,23 +100,20 @@ export interface Redemption {
   id: string;
   cardId: string;
   card?: ScratchCard;
-  citizenId: string;
-  citizen?: Citizen;
+  citizenId?: string;
+  phoneNumber: string; // Primary identifier
+  mobileOperator: MobileOperator; // Auto-detected from phone
+  giftType: "airtime" | "data";
   amount: number;
-  bankName: string;
-  accountNumber: string;
-  accountName: string;
+  dataSize?: number;
   status: RedemptionStatus;
-  transferReference?: string;
+  operatorReference?: string; // Ebills/Provider reference
   fraudScore: number;
   fraudFlags: string[];
   completedAt?: string;
   failureReason?: string;
+  expiryDate?: string; // When airtime/data expires
   createdAt: string;
-  // New citizen-provided fields
-  dob?: string;
-  favoriteParty?: string;
-  hasVotersCard?: boolean;
 }
 
 // Fraud Detection Types

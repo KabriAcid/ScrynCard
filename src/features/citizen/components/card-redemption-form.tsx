@@ -7,79 +7,42 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Form } from "@/components/ui/form";
 import { LoaderCircle } from "lucide-react";
 import { RedemptionSchema, RedemptionFormValues } from "./redemption/schema";
-import { CardVerificationStep } from "./redemption/CardVerificationStep";
-import { PersonalDetailsStep } from "./redemption/PersonalDetailsStep";
-import { LocationStep } from "./redemption/LocationStep";
-import { PartySelectionStep } from "./redemption/PartySelectionStep";
-import { BankDetailsStep } from "./redemption/BankDetailsStep";
-// import { StepIndicator } from "./redemption/StepIndicator";
+import { GiftVerificationStep } from "./redemption/GiftVerificationStep";
+import { PhoneVerificationStep } from "./redemption/PhoneVerificationStep";
+import { ConfirmationStep } from "./redemption/ConfirmationStep";
 import { SuccessConfirmation } from "./redemption/SuccessConfirmation";
+import { useCitizenStore } from "@/stores/citizenStore";
 
 export function CardRedemptionForm() {
   const navigate = useNavigate();
   const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
-  const [cardVerified, setCardVerified] = useState(false); // Card verification complete
-  const [showSpinner, setShowSpinner] = useState(false); // Show spinner after verification
-  const [showForm, setShowForm] = useState(false); // Show form after spinner
-  const [showSuccess, setShowSuccess] = useState(false); // Show success screen
-  const [step, setStep] = useState(1); // Form step (1-4)
+  const [showSuccess, setShowSuccess] = useState(false);
+  const [step, setStep] = useState(1); // Form step (1-3)
+  const [giftDetails, setGiftDetails] = useState<any>(null);
   const [submittedValues, setSubmittedValues] =
     useState<RedemptionFormValues | null>(null);
-
-  // Serial and card code state (for card verification)
-  const [serialNumber, setSerialNumber] = useState("");
-  const [cardCode, setCardCode] = useState("");
-
-  // Handle spinner -> form transition
-  useEffect(() => {
-    if (showSpinner && !showForm) {
-      const timer = setTimeout(() => {
-        setShowForm(true);
-        setShowSpinner(false);
-        setIsLoading(false);
-      }, 2000);
-      return () => clearTimeout(timer);
-    }
-  }, [showSpinner, showForm]);
+  const redeemGift = useCitizenStore((state) => state.redeemGift);
 
   const form = useForm<RedemptionFormValues>({
     resolver: zodResolver(RedemptionSchema),
     mode: "onChange",
     defaultValues: {
-      serialNumber: "",
-      cardCode: "",
-      accountName: "",
-      email: "",
-      phone: "",
-      nin: "",
-      dob: "",
-      state: "",
-      lga: "",
-      ward: "",
-      favoriteParty: "",
-      hasVotersCard: false,
-      bankName: "",
-      accountNumber: "",
-      bvn: "",
+      giftCode: "",
+      phoneNumber: "",
     },
   });
 
-  const handleCardVerificationNext = () => {
-    setIsLoading(true);
-    setCardVerified(true);
-    setShowSpinner(true);
-
-    // Set form values with card data
-    form.setValue("serialNumber", serialNumber);
-    form.setValue("cardCode", cardCode);
+  // Store gift details when verified
+  const handleGiftVerified = (details: any) => {
+    setGiftDetails(details);
   };
 
   const handleNextStep = async () => {
     setIsLoading(true);
     try {
-      await new Promise((resolve) => setTimeout(resolve, 800));
-      setStep((prev) => (prev < 4 ? prev + 1 : prev));
+      await new Promise((resolve) => setTimeout(resolve, 500));
+      setStep((prev) => (prev < 3 ? prev + 1 : prev));
     } catch (error) {
       toast({
         variant: "destructive",
@@ -98,14 +61,26 @@ export function CardRedemptionForm() {
   const onSubmit = async (values: RedemptionFormValues) => {
     setIsLoading(true);
     try {
-      await new Promise((resolve) => setTimeout(resolve, 2000));
-      setSubmittedValues(values);
-      setShowSuccess(true);
+      const result = await redeemGift(values.giftCode, values.phoneNumber);
+      if (result.success) {
+        setSubmittedValues(values);
+        setShowSuccess(true);
+        toast({
+          title: "Success!",
+          description: `Your ${giftDetails?.giftType} has been sent to ${values.phoneNumber}`,
+        });
+      } else {
+        toast({
+          variant: "destructive",
+          title: "Redemption Failed",
+          description: result.error || "Failed to redeem gift",
+        });
+      }
     } catch (error) {
       toast({
         variant: "destructive",
         title: "Error",
-        description: "Failed to redeem card. Please try again.",
+        description: "An unexpected error occurred. Please try again.",
       });
     } finally {
       setIsLoading(false);
@@ -114,12 +89,9 @@ export function CardRedemptionForm() {
 
   const handleSuccessComplete = () => {
     form.reset();
-    setCardVerified(false);
-    setShowForm(false);
     setShowSuccess(false);
     setStep(1);
-    setSerialNumber("");
-    setCardCode("");
+    setGiftDetails(null);
     navigate("/");
   };
 
@@ -131,101 +103,61 @@ export function CardRedemptionForm() {
           {showSuccess && submittedValues && (
             <SuccessConfirmation
               values={submittedValues}
+              giftDetails={giftDetails}
               onComplete={handleSuccessComplete}
             />
           )}
 
-          {/* Card Verification Step */}
-          {!cardVerified && !showSuccess && (
+          {/* Step 1: Verify Gift */}
+          {!showSuccess && step === 1 && (
             <motion.div
-              key="card-verification"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
+              key="step-1"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
               transition={{ duration: 0.3 }}
             >
-              <CardVerificationStep
+              <GiftVerificationStep
                 isLoading={isLoading}
-                serialNumber={serialNumber}
-                cardCode={cardCode}
-                onSerialChange={setSerialNumber}
-                onCodeChange={setCardCode}
-                onNext={handleCardVerificationNext}
+                onNext={handleNextStep}
+                onPrev={handlePrevStep}
+                isFirstStep={true}
               />
             </motion.div>
           )}
 
-          {/* Loading Spinner */}
-          {showSpinner && !showForm && !showSuccess && (
+          {/* Step 2: Phone Verification */}
+          {!showSuccess && step === 2 && (
             <motion.div
-              key="spinner"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.3 }}
-              className="flex items-center justify-center py-16"
-            >
-              <div className="text-center">
-                <LoaderCircle className="h-12 w-12 animate-spin text-primary mx-auto mb-4" />
-                <p className="text-muted-foreground">Verifying your card...</p>
-              </div>
-            </motion.div>
-          )}
-
-          {/* Main Form */}
-          {showForm && !showSuccess && (
-            <motion.div
-              key="form-steps"
+              key="step-2"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -20 }}
-              transition={{ duration: 0.4 }}
-              className="space-y-8"
+              transition={{ duration: 0.3 }}
             >
-              {/* <StepIndicator currentStep={step} totalSteps={4} /> */}
+              <PhoneVerificationStep
+                isLoading={isLoading}
+                onNext={handleNextStep}
+                onPrev={handlePrevStep}
+              />
+            </motion.div>
+          )}
 
-              <AnimatePresence mode="wait">
-                {step === 1 && (
-                  <PersonalDetailsStep
-                    key="step-1"
-                    form={form}
-                    isLoading={isLoading}
-                    onNext={handleNextStep}
-                    onPrev={handlePrevStep}
-                    isFirstStep={true}
-                  />
-                )}
-
-                {step === 2 && (
-                  <LocationStep
-                    key="step-2"
-                    form={form}
-                    isLoading={isLoading}
-                    onNext={handleNextStep}
-                    onPrev={handlePrevStep}
-                  />
-                )}
-
-                {step === 3 && (
-                  <PartySelectionStep
-                    key="step-3"
-                    form={form}
-                    isLoading={isLoading}
-                    onNext={handleNextStep}
-                    onPrev={handlePrevStep}
-                  />
-                )}
-
-                {step === 4 && (
-                  <BankDetailsStep
-                    key="step-4"
-                    form={form}
-                    isLoading={isLoading}
-                    onSubmit={form.handleSubmit(onSubmit)}
-                    onPrev={handlePrevStep}
-                  />
-                )}
-              </AnimatePresence>
+          {/* Step 3: Confirmation */}
+          {!showSuccess && step === 3 && (
+            <motion.div
+              key="step-3"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              transition={{ duration: 0.3 }}
+            >
+              <ConfirmationStep
+                isLoading={isLoading}
+                giftDetails={giftDetails}
+                onPrev={handlePrevStep}
+                onSubmit={onSubmit}
+              />
             </motion.div>
           )}
         </AnimatePresence>

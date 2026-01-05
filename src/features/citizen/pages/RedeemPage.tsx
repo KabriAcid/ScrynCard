@@ -30,10 +30,10 @@ export default function RedeemPage() {
         <Card className="shadow-2xl">
           <CardHeader className="text-center">
             <CardTitle className="text-3xl font-bold">
-              Redeem Your Card
+              Redeem Your Gift
             </CardTitle>
             <CardDescription>
-              Complete the process in two simple steps
+              Complete the process in three simple steps
             </CardDescription>
           </CardHeader>
           <CardContent>

@@ -1,10 +1,12 @@
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
-import { Check } from "lucide-react";
+import { Check, Gift, Phone } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
 import type { RedemptionFormValues } from "./schema";
 
 interface SuccessConfirmationProps {
   values: RedemptionFormValues;
+  giftDetails: any;
   onComplete: () => void;
 }
 
@@ -54,9 +56,10 @@ const countdownVariants = {
 
 export const SuccessConfirmation = ({
   values,
+  giftDetails,
   onComplete,
 }: SuccessConfirmationProps) => {
-  const [countdown, setCountdown] = useState(3);
+  const [countdown, setCountdown] = useState(5);
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -72,7 +75,15 @@ export const SuccessConfirmation = ({
     return () => clearInterval(timer);
   }, [onComplete]);
 
-  const cardLastFour = values.serialNumber.slice(-4);
+  const getOperatorColor = (operator: string) => {
+    const colors: Record<string, { bg: string; text: string }> = {
+      MTN: { bg: "bg-yellow-100", text: "text-yellow-800" },
+      Airtel: { bg: "bg-red-100", text: "text-red-800" },
+      Glo: { bg: "bg-green-100", text: "text-green-800" },
+      "9Mobile": { bg: "bg-blue-100", text: "text-blue-800" },
+    };
+    return colors[operator] || { bg: "bg-gray-100", text: "text-gray-800" };
+  };
 
   return (
     <motion.div
@@ -96,42 +107,64 @@ export const SuccessConfirmation = ({
       {/* Success Message */}
       <motion.div variants={itemVariants} className="text-center">
         <h2 className="text-2xl font-bold text-foreground">
-          Card Redeemed Successfully!
+          Gift Redeemed Successfully!
         </h2>
         <p className="mt-2 text-sm text-muted-foreground">
-          Your card has been processed and credited to your account
+          Your {giftDetails?.giftType} has been sent to your phone
         </p>
       </motion.div>
 
-      {/* Card Details */}
-      <motion.div
-        variants={itemVariants}
-        className="w-full max-w-sm rounded-lg border border-border bg-card p-4"
-      >
-        <div className="space-y-3">
-          <div className="flex items-center justify-between">
-            <span className="text-sm font-medium text-muted-foreground">
-              Card Serial
-            </span>
-            <span className="font-mono text-sm font-semibold text-foreground">
-              ****{cardLastFour}
-            </span>
+      {/* Gift Details */}
+      <motion.div variants={itemVariants} className="w-full max-w-sm space-y-3">
+        {/* Gift Card */}
+        <div className="rounded-lg border-2 border-blue-200 bg-blue-50 p-4">
+          <div className="flex items-center gap-2 mb-3">
+            <Gift className="h-5 w-5 text-blue-600" />
+            <h3 className="font-semibold text-blue-900">Gift Details</h3>
           </div>
-          <div className="flex items-center justify-between border-t border-border pt-3">
-            <span className="text-sm font-medium text-muted-foreground">
-              Account
-            </span>
-            <span className="font-mono text-sm font-semibold text-foreground">
-              **** {values.accountNumber.slice(-4)}
-            </span>
+          <div className="space-y-2 text-sm text-blue-900">
+            <div className="flex justify-between">
+              <span className="text-blue-700">Type</span>
+              <Badge className="capitalize">{giftDetails?.giftType}</Badge>
+            </div>
+            <div className="flex justify-between">
+              <span className="text-blue-700">Amount</span>
+              <span className="font-semibold">
+                {giftDetails?.giftType === "data"
+                  ? `${giftDetails?.dataSize}MB`
+                  : `₦${giftDetails?.amount.toLocaleString()}`}
+              </span>
+            </div>
+            {giftDetails?.expiryDate && (
+              <div className="flex justify-between border-t border-blue-200 pt-2">
+                <span className="text-blue-700">Expires</span>
+                <span className="font-semibold">
+                  {new Date(giftDetails?.expiryDate).toLocaleDateString()}
+                </span>
+              </div>
+            )}
           </div>
-          <div className="flex items-center justify-between border-t border-border pt-3">
-            <span className="text-sm font-medium text-muted-foreground">
-              Name
-            </span>
-            <span className="text-sm font-semibold text-foreground">
-              {values.accountName}
-            </span>
+        </div>
+
+        {/* Phone Card */}
+        <div className="rounded-lg border-2 border-green-200 bg-green-50 p-4">
+          <div className="flex items-center gap-2 mb-3">
+            <Phone className="h-5 w-5 text-green-600" />
+            <h3 className="font-semibold text-green-900">Recipient</h3>
+          </div>
+          <div className="space-y-2 text-sm text-green-900">
+            <div className="flex justify-between items-center">
+              <span className="text-green-700">Phone</span>
+              <span className="font-mono font-semibold">
+                {values.phoneNumber}
+              </span>
+            </div>
+            <div className="flex justify-between items-center border-t border-green-200 pt-2">
+              <span className="text-green-700">Operator</span>
+              <Badge className={getOperatorColor(giftDetails?.operator).bg}>
+                {giftDetails?.operator}
+              </Badge>
+            </div>
           </div>
         </div>
       </motion.div>
@@ -141,7 +174,7 @@ export const SuccessConfirmation = ({
         variants={itemVariants}
         className="text-center text-sm text-muted-foreground"
       >
-        <p>Redirecting in</p>
+        <p>Redirecting to home in</p>
         <motion.div
           key={countdown}
           variants={countdownVariants}

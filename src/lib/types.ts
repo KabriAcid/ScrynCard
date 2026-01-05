@@ -1,13 +1,14 @@
 import type { LucideIcon } from "lucide-react";
+import type { MobileOperator } from "./operators/types";
 
 export type Transaction = {
   id: string;
   date: string;
   amount: number;
   status: "Success" | "Pending" | "Failed";
-  cardCode: string;
-  account: string;
-  bank: string;
+  giftCode: string;
+  phoneNumber: string;
+  operator: MobileOperator;
 };
 
 export type Order = {
@@ -30,12 +31,10 @@ export type Redemption = {
   date: string;
   amount: number;
   status: "Completed" | "Pending" | "Failed";
-  cardCode: string;
-  citizenName: string;
-  bank: string;
-  dob?: string;
-  favoriteParty?: string;
-  hasVotersCard?: boolean;
+  giftCode: string;
+  phoneNumber: string;
+  operator: MobileOperator;
+  giftType: "airtime" | "data";
 };
 
 export type Redeemer = {
@@ -44,19 +43,12 @@ export type Redeemer = {
     name: string;
     email: string;
     phone: string;
-    nin: string;
-    dob?: string;
-    favoriteParty?: string;
-    hasVotersCard?: boolean;
   };
-  bankDetails: {
-    accountNumber: string;
-    bankName: string;
-    bvn: string;
+  operatorDetails: {
+    phoneNumber: string;
+    operator: MobileOperator;
   };
   location: {
-    state: string;
-    lga: string;
     ipAddress: string;
     redemptionDate: string;
   };
