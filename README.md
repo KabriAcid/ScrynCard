@@ -2,6 +2,8 @@
 ## Complete Technical Proposal & Business Plan
 
 ---
+### Figma Design
+https://www.figma.com/design/tPeHbkVtc1QERApjFLEUFI/Scryn?node-id=0-1&p=f&t=60m14OdLe5VeWqWR-0
 
 ## 📋 Executive Summary
 
