@@ -1,29 +1,13 @@
-import { useEffect, useMemo, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import {
-  Gift,
-  Zap,
-  HardDrive,
-  TrendingUp,
-  Check,
-  X,
-  Search,
-  ChevronLeft,
-  ChevronRight,
-} from "lucide-react";
-import { Badge } from "@/components/ui/badge";
+import { useState, useMemo, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { DashboardSkeleton } from "@/components/dashboard/skeletons";
-import { useAdminStore } from "@/stores/adminStore";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import {
   Table,
   TableBody,
@@ -32,12 +16,35 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Badge } from "@/components/ui/badge";
+import { useNavigate } from "react-router-dom";
+import type { Redemption } from "@/lib/types";
+import {
+  ChevronLeft,
+  ChevronRight,
+  Search,
+  X,
+  Zap,
+  HardDrive,
+} from "lucide-react";
+
+interface AirtimeRedemptionTableProps {
+  redemptions: Redemption[];
+}
 
 const ITEMS_PER_PAGE_OPTIONS = [10, 25, 50, 100];
 
-export default function RedemptionsPage() {
+export function AirtimeRedemptionTable({
+  redemptions,
+}: AirtimeRedemptionTableProps) {
   const navigate = useNavigate();
-  const { redemptions, isLoading, fetchRedemptions } = useAdminStore();
 
   // Filter states
   const [searchQuery, setSearchQuery] = useState("");
@@ -48,10 +55,6 @@ export default function RedemptionsPage() {
   // Pagination states
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(10);
-
-  useEffect(() => {
-    fetchRedemptions();
-  }, [fetchRedemptions]);
 
   // Get unique operators for filter dropdown
   const uniqueOperators = useMemo(() => {
@@ -84,17 +87,12 @@ export default function RedemptionsPage() {
       // Gift type filter
       const matchesGiftType =
         giftTypeFilter === "all" || redemption.giftType === giftTypeFilter;
+
       return (
         matchesSearch && matchesStatus && matchesOperator && matchesGiftType
       );
     });
-  }, [
-    redemptions,
-    searchQuery,
-    statusFilter,
-    operatorFilter,
-    giftTypeFilter,
-  ]);
+  }, [redemptions, searchQuery, statusFilter, operatorFilter, giftTypeFilter]);
 
   // Pagination calculations
   const totalPages = Math.ceil(filteredRedemptions.length / itemsPerPage);
@@ -106,27 +104,6 @@ export default function RedemptionsPage() {
   useEffect(() => {
     setCurrentPage(1);
   }, [searchQuery, statusFilter, operatorFilter, giftTypeFilter, itemsPerPage]);
-
-  if (isLoading) {
-    return <DashboardSkeleton />;
-  }
-
-  // Calculate KPIs for airtime/data
-  const totalAirtimeDistributed = redemptions
-    .filter((r) => r.status === "completed" && r.giftType === "airtime")
-    .reduce((sum, r) => sum + (r.amount || 0), 0);
-  
-  const totalDataDistributed = redemptions
-    .filter((r) => r.status === "completed" && r.giftType === "data")
-    .reduce((sum, r) => sum + (r.dataSize || 0), 0);
-  
-  const completedRedemptions = redemptions.filter(
-    (r) => r.status === "completed"
-  ).length;
-  const successRate =
-    redemptions.length > 0
-      ? Math.round((completedRedemptions / redemptions.length) * 100)
-      : 0;
 
   const clearFilters = () => {
     setSearchQuery("");
@@ -141,106 +118,61 @@ export default function RedemptionsPage() {
     operatorFilter !== "all" ||
     giftTypeFilter !== "all";
 
+  const getStatusBadgeColor = (status: string) => {
+    if (status === "completed") return "bg-green-100 text-green-800";
+    if (status === "failed") return "bg-red-100 text-red-800";
+    return "bg-yellow-100 text-yellow-800";
+  };
+
+  const getOperatorColor = (operator: string) => {
+    const colors: Record<string, string> = {
+      MTN: "bg-yellow-100 text-yellow-800",
+      Airtel: "bg-red-100 text-red-800",
+      Glo: "bg-green-100 text-green-800",
+      "9Mobile": "bg-blue-100 text-blue-800",
+    };
+    return colors[operator] || "bg-gray-100 text-gray-800";
+  };
+
   return (
-    <div className="space-y-6">
-      <div>
-        <h1 className="text-3xl font-bold">Gift Redemptions</h1>
-        <p className="mt-2 text-muted-foreground">
-          All airtime and data gift redemptions across the platform
-        </p>
-      </div>
-
-      {/* KPI Cards */}
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">
-              Total Redemptions
-            </CardTitle>
-            <Gift className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{redemptions.length}</div>
-            <p className="text-xs text-muted-foreground">
-              All time gifts redeemed
-            </p>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">
-              Airtime Distributed
-            </CardTitle>
-            <Zap className="h-4 w-4 text-yellow-500" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">
-              ₦{totalAirtimeDistributed.toLocaleString()}
-            </div>
-            <p className="text-xs text-muted-foreground">
-              Total airtime value sent
-            </p>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">
-              Data Distributed
-            </CardTitle>
-            <HardDrive className="h-4 w-4 text-blue-500" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">
-              {Math.round(totalDataDistributed / 1024)} GB
-            </div>
-            <p className="text-xs text-muted-foreground">
-              Total data bundles sent
-            </p>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Success Rate</CardTitle>
-            <TrendingUp className="h-4 w-4 text-green-500" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{successRate}%</div>
-            <p className="text-xs text-muted-foreground">
-              {completedRedemptions} completed
-            </p>
-          </CardContent>
-        </Card>
-      </div>
-
-      <Card>
-        <CardHeader>
-          <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+    <Card>
+      <CardHeader>
+        <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+          <div>
             <CardTitle>
-              All Gift Redemptions ({filteredRedemptions.length}
+              Gift Redemption History ({filteredRedemptions.length}
               {hasActiveFilters && ` of ${redemptions.length}`})
             </CardTitle>
-            {hasActiveFilters && (
-              <Button variant="ghost" size="sm" onClick={clearFilters}>
-                <X className="mr-1 h-4 w-4" />
-                Clear filters
-              </Button>
-            )}
+            <CardDescription>
+              An overview of all airtime/data gift redemptions.
+            </CardDescription>
           </div>
-        </CardHeader>
-        <CardContent className="space-y-4">
+          {hasActiveFilters && (
+            <Button variant="ghost" size="sm" onClick={clearFilters}>
+              <X className="mr-1 h-4 w-4" />
+              Clear filters
+            </Button>
+          )}
+        </div>
+      </CardHeader>
+      <CardContent>
+        <div className="space-y-4">
           {/* Filters */}
-          <div className="flex flex-col gap-4 sm:flex-row sm:flex-wrap">
-            <div className="relative flex-1 min-w-[200px]">
-              <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+          <div className="flex flex-col gap-4 sm:flex-row">
+            {/* Search */}
+            <div className="relative flex-1">
+              <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
               <Input
-                placeholder="Search by phone, gift code, operator..."
+                placeholder="Search by phone, gift code, or operator..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 className="pl-9"
               />
             </div>
+
+            {/* Status Filter */}
             <Select value={statusFilter} onValueChange={setStatusFilter}>
-              <SelectTrigger className="w-full sm:w-[150px]">
+              <SelectTrigger className="w-[130px]">
                 <SelectValue placeholder="Status" />
               </SelectTrigger>
               <SelectContent>
@@ -253,7 +185,7 @@ export default function RedemptionsPage() {
 
             {/* Operator Filter */}
             <Select value={operatorFilter} onValueChange={setOperatorFilter}>
-              <SelectTrigger className="w-full sm:w-[150px]">
+              <SelectTrigger className="w-[130px]">
                 <SelectValue placeholder="Operator" />
               </SelectTrigger>
               <SelectContent>
@@ -268,13 +200,15 @@ export default function RedemptionsPage() {
 
             {/* Gift Type Filter */}
             <Select value={giftTypeFilter} onValueChange={setGiftTypeFilter}>
-              <SelectTrigger className="w-full sm:w-[150px]">
+              <SelectTrigger className="w-[130px]">
                 <SelectValue placeholder="Type" />
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="all">All Types</SelectItem>
                 <SelectItem value="airtime">Airtime</SelectItem>
                 <SelectItem value="data">Data</SelectItem>
+              </SelectContent>
+            </Select>
           </div>
 
           {/* Table */}
@@ -294,12 +228,17 @@ export default function RedemptionsPage() {
               <TableBody>
                 {paginatedRedemptions.length > 0 ? (
                   paginatedRedemptions.map((redemption) => (
-                    <TableRow key={redemption.id}>
+                    <TableRow
+                      key={redemption.id}
+                      className="cursor-pointer hover:bg-muted/50"
+                    >
                       <TableCell className="font-mono text-sm">
                         {redemption.phoneNumber}
                       </TableCell>
                       <TableCell>
-                        <Badge className={getOperatorColor(redemption.operator)}>
+                        <Badge
+                          className={getOperatorColor(redemption.operator)}
+                        >
                           {redemption.operator}
                         </Badge>
                       </TableCell>
@@ -308,12 +247,12 @@ export default function RedemptionsPage() {
                           {redemption.giftType === "airtime" ? (
                             <>
                               <Zap className="h-4 w-4 text-yellow-500" />
-                              <span>Airtime</span>
+                              <span className="capitalize">Airtime</span>
                             </>
                           ) : (
                             <>
                               <HardDrive className="h-4 w-4 text-blue-500" />
-                              <span>Data</span>
+                              <span className="capitalize">Data</span>
                             </>
                           )}
                         </div>
@@ -342,7 +281,7 @@ export default function RedemptionsPage() {
                           variant="ghost"
                           size="sm"
                           onClick={() =>
-                            navigate(`/admin/redemptions/${redemption.id}`)
+                            navigate(`/politician/redemptions/${redemption.id}`)
                           }
                         >
                           View
@@ -410,26 +349,8 @@ export default function RedemptionsPage() {
               </div>
             </div>
           )}
-        </CardContent>
-      </Card>
-    </div>
+        </div>
+      </CardContent>
+    </Card>
   );
-}
-
-// Helper function for status badge color
-function getStatusBadgeColor(status: string) {
-  if (status === "completed") return "bg-green-100 text-green-800";
-  if (status === "failed") return "bg-red-100 text-red-800";
-  return "bg-yellow-100 text-yellow-800";
-}
-
-// Helper function for operator color
-function getOperatorColor(operator: string) {
-  const colors: Record<string, string> = {
-    MTN: "bg-yellow-100 text-yellow-800",
-    Airtel: "bg-red-100 text-red-800",
-    Glo: "bg-green-100 text-green-800",
-    "9Mobile": "bg-blue-100 text-blue-800",
-  };
-  return colors[operator] || "bg-gray-100 text-gray-800";
 }

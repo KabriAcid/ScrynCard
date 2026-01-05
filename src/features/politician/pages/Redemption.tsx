@@ -4,8 +4,8 @@ import { mockRedemptions } from "@/lib/mock";
 import { usePoliticianStore } from "@/stores/politicianStore";
 import { useAuthStore } from "@/stores/authStore";
 import {
-  RedemptionStats,
-  RedemptionTable,
+  AirtimeRedemptionStats,
+  AirtimeRedemptionTable,
   RedemptionPageSkeleton,
 } from "./components";
 
@@ -26,19 +26,13 @@ export default function RedemptionPage() {
       (redemption) => ({
         id: redemption.id,
         date: new Date(redemption.createdAt).toLocaleDateString(),
-        amount: redemption.amount,
-        status:
-          redemption.status === "completed"
-            ? "Completed"
-            : redemption.status === "failed"
-            ? "Failed"
-            : "Pending",
-        citizenName: redemption.citizen?.fullName || "Unknown",
-        cardCode: redemption.card?.code || "N/A",
-        bank: redemption.bankName || "N/A",
-        dob: redemption.dob,
-        favoriteParty: redemption.favoriteParty,
-        hasVotersCard: redemption.hasVotersCard,
+        phoneNumber: redemption.phoneNumber || "Unknown",
+        operator: redemption.mobileOperator || "Unknown",
+        giftType: redemption.giftType || "airtime",
+        amount: redemption.amount || 0,
+        dataSize: redemption.dataSize || 0,
+        status: redemption.status || "pending",
+        giftCode: redemption.giftCode || "N/A",
       })
     );
     setRedemptions(transformedRedemptions);
@@ -50,19 +44,27 @@ export default function RedemptionPage() {
   }
 
   const totalRedemptions = redemptions.length;
-  const successfulPayouts = redemptions
-    .filter((r) => r.status === "Completed")
-    .reduce((sum, r) => sum + r.amount, 0);
-  const totalWithVotersCard = redemptions.filter((r) => r.hasVotersCard).length;
+  const totalAirtimeDistributed = redemptions
+    .filter((r) => r.status === "completed" && r.giftType === "airtime")
+    .reduce((sum, r) => sum + (r.amount || 0), 0);
+
+  // Get top operator
+  const operatorCounts: Record<string, number> = {};
+  redemptions.forEach((r) => {
+    operatorCounts[r.operator] = (operatorCounts[r.operator] || 0) + 1;
+  });
+  const topOperator =
+    Object.entries(operatorCounts).sort(([, a], [, b]) => b - a)[0]?.[0] ||
+    "MTN";
 
   return (
     <div className="space-y-6">
-      <RedemptionStats
+      <AirtimeRedemptionStats
         totalRedemptions={totalRedemptions}
-        successfulPayouts={successfulPayouts}
-        totalWithVotersCard={totalWithVotersCard}
+        totalAirtimeDistributed={totalAirtimeDistributed}
+        topOperator={topOperator}
       />
-      <RedemptionTable redemptions={redemptions} />
+      <AirtimeRedemptionTable redemptions={redemptions} />
     </div>
   );
 }

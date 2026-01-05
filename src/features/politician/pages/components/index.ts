@@ -5,6 +5,8 @@ export { RedemptionOverviewSection } from "./RedemptionOverviewSection";
 export { RecentOrdersSection } from "./RecentOrdersSection";
 export { RedemptionStats } from "./RedemptionStats";
 export { RedemptionTable } from "./RedemptionTable";
+export { AirtimeRedemptionStats } from "./AirtimeRedemptionStats";
+export { AirtimeRedemptionTable } from "./AirtimeRedemptionTable";
 export { RedemptionPageSkeleton } from "./RedemptionPageSkeleton";
 export { PersonalInfoSection } from "./PersonalInfoSection";
 export { BankDetailsSection } from "./BankDetailsSection";
