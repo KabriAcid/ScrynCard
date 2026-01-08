@@ -57,7 +57,7 @@ export default function RedemptionsPage() {
   const uniqueOperators = useMemo(() => {
     const operators = new Set<string>();
     redemptions.forEach((r) => {
-      if (r.operator) operators.add(r.operator);
+      if (r.mobileOperator) operators.add(r.mobileOperator);
     });
     return Array.from(operators).sort();
   }, [redemptions]);
@@ -70,8 +70,8 @@ export default function RedemptionsPage() {
       const matchesSearch =
         !searchQuery ||
         redemption.phoneNumber?.toLowerCase().includes(searchLower) ||
-        redemption.giftCode?.toLowerCase().includes(searchLower) ||
-        redemption.operator?.toLowerCase().includes(searchLower);
+        redemption.cardId?.toLowerCase().includes(searchLower) ||
+        redemption.mobileOperator?.toLowerCase().includes(searchLower);
 
       // Status filter
       const matchesStatus =
@@ -79,7 +79,7 @@ export default function RedemptionsPage() {
 
       // Operator filter
       const matchesOperator =
-        operatorFilter === "all" || redemption.operator === operatorFilter;
+        operatorFilter === "all" || redemption.mobileOperator === operatorFilter;
 
       // Gift type filter
       const matchesGiftType =
@@ -275,6 +275,8 @@ export default function RedemptionsPage() {
                 <SelectItem value="all">All Types</SelectItem>
                 <SelectItem value="airtime">Airtime</SelectItem>
                 <SelectItem value="data">Data</SelectItem>
+              </SelectContent>
+              </Select>
           </div>
 
           {/* Table */}
@@ -299,8 +301,8 @@ export default function RedemptionsPage() {
                         {redemption.phoneNumber}
                       </TableCell>
                       <TableCell>
-                        <Badge className={getOperatorColor(redemption.operator)}>
-                          {redemption.operator}
+                        <Badge className={getOperatorColor(redemption.mobileOperator)}>
+                          {redemption.mobileOperator}
                         </Badge>
                       </TableCell>
                       <TableCell>
@@ -324,7 +326,7 @@ export default function RedemptionsPage() {
                           : `₦${redemption.amount?.toLocaleString()}`}
                       </TableCell>
                       <TableCell className="text-sm text-muted-foreground">
-                        {redemption.date}
+                        {redemption.completedAt}
                       </TableCell>
                       <TableCell>
                         <Badge

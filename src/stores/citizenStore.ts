@@ -138,8 +138,3 @@ export const useCitizenStore = create<CitizenState>((set) => ({
     set({ error: null });
   },
 }));
-
-  resetError: () => {
-    set({ error: null });
-  },
-}));
