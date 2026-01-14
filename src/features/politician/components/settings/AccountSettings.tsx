@@ -45,8 +45,8 @@ export function AccountSettings({
               <Input id="fullName" defaultValue={userProfile.fullName} />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="party">Political Party</Label>
-              <Input id="party" defaultValue={userProfile.party} />
+              <Label htmlFor="organization">Organization</Label>
+              <Input id="organization" defaultValue={userProfile.organization || ""} />
             </div>
           </div>
 
@@ -59,33 +59,6 @@ export function AccountSettings({
               <Label htmlFor="phone">Phone Number</Label>
               <Input id="phone" type="tel" defaultValue={userProfile.phone} />
             </div>
-          </div>
-
-          <div className="grid gap-4 md:grid-cols-2">
-            <div className="space-y-2">
-              <Label htmlFor="state">State</Label>
-              <Select defaultValue={userProfile.state}>
-                <SelectTrigger id="state">
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="Lagos">Lagos</SelectItem>
-                  <SelectItem value="Oyo">Oyo</SelectItem>
-                  <SelectItem value="Borno">Borno</SelectItem>
-                  <SelectItem value="Anambra">Anambra</SelectItem>
-                  <SelectItem value="Adamawa">Adamawa</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="lga">Local Government Area</Label>
-              <Input id="lga" defaultValue={userProfile.lga} />
-            </div>
-          </div>
-
-          <div className="space-y-2">
-            <Label htmlFor="position">Position/Title</Label>
-            <Input id="position" defaultValue={userProfile.position} />
           </div>
 
           <div className="space-y-2">
@@ -113,59 +86,54 @@ export function AccountSettings({
           </Button>
         </CardContent>
       </Card>
+      Set your language and regional preferences
+    </CardDescription >
+        </CardHeader >
+    <CardContent className="space-y-4">
+      <div className="grid gap-4 md:grid-cols-2">
+        <div className="space-y-2">
+          <Label htmlFor="language">Language</Label>
+          <Select defaultValue="en">
+            <SelectTrigger id="language">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="en">English</SelectItem>
+              <SelectItem value="ha">Hausa</SelectItem>
+              <SelectItem value="yo">Yoruba</SelectItem>
+              <SelectItem value="ig">Igbo</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
+        <div className="space-y-2">
+          <Label htmlFor="timezone">Timezone</Label>
+          <Select defaultValue="wat">
+            <SelectTrigger id="timezone">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="wat">West Africa Time (WAT)</SelectItem>
+              <SelectItem value="gmt">Greenwich Mean Time (GMT)</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
+      </div>
 
-      <Card>
-        <CardHeader>
-          <CardTitle>Language & Region</CardTitle>
-          <CardDescription>
-            Set your language and regional preferences
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="grid gap-4 md:grid-cols-2">
-            <div className="space-y-2">
-              <Label htmlFor="language">Language</Label>
-              <Select defaultValue="en">
-                <SelectTrigger id="language">
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="en">English</SelectItem>
-                  <SelectItem value="ha">Hausa</SelectItem>
-                  <SelectItem value="yo">Yoruba</SelectItem>
-                  <SelectItem value="ig">Igbo</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="timezone">Timezone</Label>
-              <Select defaultValue="wat">
-                <SelectTrigger id="timezone">
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="wat">West Africa Time (WAT)</SelectItem>
-                  <SelectItem value="gmt">Greenwich Mean Time (GMT)</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-          </div>
-
-          <Button onClick={onSave} disabled={isSaving}>
-            {isSaving ? (
-              <>
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                Saving...
-              </>
-            ) : (
-              <>
-                <Check className="mr-2 h-4 w-4" />
-                Save Changes
-              </>
-            )}
-          </Button>
-        </CardContent>
-      </Card>
+      <Button onClick={onSave} disabled={isSaving}>
+        {isSaving ? (
+          <>
+            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+            Saving...
+          </>
+        ) : (
+          <>
+            <Check className="mr-2 h-4 w-4" />
+            Save Changes
+          </>
+        )}
+      </Button>
+    </CardContent>
+      </Card >
     </>
   );
 }

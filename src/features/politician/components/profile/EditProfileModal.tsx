@@ -37,10 +37,7 @@ export function EditProfileModal({
   const [isSaving, setIsSaving] = useState(false);
   const [formData, setFormData] = useState({
     fullName: userProfile.fullName,
-    party: userProfile.party,
-    position: userProfile.position,
-    state: userProfile.state,
-    lga: userProfile.lga,
+    party: "",
     email: userProfile.email,
     phone: userProfile.phone,
     bio: userProfile.bio || "",
@@ -121,7 +118,7 @@ export function EditProfileModal({
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="party">Political Party</Label>
+                <Label htmlFor="party">Party</Label>
                 <Input
                   id="party"
                   value={formData.party}
@@ -132,92 +129,48 @@ export function EditProfileModal({
               </div>
             </div>
 
+            {/* Contact Information */}
+            <div className="space-y-4">
+              <h4 className="font-medium">Contact Information</h4>
+              <div className="grid gap-4 md:grid-cols-2">
+                <div className="space-y-2">
+                  <Label htmlFor="email">Email</Label>
+                  <Input
+                    id="email"
+                    type="email"
+                    value={formData.email}
+                    onChange={(e) =>
+                      setFormData({ ...formData, email: e.target.value })
+                    }
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="phone">Phone</Label>
+                  <Input
+                    id="phone"
+                    type="tel"
+                    value={formData.phone}
+                    onChange={(e) =>
+                      setFormData({ ...formData, phone: e.target.value })
+                    }
+                  />
+                </div>
+              </div>
+            </div>
+
+            {/* Bio */}
             <div className="space-y-2">
-              <Label htmlFor="position">Position/Title</Label>
-              <Input
-                id="position"
-                value={formData.position}
+              <Label htmlFor="bio">Bio</Label>
+              <textarea
+                id="bio"
+                className="flex min-h-[100px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                value={formData.bio}
                 onChange={(e) =>
-                  setFormData({ ...formData, position: e.target.value })
+                  setFormData({ ...formData, bio: e.target.value })
                 }
+                placeholder="Tell us about yourself..."
               />
             </div>
-
-            <div className="grid gap-4 md:grid-cols-2">
-              <div className="space-y-2">
-                <Label htmlFor="state">State</Label>
-                <Select
-                  value={formData.state}
-                  onValueChange={(value) =>
-                    setFormData({ ...formData, state: value })
-                  }
-                >
-                  <SelectTrigger id="state">
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="Lagos">Lagos</SelectItem>
-                    <SelectItem value="Oyo">Oyo</SelectItem>
-                    <SelectItem value="Borno">Borno</SelectItem>
-                    <SelectItem value="Anambra">Anambra</SelectItem>
-                    <SelectItem value="Adamawa">Adamawa</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="lga">Local Government Area</Label>
-                <Input
-                  id="lga"
-                  value={formData.lga}
-                  onChange={(e) =>
-                    setFormData({ ...formData, lga: e.target.value })
-                  }
-                />
-              </div>
-            </div>
-          </div>
-
-          {/* Contact Information */}
-          <div className="space-y-4">
-            <h4 className="font-medium">Contact Information</h4>
-            <div className="grid gap-4 md:grid-cols-2">
-              <div className="space-y-2">
-                <Label htmlFor="email">Email</Label>
-                <Input
-                  id="email"
-                  type="email"
-                  value={formData.email}
-                  onChange={(e) =>
-                    setFormData({ ...formData, email: e.target.value })
-                  }
-                />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="phone">Phone</Label>
-                <Input
-                  id="phone"
-                  type="tel"
-                  value={formData.phone}
-                  onChange={(e) =>
-                    setFormData({ ...formData, phone: e.target.value })
-                  }
-                />
-              </div>
-            </div>
-          </div>
-
-          {/* Bio */}
-          <div className="space-y-2">
-            <Label htmlFor="bio">Bio</Label>
-            <textarea
-              id="bio"
-              className="flex min-h-[100px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-              value={formData.bio}
-              onChange={(e) =>
-                setFormData({ ...formData, bio: e.target.value })
-              }
-              placeholder="Tell us about yourself..."
-            />
           </div>
         </div>
 

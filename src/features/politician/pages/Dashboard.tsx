@@ -1,43 +1,46 @@
-﻿import { useEffect, useCallback } from "react";
+﻿import { useEffect, useState } from "react";
 import { DashboardSkeleton } from "@/components/dashboard/skeletons";
-import { usePoliticianStore } from "@/stores/politicianStore";
 import { useAuthStore } from "@/stores/authStore";
+import { getRecentOrders, getRecentRedemptions } from "@/lib/mock";
 import {
   DashboardHeader,
   KPICards,
-  PartyAffiliationSection,
   RedemptionOverviewSection,
   RecentOrdersSection,
 } from "./components";
 
 export default function PoliticianDashboardPage() {
   const { user } = useAuthStore();
-  const { stats, isLoading, fetchDashboard } = usePoliticianStore();
+  const [isLoading, setIsLoading] = useState(true);
+  const [recentOrders, setRecentOrders] = useState([]);
+  const [dashboardStats, setDashboardStats] = useState<any>(null);
 
   useEffect(() => {
-    console.log("Dashboard useEffect - user:", user?.id, "stats:", !!stats);
-    if (user?.id) {
-      console.log("Calling fetchDashboard with:", user.id);
-      fetchDashboard(user.id);
-    }
-  }, [user?.id, fetchDashboard]);
+    // Simulate loading mock data
+    const timer = setTimeout(() => {
+      setRecentOrders(getRecentOrders(5));
+      setDashboardStats({
+        totalOrders: 12,
+        totalRedemptions: 2458,
+        totalAirtimeDistributed: 18550000,
+        uniqueVoters: 1400,
+        completionRate: 85,
+      });
+      setIsLoading(false);
+    }, 800);
 
-  if (!stats || (isLoading && !stats)) {
+    return () => clearTimeout(timer);
+  }, []);
+
+  if (!dashboardStats || (isLoading && !dashboardStats)) {
     return <DashboardSkeleton />;
   }
 
-  const politician = stats?.politician;
-  const recentOrders = stats?.recentOrders || [];
-  const dashboardStats = stats?.stats || {};
-
   return (
     <div className="space-y-6">
-      <DashboardHeader politicianName={politician?.fullName} />
+      <DashboardHeader politicianName={user?.fullName || "User"} />
 
       <KPICards stats={dashboardStats} />
-
-      {/* Party Affiliation - Full Width */}
-      <PartyAffiliationSection />
 
       {/* Redemption Overview */}
       <RedemptionOverviewSection />

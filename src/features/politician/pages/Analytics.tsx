@@ -1,8 +1,7 @@
 import { useEffect, useState } from "react";
 import {
   RedemptionOverviewChart,
-  GeographicDistributionChart,
-  PartyAffiliationChart,
+  OperatorDistributionChart,
 } from "@/components/dashboard/analytics-charts";
 import {
   Card,
@@ -13,30 +12,48 @@ import {
 } from "@/components/ui/card";
 import { Users, MapPin, PartyPopper, Wallet } from "lucide-react";
 import { DashboardSkeleton } from "@/components/dashboard/skeletons";
-import { usePoliticianStore } from "@/stores/politicianStore";
+import { mockRedemptions, getRecentRedemptions } from "@/lib/mock";
 
 export default function AnalyticsPage() {
-  const { fetchOrderAnalytics } = usePoliticianStore();
   const [loading, setLoading] = useState(true);
   const [analyticsData, setAnalyticsData] = useState<any>(null);
 
   useEffect(() => {
-    const loadAnalytics = async () => {
-      try {
-        setLoading(true);
-        const data = await fetchOrderAnalytics("orderId");
-        setAnalyticsData(data);
-      } catch (error) {
-        console.error("Failed to load analytics:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
+    // Simulate loading analytics data
+    const timer = setTimeout(() => {
+      const recentRedemptions = getRecentRedemptions(10);
 
-    loadAnalytics();
-  }, [fetchOrderAnalytics]);
+      // Calculate analytics from redemptions
+      const operatorCounts: Record<string, number> = {};
+      let totalRedemptions = 0;
+      let totalValue = 0;
 
-  if (loading) {
+      recentRedemptions.forEach((r) => {
+        operatorCounts[r.mobileOperator] =
+          (operatorCounts[r.mobileOperator] || 0) + 1;
+        totalRedemptions++;
+        totalValue += r.amount;
+      });
+
+      const topOperator = Object.entries(operatorCounts).sort(
+        ([, a], [, b]) => b - a
+      )[0]?.[0] || "MTN";
+
+      setAnalyticsData({
+        topOperator,
+        topOperatorCount:
+          operatorCounts[topOperator] || 0,
+        totalRedemptions,
+        avgValue: totalValue / totalRedemptions,
+        uniqueUsers: Math.floor(totalRedemptions * 1.2),
+      });
+      setLoading(false);
+    }, 600);
+
+    return () => clearTimeout(timer);
+  }, []);
+
+  if (loading || !analyticsData) {
     return <DashboardSkeleton />;
   }
 
@@ -46,37 +63,39 @@ export default function AnalyticsPage() {
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">
-              Top Performing
+              Top Operator
             </CardTitle>
             <MapPin className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">Rimi</div>
-            <p className="text-xs text-muted-foreground">4,000 redemptions</p>
+            <div className="text-2xl font-bold">{analyticsData.topOperator}</div>
+            <p className="text-xs text-muted-foreground">
+              {analyticsData.topOperatorCount} redemptions
+            </p>
           </CardContent>
         </Card>
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">
-              Most Popular Party
+              Total Redemptions
             </CardTitle>
             <PartyPopper className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">APC</div>
-            <p className="text-xs text-muted-foreground">400 voters</p>
+            <div className="text-2xl font-bold">{analyticsData.totalRedemptions}</div>
+            <p className="text-xs text-muted-foreground">This month</p>
           </CardContent>
         </Card>
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">
-              Total Unique Voters
+              Unique Users
             </CardTitle>
             <Users className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">1,400</div>
-            <p className="text-xs text-muted-foreground">+50 from yesterday</p>
+            <div className="text-2xl font-bold">{analyticsData.uniqueUsers}</div>
+            <p className="text-xs text-muted-foreground">Active users</p>
           </CardContent>
         </Card>
         <Card>
@@ -87,19 +106,19 @@ export default function AnalyticsPage() {
             <Wallet className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">₦4,850</div>
+            <div className="text-2xl font-bold">
+              ₦{Math.round(analyticsData.avgValue).toLocaleString()}
+            </div>
             <p className="text-xs text-muted-foreground">
-              Across all redemptions
+              Per redemption
             </p>
           </CardContent>
         </Card>
       </div>
 
-      <PartyAffiliationChart />
-
       <div className="grid gap-4 md:gap-8 lg:grid-cols-2">
         <RedemptionOverviewChart />
-        <GeographicDistributionChart />
+        <OperatorDistributionChart />
       </div>
     </div>
   );

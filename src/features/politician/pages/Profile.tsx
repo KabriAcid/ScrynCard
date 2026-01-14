@@ -6,7 +6,7 @@ import {
   ProfileHeader,
   BioCard,
   PersonalInfoCard,
-  PoliticalPresenceCard,
+  OrganizationCard,
   ContactInfoCard,
   StatisticsCards,
   ActivityMetricsCard,
@@ -50,7 +50,7 @@ export default function ProfilePage() {
           <div className="grid gap-6 md:grid-cols-2">
             <BioCard bio={userProfile.bio} />
             <PersonalInfoCard userProfile={userProfile} />
-            <PoliticalPresenceCard userProfile={userProfile} />
+            <OrganizationCard userProfile={userProfile} />
           </div>
         </TabsContent>
 

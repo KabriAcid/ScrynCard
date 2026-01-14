@@ -37,42 +37,18 @@ const redemptionData = [
   { name: "Dec", total: Math.floor(Math.random() * 5000) + 1000 },
 ];
 
-const geoData = [
-  { location: "Rimi", redemptions: 3500 },
-  { location: "Daura", redemptions: 2800 },
-  { location: "Kankara", redemptions: 2100 },
-  { location: "Funtua", redemptions: 2450 },
-  { location: "Kafur", redemptions: 1750 },
-  { location: "Malumfashi", redemptions: 1920 },
-  { location: "Jibia", redemptions: 2640 },
+const operatorDistributionData = [
+  { operator: "MTN", dataRedemptions: 3500, airtimeRedemptions: 2800 },
+  { operator: "Airtel", dataRedemptions: 2800, airtimeRedemptions: 2400 },
+  { operator: "Glo", dataRedemptions: 2100, airtimeRedemptions: 2200 },
+  { operator: "9Mobile", dataRedemptions: 1200, airtimeRedemptions: 1100 },
 ];
 
-const partyData = [
-  {
-    name: "APC",
-    value: 400,
-    color: "#6ab04c",
-    fullName: "All Progressives Congress",
-  },
-  {
-    name: "PDP",
-    value: 300,
-    color: "#30336b",
-    fullName: "Peoples Democratic Party",
-  },
-  { name: "LP", value: 250, color: "#e056fd", fullName: "Labour Party" },
-  {
-    name: "NNPP",
-    value: 200,
-    color: "#eb4d4b",
-    fullName: "New Nigeria Peoples Party",
-  },
-  {
-    name: "APGA",
-    value: 150,
-    color: "#f0932b",
-    fullName: "All Progressives Grand Alliance",
-  },
+const operatorData = [
+  { name: "MTN", value: 450, color: "#FFD700", fullName: "MTN Nigeria" },
+  { name: "Airtel", value: 380, color: "#FF0000", fullName: "Airtel Networks" },
+  { name: "Glo", value: 320, color: "#00AA00", fullName: "Globacom Limited" },
+  { name: "9Mobile", value: 180, color: "#006600", fullName: "9Mobile Networks" },
   { name: "Others", value: 100, color: "#bebebe", fullName: "Other Parties" },
 ];
 
@@ -230,18 +206,18 @@ export function RedemptionOverviewChart() {
   );
 }
 
-export function GeographicDistributionChart() {
+export function OperatorDistributionChart() {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Geographic Distribution</CardTitle>
-        <CardDescription>Redemptions by Katsina LGAs.</CardDescription>
+        <CardTitle>Operator Distribution</CardTitle>
+        <CardDescription>Airtime and data redemptions by mobile operator.</CardDescription>
       </CardHeader>
       <CardContent>
         <ResponsiveContainer width="100%" height={350}>
-          <BarChart data={geoData}>
+          <BarChart data={operatorDistributionData}>
             <XAxis
-              dataKey="location"
+              dataKey="operator"
               stroke="hsl(var(--muted-foreground))"
               fontSize={12}
               tickLine={false}
@@ -262,8 +238,15 @@ export function GeographicDistributionChart() {
             />
             <Legend />
             <Bar
-              dataKey="redemptions"
-              fill="hsl(var(--primary))"
+              dataKey="dataRedemptions"
+              name="Data Redemptions"
+              fill="#3b82f6"
+              radius={[4, 4, 0, 0]}
+            />
+            <Bar
+              dataKey="airtimeRedemptions"
+              name="Airtime Redemptions"
+              fill="#10b981"
               radius={[4, 4, 0, 0]}
             />
           </BarChart>

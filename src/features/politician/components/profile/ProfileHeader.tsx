@@ -68,9 +68,6 @@ export function ProfileHeader({
             <div className="flex-1 space-y-2">
               <div className="flex items-center gap-3 flex-wrap">
                 <h2 className="text-2xl font-bold">{userProfile.fullName}</h2>
-                <Badge variant="secondary" className="text-sm">
-                  {userProfile.party}
-                </Badge>
                 {userProfile.verified && (
                   <Badge variant="default" className="gap-1">
                     <Shield className="h-3 w-3" />
@@ -79,10 +76,7 @@ export function ProfileHeader({
                 )}
               </div>
               <p className="text-lg text-muted-foreground">
-                {userProfile.position}
-              </p>
-              <p className="text-sm text-muted-foreground">
-                {userProfile.state} State • {userProfile.lga} LGA
+                {userProfile.organization || "Airtime & Data Gifting Partner"}
               </p>
             </div>
 

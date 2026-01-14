@@ -1,49 +1,33 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Building2, MapPin, Mail, Phone, Award, Users } from "lucide-react";
+import { Building2, Mail, Phone, CheckCircle, Users } from "lucide-react";
 import type { UserProfile } from "@/lib/mock";
 
-interface PoliticalPresenceCardProps {
+interface OrganizationCardProps {
   userProfile: UserProfile;
 }
 
-export function PoliticalPresenceCard({
+export function OrganizationCard({
   userProfile,
-}: PoliticalPresenceCardProps) {
+}: OrganizationCardProps) {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Political Presence & Credentials</CardTitle>
+        <CardTitle>Organization & Credentials</CardTitle>
       </CardHeader>
       <CardContent className="space-y-6">
-        {/* Political Position */}
+        {/* Organization */}
         <div className="space-y-2">
           <div className="flex items-center gap-2">
-            <Award className="h-5 w-5 text-primary" />
+            <Building2 className="h-5 w-5 text-primary" />
             <span className="text-sm font-medium text-muted-foreground">
-              Position
+              Organization
             </span>
           </div>
           <div className="ml-7">
-            <p className="font-semibold">{userProfile.position}</p>
+            <p className="font-semibold">{userProfile.organization || "Not specified"}</p>
             <p className="text-sm text-muted-foreground">
-              {userProfile.party} Party
-            </p>
-          </div>
-        </div>
-
-        {/* Political Jurisdiction */}
-        <div className="space-y-2">
-          <div className="flex items-center gap-2">
-            <MapPin className="h-5 w-5 text-primary" />
-            <span className="text-sm font-medium text-muted-foreground">
-              Jurisdiction
-            </span>
-          </div>
-          <div className="ml-7">
-            <p className="font-semibold">{userProfile.state}</p>
-            <p className="text-sm text-muted-foreground">
-              LGA: {userProfile.lga}
+              Airtime & Data Gifting Partner
             </p>
           </div>
         </div>
@@ -77,7 +61,7 @@ export function PoliticalPresenceCard({
         {/* Verification Status */}
         <div className="space-y-2">
           <div className="flex items-center gap-2">
-            <Building2 className="h-5 w-5 text-primary" />
+            <CheckCircle className="h-5 w-5 text-primary" />
             <span className="text-sm font-medium text-muted-foreground">
               Status
             </span>
@@ -85,7 +69,7 @@ export function PoliticalPresenceCard({
           <div className="ml-7">
             <Badge variant={userProfile.verified ? "default" : "secondary"}>
               {userProfile.verified
-                ? "Verified Political Figure"
+                ? "Verified Partner"
                 : "Pending Verification"}
             </Badge>
           </div>

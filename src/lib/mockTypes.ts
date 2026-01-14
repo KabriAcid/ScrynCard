@@ -25,10 +25,6 @@ export interface User {
 }
 
 export interface Politician extends User {
-  party: string;
-  position: string;
-  state: string;
-  lga: string;
   bvn: string;
   nin: string;
 }

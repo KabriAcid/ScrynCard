@@ -23,22 +23,13 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 import { useNavigate } from "react-router-dom";
 import type { Redemption } from "@/lib/types";
 import {
-  Calendar,
-  Check,
   ChevronLeft,
   ChevronRight,
-  Flag,
   Search,
   X,
 } from "lucide-react";
@@ -55,21 +46,10 @@ export function RedemptionTable({ redemptions }: RedemptionTableProps) {
   // Filter states
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState<string>("all");
-  const [partyFilter, setPartyFilter] = useState<string>("all");
-  const [votersCardFilter, setVotersCardFilter] = useState<string>("all");
 
   // Pagination states
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(10);
-
-  // Get unique parties for filter dropdown
-  const uniqueParties = useMemo(() => {
-    const parties = new Set<string>();
-    redemptions.forEach((r) => {
-      if (r.favoriteParty) parties.add(r.favoriteParty);
-    });
-    return Array.from(parties).sort();
-  }, [redemptions]);
 
   // Filter redemptions
   const filteredRedemptions = useMemo(() => {
@@ -80,28 +60,15 @@ export function RedemptionTable({ redemptions }: RedemptionTableProps) {
         !searchQuery ||
         redemption.citizenName?.toLowerCase().includes(searchLower) ||
         redemption.bank?.toLowerCase().includes(searchLower) ||
-        redemption.favoriteParty?.toLowerCase().includes(searchLower) ||
         redemption.cardCode?.toLowerCase().includes(searchLower);
 
       // Status filter
       const matchesStatus =
         statusFilter === "all" || redemption.status === statusFilter;
 
-      // Party filter
-      const matchesParty =
-        partyFilter === "all" || redemption.favoriteParty === partyFilter;
-
-      // Voter's card filter
-      const matchesVotersCard =
-        votersCardFilter === "all" ||
-        (votersCardFilter === "yes" && redemption.hasVotersCard) ||
-        (votersCardFilter === "no" && !redemption.hasVotersCard);
-
-      return (
-        matchesSearch && matchesStatus && matchesParty && matchesVotersCard
-      );
+      return matchesSearch && matchesStatus;
     });
-  }, [redemptions, searchQuery, statusFilter, partyFilter, votersCardFilter]);
+  }, [redemptions, searchQuery, statusFilter]);
 
   // Pagination calculations
   const totalPages = Math.ceil(filteredRedemptions.length / itemsPerPage);
@@ -112,20 +79,14 @@ export function RedemptionTable({ redemptions }: RedemptionTableProps) {
   // Reset to page 1 when filters change
   useEffect(() => {
     setCurrentPage(1);
-  }, [searchQuery, statusFilter, partyFilter, votersCardFilter, itemsPerPage]);
+  }, [searchQuery, statusFilter, itemsPerPage]);
 
   const clearFilters = () => {
     setSearchQuery("");
     setStatusFilter("all");
-    setPartyFilter("all");
-    setVotersCardFilter("all");
   };
 
-  const hasActiveFilters =
-    searchQuery ||
-    statusFilter !== "all" ||
-    partyFilter !== "all" ||
-    votersCardFilter !== "all";
+  const hasActiveFilters = searchQuery || statusFilter !== "all";
 
   return (
     <Card>
@@ -154,7 +115,7 @@ export function RedemptionTable({ redemptions }: RedemptionTableProps) {
           <div className="relative flex-1 min-w-[200px]">
             <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
             <Input
-              placeholder="Search by name, bank, party, code..."
+              placeholder="Search by name, bank, code..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="pl-9"
@@ -171,29 +132,6 @@ export function RedemptionTable({ redemptions }: RedemptionTableProps) {
               <SelectItem value="Failed">Failed</SelectItem>
             </SelectContent>
           </Select>
-          <Select value={partyFilter} onValueChange={setPartyFilter}>
-            <SelectTrigger className="w-full sm:w-[150px]">
-              <SelectValue placeholder="Party" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">All Parties</SelectItem>
-              {uniqueParties.map((party) => (
-                <SelectItem key={party} value={party}>
-                  {party}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-          <Select value={votersCardFilter} onValueChange={setVotersCardFilter}>
-            <SelectTrigger className="w-full sm:w-[160px]">
-              <SelectValue placeholder="Voter's Card" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">All</SelectItem>
-              <SelectItem value="yes">With Voter's Card</SelectItem>
-              <SelectItem value="no">Without Voter's Card</SelectItem>
-            </SelectContent>
-          </Select>
         </div>
 
         <Table>
@@ -202,9 +140,7 @@ export function RedemptionTable({ redemptions }: RedemptionTableProps) {
               <TableHead className="whitespace-nowrap">S/N</TableHead>
               <TableHead className="whitespace-nowrap">Date</TableHead>
               <TableHead className="whitespace-nowrap">Citizen Name</TableHead>
-              <TableHead className="whitespace-nowrap">DOB</TableHead>
-              <TableHead className="whitespace-nowrap">Party</TableHead>
-              <TableHead className="whitespace-nowrap">Voter's Card</TableHead>
+              <TableHead className="whitespace-nowrap">Phone</TableHead>
               <TableHead className="whitespace-nowrap">Amount</TableHead>
               <TableHead className="whitespace-nowrap">Card Code</TableHead>
               <TableHead className="whitespace-nowrap">Bank</TableHead>
@@ -226,52 +162,7 @@ export function RedemptionTable({ redemptions }: RedemptionTableProps) {
                     {redemption.citizenName}
                   </TableCell>
                   <TableCell className="whitespace-nowrap">
-                    <TooltipProvider>
-                      <Tooltip>
-                        <TooltipTrigger asChild>
-                          <div className="flex items-center gap-1.5">
-                            <Calendar className="h-3.5 w-3.5 text-muted-foreground" />
-                            <span className="text-sm">
-                              {redemption.dob
-                                ? new Date(redemption.dob).toLocaleDateString(
-                                    "en-NG",
-                                    {
-                                      day: "numeric",
-                                      month: "short",
-                                      year: "numeric",
-                                    }
-                                  )
-                                : "N/A"}
-                            </span>
-                          </div>
-                        </TooltipTrigger>
-                        <TooltipContent>Date of Birth</TooltipContent>
-                      </Tooltip>
-                    </TooltipProvider>
-                  </TableCell>
-                  <TableCell className="whitespace-nowrap">
-                    <div className="flex items-center gap-1.5">
-                      <Flag className="h-3.5 w-3.5 text-muted-foreground" />
-                      <span className="text-sm">
-                        {redemption.favoriteParty || "N/A"}
-                      </span>
-                    </div>
-                  </TableCell>
-                  <TableCell className="whitespace-nowrap">
-                    {redemption.hasVotersCard ? (
-                      <Badge
-                        variant="default"
-                        className="bg-green-600 hover:bg-green-700"
-                      >
-                        <Check className="mr-1 h-3 w-3" />
-                        Yes
-                      </Badge>
-                    ) : (
-                      <Badge variant="secondary">
-                        <X className="mr-1 h-3 w-3" />
-                        No
-                      </Badge>
-                    )}
+                    {redemption.phoneNumber || "N/A"}
                   </TableCell>
                   <TableCell className="whitespace-nowrap">
                     ₦{redemption.amount.toLocaleString()}
@@ -288,8 +179,8 @@ export function RedemptionTable({ redemptions }: RedemptionTableProps) {
                         redemption.status === "Completed"
                           ? "default"
                           : redemption.status === "Pending"
-                          ? "secondary"
-                          : "destructive"
+                            ? "secondary"
+                            : "destructive"
                       }
                       className={cn("capitalize", {
                         "bg-green-100 text-green-800 dark:bg-green-900/50 dark:text-green-300":
@@ -318,7 +209,7 @@ export function RedemptionTable({ redemptions }: RedemptionTableProps) {
               ))
             ) : (
               <TableRow>
-                <TableCell colSpan={11} className="text-center py-8">
+                <TableCell colSpan={9} className="text-center py-8">
                   <p className="text-muted-foreground">
                     {hasActiveFilters
                       ? "No redemptions match your filters."

@@ -47,16 +47,18 @@ const statusColors = {
 export default function OrdersPage() {
   const navigate = useNavigate();
   const { user } = useAuthStore();
-  const { stats, isLoading } = usePoliticianStore();
   const [orders, setOrders] = useState<Order[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    // In a real app, this would fetch orders from an API
-    // For now, we'll use mock data
-    if (stats?.recentOrders) {
-      setOrders(stats.recentOrders);
-    }
-  }, [stats]);
+    // Simulate loading mock data
+    const timer = setTimeout(() => {
+      setOrders(getRecentOrders(10));
+      setIsLoading(false);
+    }, 500);
+
+    return () => clearTimeout(timer);
+  }, []);
 
   const calculateTotals = () => {
     const totalOrders = orders.length;

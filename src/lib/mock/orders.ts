@@ -7,7 +7,7 @@ export const mockOrders: Order[] = [
     id: generateId("ORD"),
     politicianId: mockPoliticians[0].id,
     politician: mockPoliticians[0],
-    batchId: "BATCH-APC-2024-001",
+    batchId: "BATCH-STD-2024-001",
     totalCardValue: 50000000, // ₦50M
     serviceFee: 5000000, // 10%
     printingCost: 2130000,
@@ -29,7 +29,7 @@ export const mockOrders: Order[] = [
     id: generateId("ORD"),
     politicianId: mockPoliticians[1].id,
     politician: mockPoliticians[1],
-    batchId: "BATCH-PDP-2024-001",
+    batchId: "BATCH-PRE-2024-001",
     totalCardValue: 75000000,
     serviceFee: 7500000,
     printingCost: 3195000,
@@ -49,7 +49,7 @@ export const mockOrders: Order[] = [
     id: generateId("ORD"),
     politicianId: mockPoliticians[2].id,
     politician: mockPoliticians[2],
-    batchId: "BATCH-APC-2024-002",
+    batchId: "BATCH-BIS-2024-001",
     totalCardValue: 100000000,
     serviceFee: 10000000,
     printingCost: 4260000,
