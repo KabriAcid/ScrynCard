@@ -16,7 +16,7 @@ const OrderItemSchema = z.object({
 const OrderFormSchema = z.object({
   items: z
     .array(OrderItemSchema)
-    .min(1, "Please select at least one denomination")
+    .min(1, "Please select at least one product")
     .refine(
       (items) => {
         const totalQuantity = items.reduce(
@@ -26,7 +26,7 @@ const OrderFormSchema = z.object({
         return totalQuantity >= 100;
       },
       {
-        message: "Total order must be at least 100 cards",
+        message: "Total order must be at least 100 units",
       }
     ),
 });
@@ -56,17 +56,14 @@ export function useOrderForm() {
       if (index > -1) remove(index);
     } else {
       newSelected.add(denomId);
-      const minQty = denomId === "2000" ? 100 : 1;
-      append({ denomination: denomId, quantity: minQty });
+      append({ denomination: denomId, quantity: 1 });
     }
     setSelectedDenoms(newSelected);
   };
 
   const updateQuantity = (index: number, delta: number) => {
     const currentItem = fields[index];
-    const denomId = currentItem.denomination;
-    const minQty = denomId === "2000" ? 100 : 1;
-    const newQuantity = Math.max(minQty, currentItem.quantity + delta);
+    const newQuantity = Math.max(1, currentItem.quantity + delta);
     update(index, { ...currentItem, quantity: newQuantity });
   };
 

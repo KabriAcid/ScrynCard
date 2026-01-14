@@ -8,11 +8,13 @@ export function OrderTipsCard() {
       </CardHeader>
       <CardContent>
         <ul className="text-xs text-muted-foreground space-y-2">
-          <li>• Minimum order: 100 cards</li>
-          <li>• ₦2k cards require min. 100 quantity</li>
+          <li>• Minimum data order: 5GB per unit</li>
+          <li>• Minimum airtime: ₦2,000 per unit</li>
+          <li>• Minimum total order: 100 units</li>
           <li>• 15% service fee applies to all orders</li>
-          <li>• Printing cost: ₦200 per card</li>
-          <li>• Cards expire 1 year after delivery</li>
+          <li>• Processing cost: ₦200 per unit</li>
+          <li>• Data valid for 30 days, Airtime never expires</li>
+          <li>• Instant delivery after payment confirmation</li>
         </ul>
       </CardContent>
     </Card>

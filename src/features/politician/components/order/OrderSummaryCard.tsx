@@ -33,13 +33,13 @@ export function OrderSummaryCard({
       <CardContent className="space-y-4">
         <div className="space-y-3">
           <div className="flex justify-between text-sm">
-            <span className="text-muted-foreground">Total Cards:</span>
+            <span className="text-muted-foreground">Total Units:</span>
             <span className="font-semibold">
               {calculations.totalCards.toLocaleString()}
             </span>
           </div>
           <div className="flex justify-between text-sm">
-            <span className="text-muted-foreground">Card Value:</span>
+            <span className="text-muted-foreground">Product Value:</span>
             <span className="font-semibold">
               {formatCurrency(calculations.cardValue)}
             </span>
@@ -51,7 +51,7 @@ export function OrderSummaryCard({
             </span>
           </div>
           <div className="flex justify-between text-sm">
-            <span className="text-muted-foreground">Printing Cost:</span>
+            <span className="text-muted-foreground">Processing Cost:</span>
             <span className="font-semibold">
               {formatCurrency(calculations.printingCost)}
             </span>

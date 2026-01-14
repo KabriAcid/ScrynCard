@@ -27,6 +27,7 @@ export interface User {
 export interface Politician extends User {
   bvn: string;
   nin: string;
+  organization?: string;
 }
 
 export interface Citizen {

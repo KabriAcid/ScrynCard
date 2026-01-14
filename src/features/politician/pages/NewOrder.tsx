@@ -68,9 +68,9 @@ export default function NewOrderPage() {
       </div>
 
       <div>
-        <h1 className="text-3xl font-bold tracking-tight">Place New Order</h1>
+        <h1 className="text-3xl font-bold tracking-tight">Order Data & Airtime</h1>
         <p className="text-muted-foreground mt-1">
-          Select card denominations and quantities for your new order
+          Select data bundles and airtime vouchers for distribution
         </p>
       </div>
 

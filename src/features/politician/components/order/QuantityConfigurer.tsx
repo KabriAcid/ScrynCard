@@ -44,8 +44,7 @@ export function QuantityConfigurer({
             const denom = denominations.find(
               (d) => d.id === field.denomination
             );
-            const is2k = field.denomination === "2000";
-            const minQty = is2k ? 100 : 1;
+            const minQty = 1;
 
             return (
               <div
@@ -55,7 +54,7 @@ export function QuantityConfigurer({
                 <div className="flex-1">
                   <div className="font-semibold">{denom?.label}</div>
                   <div className="text-sm text-muted-foreground">
-                    {formatCurrency((denom?.value || 0) * field.quantity)} total
+                    {formatCurrency((denom?.value || 0) * field.quantity)} total ({field.quantity} {denom?.unit})
                   </div>
                 </div>
                 <div className="flex items-center gap-3">

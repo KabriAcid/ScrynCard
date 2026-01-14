@@ -43,8 +43,6 @@ export default function RedemptionDetailsPage() {
             phone: redemption.phoneNumber || "N/A",
             nin: "12345678901234",
             dob: "1990-01-15",
-            favoriteParty: "APC",
-            hasVotersCard: true,
           },
           bankDetails: {
             accountNumber: "1234567890",

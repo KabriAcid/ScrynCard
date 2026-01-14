@@ -1,17 +1,21 @@
-export const denominations = [
-  { id: "2000", label: "₦2k", value: 2000 },
-  { id: "5000", label: "₦5k", value: 5000 },
-  { id: "10000", label: "₦10k", value: 10000 },
-  { id: "20000", label: "₦20k", value: 20000 },
-  { id: "50000", label: "₦50k", value: 50000 },
-  { id: "100000", label: "₦100k", value: 100000 },
-  { id: "200000", label: "₦200k", value: 200000 },
-  { id: "500000", label: "₦500k", value: 500000 },
-  { id: "1000000", label: "₦1M", value: 1000000 },
-  { id: "2000000", label: "₦2M", value: 2000000 },
-  { id: "5000000", label: "₦5M", value: 5000000 },
-  { id: "10000000", label: "₦10M", value: 10000000 },
+export const dataProducts = [
+  { id: "data-5gb", label: "5GB Data", value: 5000, type: "data" as const, unit: "GB", minQuantity: 1 },
+  { id: "data-10gb", label: "10GB Data", value: 10000, type: "data" as const, unit: "GB", minQuantity: 1 },
+  { id: "data-20gb", label: "20GB Data", value: 20000, type: "data" as const, unit: "GB", minQuantity: 1 },
+  { id: "data-50gb", label: "50GB Data", value: 50000, type: "data" as const, unit: "GB", minQuantity: 1 },
+  { id: "data-100gb", label: "100GB Data", value: 100000, type: "data" as const, unit: "GB", minQuantity: 1 },
 ] as const;
+
+export const airtimeProducts = [
+  { id: "airtime-2k", label: "₦2,000 Airtime", value: 2000, type: "airtime" as const, unit: "₦", minQuantity: 1 },
+  { id: "airtime-5k", label: "₦5,000 Airtime", value: 5000, type: "airtime" as const, unit: "₦", minQuantity: 1 },
+  { id: "airtime-10k", label: "₦10,000 Airtime", value: 10000, type: "airtime" as const, unit: "₦", minQuantity: 1 },
+  { id: "airtime-20k", label: "₦20,000 Airtime", value: 20000, type: "airtime" as const, unit: "₦", minQuantity: 1 },
+  { id: "airtime-50k", label: "₦50,000 Airtime", value: 50000, type: "airtime" as const, unit: "₦", minQuantity: 1 },
+  { id: "airtime-100k", label: "₦100,000 Airtime", value: 100000, type: "airtime" as const, unit: "₦", minQuantity: 1 },
+] as const;
+
+export const denominations = [...dataProducts, ...airtimeProducts] as const;
 
 export const SERVICE_FEE_RATE = 0.15; // 15%
 export const PRINTING_COST_PER_CARD = 200; // ₦200 per card

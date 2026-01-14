@@ -12,6 +12,7 @@ export const mockPoliticians: Politician[] = [
     createdAt: new Date(2023, 4, 29).toISOString(),
     bvn: "22345678901",
     nin: "22345678901234",
+    organization: "Community Development Initiative",
   },
   {
     id: generateId("POL"),
@@ -23,6 +24,7 @@ export const mockPoliticians: Politician[] = [
     createdAt: new Date(2023, 4, 29).toISOString(),
     bvn: "12345678999",
     nin: "12345678999234",
+    organization: "Business Enterprise Group",
   },
   {
     id: generateId("POL"),
@@ -34,6 +36,7 @@ export const mockPoliticians: Politician[] = [
     createdAt: new Date(2024, 2, 10).toISOString(),
     bvn: "12345678903",
     nin: "12345678901236",
+    organization: "Social Welfare Foundation",
   },
   {
     id: generateId("POL"),
@@ -45,6 +48,7 @@ export const mockPoliticians: Politician[] = [
     createdAt: new Date(2024, 3, 5).toISOString(),
     bvn: "12345678904",
     nin: "12345678901237",
+    organization: "Economic Development Corp",
   },
   {
     id: generateId("POL"),
@@ -56,5 +60,6 @@ export const mockPoliticians: Politician[] = [
     createdAt: new Date(2024, 4, 12).toISOString(),
     bvn: "12345678905",
     nin: "12345678901238",
+    organization: "Trade & Commerce Network",
   },
 ];

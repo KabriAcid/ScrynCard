@@ -4,10 +4,7 @@ import {
   Phone,
   CreditCard,
   Calendar,
-  Flag,
-  Vote,
 } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
 
 interface PersonalInfoSectionProps {
   personalInfo: {
@@ -16,8 +13,6 @@ interface PersonalInfoSectionProps {
     phone: string;
     nin: string;
     dob?: string;
-    favoriteParty?: string;
-    hasVotersCard?: boolean;
   };
 }
 
@@ -48,10 +43,10 @@ export function PersonalInfoSection({
   // Format DOB for display
   const formattedDob = personalInfo.dob
     ? new Date(personalInfo.dob).toLocaleDateString("en-NG", {
-        year: "numeric",
-        month: "long",
-        day: "numeric",
-      })
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    })
     : undefined;
 
   return (
@@ -73,34 +68,6 @@ export function PersonalInfoSection({
           }
         />
         <InfoRow icon={Calendar} label="Date of Birth" value={formattedDob} />
-        <InfoRow
-          icon={Flag}
-          label="Favorite Party"
-          value={personalInfo.favoriteParty}
-        />
-        {/* Voter's Card Status */}
-        {personalInfo.hasVotersCard !== undefined && (
-          <div className="flex items-start">
-            <Vote className="h-5 w-5 text-muted-foreground mr-4 mt-1" />
-            <div className="flex flex-col">
-              <span className="text-sm text-muted-foreground">
-                Voter's Card
-              </span>
-              <Badge
-                variant={personalInfo.hasVotersCard ? "default" : "secondary"}
-                className={
-                  personalInfo.hasVotersCard
-                    ? "bg-green-100 text-green-800 dark:bg-green-900/50 dark:text-green-300 w-fit"
-                    : "bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-300 w-fit"
-                }
-              >
-                {personalInfo.hasVotersCard
-                  ? "Has Voter's Card"
-                  : "No Voter's Card"}
-              </Badge>
-            </div>
-          </div>
-        )}
       </div>
     </div>
   );

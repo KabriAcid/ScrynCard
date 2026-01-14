@@ -86,54 +86,59 @@ export function AccountSettings({
           </Button>
         </CardContent>
       </Card>
-      Set your language and regional preferences
-    </CardDescription >
-        </CardHeader >
-    <CardContent className="space-y-4">
-      <div className="grid gap-4 md:grid-cols-2">
-        <div className="space-y-2">
-          <Label htmlFor="language">Language</Label>
-          <Select defaultValue="en">
-            <SelectTrigger id="language">
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="en">English</SelectItem>
-              <SelectItem value="ha">Hausa</SelectItem>
-              <SelectItem value="yo">Yoruba</SelectItem>
-              <SelectItem value="ig">Igbo</SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
-        <div className="space-y-2">
-          <Label htmlFor="timezone">Timezone</Label>
-          <Select defaultValue="wat">
-            <SelectTrigger id="timezone">
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="wat">West Africa Time (WAT)</SelectItem>
-              <SelectItem value="gmt">Greenwich Mean Time (GMT)</SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
-      </div>
 
-      <Button onClick={onSave} disabled={isSaving}>
-        {isSaving ? (
-          <>
-            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-            Saving...
-          </>
-        ) : (
-          <>
-            <Check className="mr-2 h-4 w-4" />
-            Save Changes
-          </>
-        )}
-      </Button>
-    </CardContent>
-      </Card >
+      <Card>
+        <CardHeader>
+          <CardTitle>Preferences</CardTitle>
+          <CardDescription>
+            Set your language and regional preferences
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div className="grid gap-4 md:grid-cols-2">
+            <div className="space-y-2">
+              <Label htmlFor="language">Language</Label>
+              <Select defaultValue="en">
+                <SelectTrigger id="language">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="en">English</SelectItem>
+                  <SelectItem value="ha">Hausa</SelectItem>
+                  <SelectItem value="yo">Yoruba</SelectItem>
+                  <SelectItem value="ig">Igbo</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="timezone">Timezone</Label>
+              <Select defaultValue="wat">
+                <SelectTrigger id="timezone">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="wat">West Africa Time (WAT)</SelectItem>
+                  <SelectItem value="gmt">Greenwich Mean Time (GMT)</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
+
+          <Button onClick={onSave} disabled={isSaving}>
+            {isSaving ? (
+              <>
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                Saving...
+              </>
+            ) : (
+              <>
+                <Check className="mr-2 h-4 w-4" />
+                Save Changes
+              </>
+            )}
+          </Button>
+        </CardContent>
+      </Card>
     </>
   );
 }
