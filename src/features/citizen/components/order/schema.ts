@@ -1,34 +1,39 @@
 import { z } from "zod";
 import { LucideIcon } from "lucide-react";
 
+import { z } from "zod";
+import { LucideIcon } from "lucide-react";
+
 // ============================================================================
-// DENOMINATIONS
+// PRODUCTS (DATA & AIRTIME)
 // ============================================================================
-export const denominations = [
-  { id: "2000", label: "₦2k", value: 2000, minQty: 100 },
-  { id: "5000", label: "₦5k", value: 5000, minQty: 1 },
-  { id: "10000", label: "₦10k", value: 10000, minQty: 1 },
-  { id: "20000", label: "₦20k", value: 20000, minQty: 1 },
-  { id: "50000", label: "₦50k", value: 50000, minQty: 1 },
-  { id: "100000", label: "₦100k", value: 100000, minQty: 1 },
-  { id: "200000", label: "₦200k", value: 200000, minQty: 1 },
-  { id: "500000", label: "₦500k", value: 500000, minQty: 1 },
-  { id: "1000000", label: "₦1M", value: 1000000, minQty: 1 },
-  { id: "2000000", label: "₦2M", value: 2000000, minQty: 1 },
-  { id: "5000000", label: "₦5M", value: 5000000, minQty: 1 },
-  { id: "10000000", label: "₦10M", value: 10000000, minQty: 1 },
+export const dataProducts = [
+  { id: "data-5gb", label: "5GB", value: 5000, type: "data" as const, unit: "GB", minQty: 1 },
+  { id: "data-10gb", label: "10GB", value: 10000, type: "data" as const, unit: "GB", minQty: 1 },
+  { id: "data-20gb", label: "20GB", value: 20000, type: "data" as const, unit: "GB", minQty: 1 },
+  { id: "data-50gb", label: "50GB", value: 50000, type: "data" as const, unit: "GB", minQty: 1 },
+  { id: "data-100gb", label: "100GB", value: 100000, type: "data" as const, unit: "GB", minQty: 1 },
 ] as const;
 
-export type Denomination = (typeof denominations)[number];
-export type DenominationType = Denomination["id"];
+export const airtimeProducts = [
+  { id: "airtime-2k", label: "₦2,000", value: 2000, type: "airtime" as const, unit: "₦", minQty: 1 },
+  { id: "airtime-5k", label: "₦5,000", value: 5000, type: "airtime" as const, unit: "₦", minQty: 1 },
+  { id: "airtime-10k", label: "₦10,000", value: 10000, type: "airtime" as const, unit: "₦", minQty: 1 },
+  { id: "airtime-20k", label: "₦20,000", value: 20000, type: "airtime" as const, unit: "₦", minQty: 1 },
+  { id: "airtime-50k", label: "₦50,000", value: 50000, type: "airtime" as const, unit: "₦", minQty: 1 },
+  { id: "airtime-100k", label: "₦100,000", value: 100000, type: "airtime" as const, unit: "₦", minQty: 1 },
+] as const;
+
+export const denominations = [...dataProducts, ...airtimeProducts] as const;
 
 // ============================================================================
 // ORDER CALCULATIONS
 // ============================================================================
 export const SERVICE_FEE_RATE = 0.15; // 15%
-export const PRINTING_COST_PER_CARD = 200; // ₦200 per card
+export const PRINTING_COST_PER_CARD = 200; // ₦200 per unit
+export const MINIMUM_ORDER_VALUE = 800000; // ₦800k minimum
 
-export interface OrderCalculations {
+interface OrderCalculations {
   totalCards: number;
   cardValue: number;
   serviceFee: number;
@@ -63,15 +68,7 @@ const denominationEnum = denominations.map((d) => d.id) as [
 ];
 
 export const OrderSchema = z.object({
-  title: z.string({ required_error: "Please select a title." }),
-  politicianName: z.string().min(3, "Name must be at least 3 characters."),
-  politicalParty: z.string({
-    required_error: "Please select a political party.",
-  }),
-  politicalRole: z.string({
-    required_error: "Please select a political role.",
-  }),
-  photo: z.any().optional(),
+  fullName: z.string().min(3, "Name must be at least 3 characters."),
   email: z.string().email({ message: "Please enter a valid email address." }),
   phone: z.string().regex(/^0[789][01]\d{8}$/, {
     message: "Please enter a valid Nigerian phone number.",
@@ -85,27 +82,17 @@ export const OrderSchema = z.object({
         quantity: z.coerce.number().min(1, "Min 1"),
       })
     )
-    .min(1, "You must select at least one denomination and set a quantity.")
+    .min(1, "Please select at least one product.")
     .refine(
       (items) => {
-        const totalQuantity = items.reduce(
-          (acc, item) => acc + item.quantity,
-          0
-        );
-        return totalQuantity >= 100;
+        const totalValue = items.reduce((sum, item) => {
+          const denom = denominations.find((d) => d.id === item.denomination);
+          return sum + (denom?.value || 0) * item.quantity;
+        }, 0);
+        return totalValue >= MINIMUM_ORDER_VALUE;
       },
       {
-        message: "Total quantity for the order must be at least 100 cards.",
-        path: ["orderItems"],
-      }
-    )
-    .refine(
-      (items) => {
-        const item2k = items.find((item) => item.denomination === "2000");
-        return !item2k || item2k.quantity >= 100;
-      },
-      {
-        message: "Quantity for ₦2k cards must be at least 100.",
+        message: `Minimum order value is ₦${(MINIMUM_ORDER_VALUE / 1000).toLocaleString()}k`,
         path: ["orderItems"],
       }
     ),
@@ -116,42 +103,6 @@ export type OrderFormValues = z.infer<typeof OrderSchema>;
 // ============================================================================
 // SELECT OPTIONS
 // ============================================================================
-export const politicalParties = [
-  "APC",
-  "PDP",
-  "LP",
-  "NNPP",
-  "APGA",
-  "SDP",
-  "ADC",
-  "YPP",
-];
-export const titles = [
-  "Hon.",
-  "Chief",
-  "Dr.",
-  "Engr.",
-  "Barr.",
-  "Alh.",
-  "Hajiya",
-  "Mr.",
-  "Mrs.",
-  "Ms.",
-];
-export const politicalRoles = [
-  "President",
-  "Vice President",
-  "Governor",
-  "Deputy Governor",
-  "Senator",
-  "House of Reps Member",
-  "State Assembly Member",
-  "Local Government Chairman",
-  "Councillor",
-  "Party Chairman",
-  "Women Leader",
-  "Youth Leader",
-];
 
 // ============================================================================
 // STATES AND LGAs (Katsina first, then alphabetical)

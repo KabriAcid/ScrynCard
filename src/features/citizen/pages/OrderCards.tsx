@@ -29,11 +29,10 @@ export default function OrderCardsPage() {
         <Card className="shadow-2xl">
           <CardHeader className="text-center">
             <CardTitle className="text-2xl font-bold">
-              Create a New Card Order
+              Order Data & Airtime
             </CardTitle>
             <CardDescription>
-              Fill out the form below to place a new order for scratch cards.
-              After your order, you'll get access to your dashboard.
+              Select data bundles and airtime vouchers to distribute. Minimum order value is ₦800,000.
             </CardDescription>
           </CardHeader>
           <CardContent>

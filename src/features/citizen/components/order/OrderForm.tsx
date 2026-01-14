@@ -8,39 +8,37 @@ import { useToast } from "@/hooks/use-toast";
 import { useNavigate } from "react-router-dom";
 import { OrderSchema, OrderFormValues, StepConfig } from "./schema";
 import { OrderStepIndicator } from "./OrderStepIndicator";
-import { CardCustomizationStep } from "./CardCustomizationStep";
+import { PersonalDetailsStep } from "./PersonalDetailsStep";
 import { ContactLocationStep } from "./ContactLocationStep";
 import { CardDetailsStep } from "./CardDetailsStep";
 import { cn } from "@/lib/utils";
 
 // ============================================================================
-// STEP CONFIGURATION (ward removed)
+// STEP CONFIGURATION
 // ============================================================================
 const STEPS: StepConfig[] = [
   {
     id: 1,
-    title: "Personal Details",
-    description: "Your information for the card",
+    title: "Your Information",
+    description: "Your contact details",
     fields: [
-      "title",
-      "politicianName",
-      "politicalParty",
-      "politicalRole",
-      "photo",
+      "fullName",
+      "email",
+      "phone",
     ] as const,
     icon: User,
   },
   {
     id: 2,
-    title: "Contact & Location",
-    description: "How to reach you and delivery address",
-    fields: ["email", "phone", "state", "lga"] as const,
+    title: "Delivery Location",
+    description: "Where to deliver your order",
+    fields: ["state", "lga"] as const,
     icon: MapPin,
   },
   {
     id: 3,
-    title: "Card Selection",
-    description: "Choose your card denominations",
+    title: "Product Selection",
+    description: "Choose data and airtime products",
     fields: ["orderItems"] as const,
     icon: CreditCard,
   },
@@ -56,22 +54,17 @@ export function OrderForm() {
   const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
   const [step, setStep] = useState(1);
-  const [photoPreview, setPhotoPreview] = useState<string | null>(null);
   const [isInitialized, setIsInitialized] = useState(false);
 
   const form = useForm<OrderFormValues>({
     resolver: zodResolver(OrderSchema),
     mode: "onChange",
     defaultValues: {
-      title: "",
-      politicianName: "",
-      politicalParty: "",
-      politicalRole: "",
+      fullName: "",
       email: "",
       phone: "",
       state: "",
       lga: "",
-      photo: undefined,
       orderItems: [],
     },
   });
@@ -86,15 +79,11 @@ export function OrderForm() {
         const {
           values,
           step: savedStep,
-          photoPreview: savedPhoto,
         } = JSON.parse(savedState);
-        // Remove ward if it exists in old data
-        const { ward, ...cleanedValues } = values;
+        // Remove old political fields if they exist
+        const { title, politicianName, politicalParty, politicalRole, photo, ward, ...cleanedValues } = values;
         form.reset(cleanedValues);
         setStep(savedStep);
-        if (savedPhoto) {
-          setPhotoPreview(savedPhoto);
-        }
       }
     } catch (e) {
       console.error("Failed to load form state from localStorage", e);
@@ -112,7 +101,6 @@ export function OrderForm() {
         const stateToSave = {
           values: watchedValues,
           step,
-          photoPreview,
         };
         localStorage.setItem(FORM_STORAGE_KEY, JSON.stringify(stateToSave));
       } catch (e) {
@@ -121,7 +109,7 @@ export function OrderForm() {
     }, 500);
 
     return () => clearTimeout(timeoutId);
-  }, [watchedValues, step, photoPreview, isInitialized]);
+  }, [watchedValues, step, isInitialized]);
 
   const nextStep = useCallback(async () => {
     const currentStepConfig = STEPS[step - 1];
@@ -136,32 +124,6 @@ export function OrderForm() {
   const prevStep = useCallback(() => {
     setStep((prev) => Math.max(prev - 1, 1));
   }, []);
-
-  const handlePhotoChange = useCallback(
-    (e: React.ChangeEvent<HTMLInputElement>) => {
-      const file = e.target.files?.[0];
-      if (file) {
-        // Validate file size (max 5MB)
-        if (file.size > 5 * 1024 * 1024) {
-          toast({
-            variant: "destructive",
-            title: "File too large",
-            description: "Please select an image under 5MB",
-          });
-          return;
-        }
-
-        const reader = new FileReader();
-        reader.onloadend = () => {
-          const result = reader.result as string;
-          setPhotoPreview(result);
-          form.setValue("photo", result, { shouldValidate: true });
-        };
-        reader.readAsDataURL(file);
-      }
-    },
-    [form, toast]
-  );
 
   const handleFormSubmit = async (data: OrderFormValues) => {
     setIsLoading(true);
@@ -234,11 +196,9 @@ export function OrderForm() {
           <div className="relative min-h-[600px]">
             <AnimatePresence mode="wait" initial={false}>
               {step === 1 && (
-                <CardCustomizationStep
+                <PersonalDetailsStep
                   key="step-1"
                   form={form}
-                  photoPreview={photoPreview}
-                  onPhotoChange={handlePhotoChange}
                   onNext={nextStep}
                 />
               )}

@@ -7,6 +7,8 @@ import {
   Minus,
   Plus,
   Info,
+  Wifi,
+  Smartphone,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -16,7 +18,6 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import {
   FormControl,
@@ -25,7 +26,8 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { UseFormReturn, useFieldArray } from "react-hook-form";
-import { OrderFormValues, denominations, calculateOrderTotals } from "./schema";
+import { useState } from "react";
+import { OrderFormValues, denominations, dataProducts, airtimeProducts, calculateOrderTotals } from "./schema";
 import { formatCurrency } from "@/lib/utils";
 import { stepTransition, StepHeader } from "./shared";
 
@@ -40,6 +42,7 @@ export function CardDetailsStep({
   isLoading,
   onPrev,
 }: CardDetailsStepProps) {
+  const [activeTab, setActiveTab] = useState<"data" | "airtime">("data");
   const { fields, append, remove, update } = useFieldArray({
     control: form.control,
     name: "orderItems",
@@ -47,6 +50,7 @@ export function CardDetailsStep({
   });
 
   const selectedDenoms = new Set(fields.map((f) => f.denomination));
+  const displayProducts = activeTab === "data" ? dataProducts : airtimeProducts;
 
   const handleDenominationToggle = (denomId: string) => {
     if (selectedDenoms.has(denomId)) {
@@ -88,8 +92,8 @@ export function CardDetailsStep({
       {/* Step Header */}
       <StepHeader
         icon={CreditCard}
-        title="Card Selection"
-        description="Choose card denominations and quantities for your order"
+        title="Product Selection"
+        description="Choose data bundles and airtime vouchers for your order"
         step={3}
         totalSteps={3}
       />
@@ -97,40 +101,50 @@ export function CardDetailsStep({
       {/* Denomination Selector */}
       <Card>
         <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <CreditCard className="h-5 w-5" />
-            Select Card Denominations
-          </CardTitle>
+          <CardTitle>Select Products</CardTitle>
           <CardDescription>
-            Choose the denominations you want to order
+            Choose data bundles or airtime vouchers to order
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
-          <div className="grid grid-cols-3 gap-3">
-            {denominations.map((denom) => {
+          {/* Tabs */}
+          <div className="flex gap-2">
+            <Button
+              type="button"
+              variant={activeTab === "data" ? "default" : "outline"}
+              onClick={() => setActiveTab("data")}
+              className="flex items-center gap-2"
+            >
+              <Wifi className="h-4 w-4" />
+              Data Bundles
+            </Button>
+            <Button
+              type="button"
+              variant={activeTab === "airtime" ? "default" : "outline"}
+              onClick={() => setActiveTab("airtime")}
+              className="flex items-center gap-2"
+            >
+              <Smartphone className="h-4 w-4" />
+              Airtime
+            </Button>
+          </div>
+
+          {/* Product Grid */}
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+            {displayProducts.map((denom) => {
               const isSelected = selectedDenoms.has(denom.id);
-              const hasMinQty = denom.minQty > 1;
 
               return (
                 <button
                   key={denom.id}
                   type="button"
                   onClick={() => handleDenominationToggle(denom.id)}
-                  className={`relative p-4 rounded-lg border-2 transition-all hover:shadow-md ${
-                    isSelected
-                      ? "border-primary bg-primary/10"
-                      : "border-border hover:border-primary/50"
-                  }`}
+                  className={`relative p-4 rounded-lg border-2 transition-all hover:shadow-md ${isSelected
+                    ? "border-primary bg-primary/10"
+                    : "border-border hover:border-primary/50"
+                    }`}
                 >
                   <div className="text-lg font-bold">{denom.label}</div>
-                  {hasMinQty && (
-                    <Badge
-                      variant="secondary"
-                      className="absolute top-1 right-1 text-xs"
-                    >
-                      Min {denom.minQty}
-                    </Badge>
-                  )}
                 </button>
               );
             })}
@@ -239,13 +253,13 @@ export function CardDetailsStep({
           <CardContent className="space-y-4">
             <div className="space-y-3">
               <div className="flex justify-between text-sm">
-                <span className="text-muted-foreground">Total Cards:</span>
+                <span className="text-muted-foreground">Total Units:</span>
                 <span className="font-semibold">
                   {calculations.totalCards.toLocaleString()}
                 </span>
               </div>
               <div className="flex justify-between text-sm">
-                <span className="text-muted-foreground">Card Value:</span>
+                <span className="text-muted-foreground">Product Value:</span>
                 <span className="font-semibold">
                   {formatCurrency(calculations.cardValue)}
                 </span>
@@ -259,7 +273,7 @@ export function CardDetailsStep({
                 </span>
               </div>
               <div className="flex justify-between text-sm">
-                <span className="text-muted-foreground">Printing Cost:</span>
+                <span className="text-muted-foreground">Processing Cost:</span>
                 <span className="font-semibold">
                   {formatCurrency(calculations.printingCost)}
                 </span>
@@ -276,9 +290,7 @@ export function CardDetailsStep({
             <Alert>
               <Info className="h-4 w-4" />
               <AlertDescription className="text-xs">
-                After placing your order, you'll receive bank details to
-                complete the payment. Your cards will be processed upon payment
-                confirmation.
+                Minimum order value is ₦800,000. After placing your order, you'll receive bank details for payment completion. Instant delivery upon payment confirmation.
               </AlertDescription>
             </Alert>
           </CardContent>
@@ -293,10 +305,9 @@ export function CardDetailsStep({
           onClick={onPrev}
           disabled={isLoading}
           size="lg"
-          className="flex-1 h-12 text-base font-semibold"
+          className="h-12 text-base font-semibold"
         >
-          <ArrowLeft className="mr-2 h-5 w-5" />
-          Previous
+          Back
         </Button>
         <Button
           type="submit"

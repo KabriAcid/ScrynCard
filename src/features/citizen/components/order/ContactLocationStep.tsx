@@ -261,10 +261,9 @@ export function ContactLocationStep({
             variant="outline"
             onClick={onPrev}
             size="lg"
-            className="flex-1 h-12 text-base font-semibold group"
+            className="h-12 text-base font-semibold group"
           >
-            <ArrowLeft className="mr-2 h-5 w-5 group-hover:-translate-x-1 transition-transform" />
-            <span>Previous</span>
+            <span>Back</span>
           </Button>
           <Button
             type="button"
@@ -272,7 +271,7 @@ export function ContactLocationStep({
             size="lg"
             className="flex-1 h-12 text-base font-semibold group"
           >
-            <span>Continue to Card Details</span>
+            <span>Continue</span>
             <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
           </Button>
         </motion.div>
