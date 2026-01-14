@@ -69,9 +69,8 @@ const denominationEnum = denominations.map((d) => d.id) as [
 
 export const OrderSchema = z.object({
   fullName: z.string().min(3, "Name must be at least 3 characters."),
-  email: z.string().email({ message: "Please enter a valid email address." }),
-  phone: z.string().regex(/^0[789][01]\d{8}$/, {
-    message: "Please enter a valid Nigerian phone number.",
+  nin: z.string().regex(/^\d{11}$/, {
+    message: "Please enter a valid NIN (11 digits).",
   }),
   state: z.string({ required_error: "Please select a state." }),
   lga: z.string({ required_error: "Please select an LGA." }),

@@ -25,7 +25,7 @@ const QuantityInput = React.forwardRef<HTMLInputElement, QuantityInputProps>(
     };
 
     return (
-      <div className="flex items-center gap-1">
+      <div className="flex items-center gap-0.5 sm:gap-1">
         <Button
           type="button"
           variant="outline"

@@ -31,7 +31,7 @@ export function PersonalDetailsStep({
     onNext,
 }: PersonalDetailsStepProps) {
     const handleContinue = async () => {
-        const isValid = await form.trigger(["fullName", "email", "phone"]);
+        const isValid = await form.trigger(["fullName", "nin"]);
         if (isValid) {
             onNext();
         }
@@ -50,7 +50,7 @@ export function PersonalDetailsStep({
             <StepHeader
                 icon={User}
                 title="Your Information"
-                description="Please provide your contact details"
+                description="Please provide your personal details"
                 step={1}
                 totalSteps={3}
             />
@@ -83,35 +83,16 @@ export function PersonalDetailsStep({
                                 )}
                             />
 
-                            {/* Email */}
+                            {/* NIN */}
                             <FormField
                                 control={form.control}
-                                name="email"
+                                name="nin"
                                 render={({ field }) => (
                                     <FormItem>
-                                        <FormLabel>Email Address</FormLabel>
+                                        <FormLabel>National ID Number (NIN)</FormLabel>
                                         <FormControl>
                                             <Input
-                                                type="email"
-                                                placeholder="your.email@example.com"
-                                                {...field}
-                                            />
-                                        </FormControl>
-                                        <FormMessage />
-                                    </FormItem>
-                                )}
-                            />
-
-                            {/* Phone */}
-                            <FormField
-                                control={form.control}
-                                name="phone"
-                                render={({ field }) => (
-                                    <FormItem>
-                                        <FormLabel>Phone Number</FormLabel>
-                                        <FormControl>
-                                            <Input
-                                                placeholder="08012345678"
+                                                placeholder="Enter your NIN"
                                                 {...field}
                                             />
                                         </FormControl>
