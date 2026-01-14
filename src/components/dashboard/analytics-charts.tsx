@@ -281,11 +281,10 @@ export function PartyAffiliationChart() {
           {partyData.map((party, index) => (
             <div
               key={party.name}
-              className={`relative rounded-lg border-2 p-3 cursor-pointer transition-all hover:shadow-md ${
-                activeIndex === index
+              className={`relative rounded-lg border-2 p-3 cursor-pointer transition-all hover:shadow-md ${activeIndex === index
                   ? "border-primary shadow-lg"
                   : "border-border"
-              }`}
+                }`}
               onClick={() => setActiveIndex(index)}
               onMouseEnter={() => setActiveIndex(index)}
             >

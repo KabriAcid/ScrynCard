@@ -37,7 +37,6 @@ export function EditProfileModal({
   const [isSaving, setIsSaving] = useState(false);
   const [formData, setFormData] = useState({
     fullName: userProfile.fullName,
-    party: "",
     email: userProfile.email,
     phone: userProfile.phone,
     bio: userProfile.bio || "",
@@ -106,27 +105,15 @@ export function EditProfileModal({
           {/* Basic Information */}
           <div className="space-y-4">
             <h4 className="font-medium">Basic Information</h4>
-            <div className="grid gap-4 md:grid-cols-2">
-              <div className="space-y-2">
-                <Label htmlFor="fullName">Full Name</Label>
-                <Input
-                  id="fullName"
-                  value={formData.fullName}
-                  onChange={(e) =>
-                    setFormData({ ...formData, fullName: e.target.value })
-                  }
-                />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="party">Party</Label>
-                <Input
-                  id="party"
-                  value={formData.party}
-                  onChange={(e) =>
-                    setFormData({ ...formData, party: e.target.value })
-                  }
-                />
-              </div>
+            <div className="space-y-2">
+              <Label htmlFor="fullName">Full Name</Label>
+              <Input
+                id="fullName"
+                value={formData.fullName}
+                onChange={(e) =>
+                  setFormData({ ...formData, fullName: e.target.value })
+                }
+              />
             </div>
 
             {/* Contact Information */}
