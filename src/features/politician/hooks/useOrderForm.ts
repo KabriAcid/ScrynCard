@@ -5,6 +5,7 @@ import { z } from "zod";
 import {
   calculateOrderTotals,
   denominations,
+  MINIMUM_ORDER_VALUE,
   type OrderItem,
 } from "../components/order";
 
@@ -19,14 +20,15 @@ const OrderFormSchema = z.object({
     .min(1, "Please select at least one product")
     .refine(
       (items) => {
-        const totalQuantity = items.reduce(
-          (sum, item) => sum + item.quantity,
-          0
-        );
-        return totalQuantity >= 100;
+        // Calculate total product value
+        const totalValue = items.reduce((sum, item) => {
+          const denom = denominations.find((d) => d.id === item.denomination);
+          return sum + (denom?.value || 0) * item.quantity;
+        }, 0);
+        return totalValue >= MINIMUM_ORDER_VALUE;
       },
       {
-        message: "Total order must be at least 100 units",
+        message: `Minimum order value is ₦${(MINIMUM_ORDER_VALUE / 1000).toLocaleString()}k`,
       }
     ),
 });

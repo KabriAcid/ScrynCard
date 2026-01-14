@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { Badge } from "@/components/ui/badge";
 import {
   Card,
   CardContent,
@@ -67,19 +66,11 @@ export function DenominationSelector({
                 type="button"
                 onClick={() => onToggle(denom.id)}
                 className={`relative p-4 rounded-lg border-2 transition-all hover:shadow-md ${isSelected
-                    ? "border-primary bg-primary/10"
-                    : "border-border hover:border-primary/50"
+                  ? "border-primary bg-primary/10"
+                  : "border-border hover:border-primary/50"
                   }`}
               >
                 <div className="text-lg font-bold">{denom.label}</div>
-                {activeTab === "data" && (
-                  <Badge
-                    variant="secondary"
-                    className="absolute top-1 right-1 text-xs"
-                  >
-                    {denom.unit}
-                  </Badge>
-                )}
               </button>
             );
           })}

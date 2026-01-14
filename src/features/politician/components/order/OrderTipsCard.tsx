@@ -8,12 +8,12 @@ export function OrderTipsCard() {
       </CardHeader>
       <CardContent>
         <ul className="text-xs text-muted-foreground space-y-2">
-          <li>• Minimum data order: 5GB per unit</li>
-          <li>• Minimum airtime: ₦2,000 per unit</li>
-          <li>• Minimum total order: 100 units</li>
+          <li>• Minimum order value: ₦800,000</li>
+          <li>• Mix data and airtime in one order</li>
+          <li>• Data bundles valid for 30 days</li>
+          <li>• Airtime never expires</li>
           <li>• 15% service fee applies to all orders</li>
           <li>• Processing cost: ₦200 per unit</li>
-          <li>• Data valid for 30 days, Airtime never expires</li>
           <li>• Instant delivery after payment confirmation</li>
         </ul>
       </CardContent>
