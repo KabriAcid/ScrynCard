@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuthStore } from "@/stores/authStore";
-import { usePoliticianStore } from "@/stores/politicianStore";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -27,6 +26,7 @@ import {
 import { formatCurrency } from "@/lib/utils";
 import { format } from "date-fns";
 import type { Order } from "@/lib/mockTypes";
+import { mockOrders, getRecentOrders } from "@/lib/mock";
 
 const statusIcons = {
   completed: CheckCircle2,

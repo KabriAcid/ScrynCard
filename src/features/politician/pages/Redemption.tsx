@@ -32,7 +32,7 @@ export default function RedemptionPage() {
         amount: redemption.amount || 0,
         dataSize: redemption.dataSize || 0,
         status: redemption.status || "pending",
-        giftCode: redemption.giftCode || "N/A",
+        giftCode: redemption.operatorReference || "N/A",
       })
     );
     setRedemptions(transformedRedemptions);

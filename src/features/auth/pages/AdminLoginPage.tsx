@@ -66,9 +66,7 @@ export default function AdminLoginPage() {
         {/* Header */}
         <div className="text-center space-y-2">
           <div className="flex justify-center">
-            <div className="rounded-full bg-primary p-4">
               <Logo />
-            </div>
           </div>
           <h1 className="text-3xl font-bold tracking-tight">Admin Portal</h1>
           <p className="text-muted-foreground">

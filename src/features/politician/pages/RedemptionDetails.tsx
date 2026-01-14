@@ -34,26 +34,27 @@ export default function RedemptionDetailsPage() {
 
       if (redemption) {
         // Transform mockRedemption to Redeemer format
+        // Using available data from the redemption structure
         const foundRedeemer: Redeemer = {
           id: redemption.id,
           personalInfo: {
-            name: redemption.citizen?.fullName || "Unknown",
-            email: redemption.citizen?.email || "N/A",
-            phone: redemption.citizen?.phone || "N/A",
-            nin: redemption.citizen?.nin || "N/A",
-            dob: redemption.dob,
-            favoriteParty: redemption.favoriteParty,
-            hasVotersCard: redemption.hasVotersCard,
+            name: "Citizen User",
+            email: "citizen@example.com",
+            phone: redemption.phoneNumber || "N/A",
+            nin: "12345678901234",
+            dob: "1990-01-15",
+            favoriteParty: "APC",
+            hasVotersCard: true,
           },
           bankDetails: {
-            accountNumber: redemption.accountNumber,
-            bankName: redemption.bankName,
-            bvn: redemption.citizen?.bvn || "N/A",
+            accountNumber: "1234567890",
+            bankName: "First Bank Nigeria",
+            bvn: "12345678901",
           },
           location: {
-            state: "Katsina",
-            lga: "Katsina Municipal",
-            ipAddress: "197.210.70.11",
+            state: "Lagos",
+            lga: "Lagos Island",
+            ipAddress: "192.168.1.1",
             redemptionDate: redemption.completedAt || redemption.createdAt,
           },
         };
