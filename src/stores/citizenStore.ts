@@ -15,8 +15,17 @@ interface CitizenState {
     amount?: number;
     dataSize?: number;
     error?: string;
+    errorCode?: string;
+    expiryDate?: string;
   }>;
-  redeemGift: (giftCode: string, phoneNumber: string) => Promise<void>;
+  redeemGift: (
+    giftCode: string,
+    phoneNumber: string
+  ) => Promise<{
+    success: boolean;
+    error?: string;
+    message?: string;
+  }>;
   resetError: () => void;
 }
 
@@ -101,7 +110,7 @@ export const useCitizenStore = create<CitizenState>((set) => ({
         });
         return {
           success: false,
-          error: "Invalid card code. Card not found in system.",
+          error: "INVALID CARD CODE.",
           errorCode: "VERIFICATION_FAILED",
         };
       }
@@ -125,7 +134,10 @@ export const useCitizenStore = create<CitizenState>((set) => ({
           error: phoneValidation.errorMessage || "Invalid phone number",
           isLoading: false,
         });
-        return;
+        return {
+          success: false,
+          error: phoneValidation.errorMessage || "Invalid phone number",
+        };
       }
 
       // Step 2: Validate gift code
@@ -138,7 +150,10 @@ export const useCitizenStore = create<CitizenState>((set) => ({
           error: giftValidation.error || "Invalid gift code",
           isLoading: false,
         });
-        return;
+        return {
+          success: false,
+          error: giftValidation.error || "Invalid gift code",
+        };
       }
 
       // Step 3: Call AirtimeService to redeem
@@ -155,14 +170,26 @@ export const useCitizenStore = create<CitizenState>((set) => ({
           redemptions: [...state.redemptions, response as any],
           isLoading: false,
         }));
+        return {
+          success: true,
+        };
       } else {
         set({
           error: response.message || "Redemption failed",
           isLoading: false,
         });
+        return {
+          success: false,
+          error: response.message || "Redemption failed",
+        };
       }
     } catch (error: any) {
-      set({ error: error.message || "An error occurred", isLoading: false });
+      const errorMessage = error.message || "An error occurred";
+      set({ error: errorMessage, isLoading: false });
+      return {
+        success: false,
+        error: errorMessage,
+      };
     }
   },
 

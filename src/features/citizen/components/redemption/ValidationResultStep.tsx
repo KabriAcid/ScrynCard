@@ -58,23 +58,18 @@ export function ValidationResultStep({
           </p>
         </div>
 
-        <Card className="p-12 bg-blue-50 border-blue-200">
+        <Card className="p-12">
           <div className="space-y-6 text-center">
             <div className="flex justify-center">
-              <Spinner size="lg" className="text-blue-600" />
+              <Spinner size="lg" className="text-primary" />
             </div>
             <div>
-              <h3 className="font-semibold text-blue-900 text-lg">
+              <h3 className="font-semibold text-primary text-lg">
                 Verifying Card
               </h3>
-              <p className="text-sm text-blue-700 mt-2">
+              <p className="text-sm text-muted-foreground mt-2">
                 Please wait while we validate your card...
               </p>
-            </div>
-            <div className="text-xs text-blue-600 font-mono bg-white bg-opacity-50 p-3 rounded">
-              <p className="font-semibold mb-2">Card Information</p>
-              <p>Serial: {serialNumber}</p>
-              <p>Code: {cardCode}</p>
             </div>
           </div>
         </Card>
@@ -111,10 +106,10 @@ export function ValidationResultStep({
         </Card>
 
         {/* Card Details Display */}
-        <Card className="p-6 border-gray-200">
+        <Card className="p-6">
           <div className="space-y-4">
             <div className="flex items-center gap-2 mb-4">
-              <CreditCard className="h-5 w-5 text-blue-600" />
+              <CreditCard className="h-5 w-5 text-primary" />
               <h3 className="font-semibold">Card Details</h3>
             </div>
             <div className="grid grid-cols-2 gap-4">
@@ -209,11 +204,11 @@ export function ValidationResultStep({
       </Card>
 
       {/* Card Details for Reference */}
-      <Card className="p-6 border-gray-200 bg-gray-50">
+      <Card className="p-6">
         <div className="space-y-4">
           <div className="flex items-center gap-2 mb-4">
-            <CreditCard className="h-5 w-5 text-gray-600" />
-            <h3 className="font-semibold text-gray-900">Card Information</h3>
+            <CreditCard className="h-5 w-5 text-primary" />
+            <h3 className="font-semibold">Card Information</h3>
           </div>
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-1">

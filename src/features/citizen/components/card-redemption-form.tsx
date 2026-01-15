@@ -1,11 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useToast } from "@/hooks/use-toast";
 import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { Form } from "@/components/ui/form";
-import { LoaderCircle } from "lucide-react";
 import { RedemptionSchema, RedemptionFormValues } from "./redemption/schema";
 import { GiftVerificationStep } from "./redemption/GiftVerificationStep";
 import { ValidationResultStep } from "./redemption/ValidationResultStep";
@@ -36,7 +35,9 @@ export function CardRedemptionForm() {
       phoneNumber: "",
     },
   });
-// If we're on step 1 (Card Verification), validate the card first
+
+  const handleNextStep = async () => {
+    // If we're on step 1 (Card Verification), validate the card first
     if (step === 1) {
       const cardCode = form.getValues("cardCode");
       setIsLoading(true);
@@ -94,8 +95,15 @@ export function CardRedemptionForm() {
     } else {
       setStep((prev) => (prev > 1 ? prev - 1 : prev));
     }
-  const handlePrevStep = () => {
-    setStep((prev) => (prev > 1 ? prev - 1 : prev));
+  };
+
+  const handleSuccessComplete = () => {
+    form.reset();
+    setShowSuccess(false);
+    setStep(1);
+    setGiftDetails(null);
+    setValidationError(null);
+    navigate("/");
   };
 
   const onSubmit = async (values: RedemptionFormValues) => {
@@ -127,7 +135,40 @@ export function CardRedemptionForm() {
     } finally {
       setIsLoading(false);
     }
-  };Validation Result */}
+  };
+
+  return (
+    <Form {...form}>
+      <form onSubmit={form.handleSubmit(onSubmit)} className="w-full space-y-8">
+        <AnimatePresence mode="wait">
+          {/* Success Screen */}
+          {showSuccess && submittedValues && (
+            <SuccessConfirmation
+              values={submittedValues}
+              giftDetails={giftDetails}
+              onComplete={handleSuccessComplete}
+            />
+          )}
+
+          {/* Step 1: Card Verification */}
+          {!showSuccess && step === 1 && (
+            <motion.div
+              key="step-1"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              transition={{ duration: 0.3 }}
+            >
+              <GiftVerificationStep
+                isLoading={isLoading}
+                onNext={handleNextStep}
+                onPrev={handlePrevStep}
+                isFirstStep={true}
+              />
+            </motion.div>
+          )}
+
+          {/* Step 2: Validation Result */}
           {!showSuccess && step === 2 && (
             <motion.div
               key="step-2"
@@ -168,48 +209,7 @@ export function CardRedemptionForm() {
           {/* Step 4: Confirmation */}
           {!showSuccess && step === 4 && (
             <motion.div
-              key="step-4
-          )}
-
-          {/* Step 1: Card Verification */}
-          {!showSuccess && step === 1 && (
-            <motion.div
-              key="step-1"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -20 }}
-              transition={{ duration: 0.3 }}
-            >
-              <GiftVerificationStep
-                isLoading={isLoading}
-                onNext={handleNextStep}
-                onPrev={handlePrevStep}
-                isFirstStep={true}
-              />
-            </motion.div>
-          )}
-
-          {/* Step 2: Phone Verification */}
-          {!showSuccess && step === 2 && (
-            <motion.div
-              key="step-2"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -20 }}
-              transition={{ duration: 0.3 }}
-            >
-              <PhoneVerificationStep
-                isLoading={isLoading}
-                onNext={handleNextStep}
-                onPrev={handlePrevStep}
-              />
-            </motion.div>
-          )}
-
-          {/* Step 3: Confirmation */}
-          {!showSuccess && step === 3 && (
-            <motion.div
-              key="step-3"
+              key="step-4"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -20 }}
