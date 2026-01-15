@@ -48,11 +48,19 @@ const operatorData = [
   { name: "MTN", value: 450, color: "#FFD700", fullName: "MTN Nigeria" },
   { name: "Airtel", value: 380, color: "#FF0000", fullName: "Airtel Networks" },
   { name: "Glo", value: 320, color: "#00AA00", fullName: "Globacom Limited" },
-  { name: "9Mobile", value: 180, color: "#006600", fullName: "9Mobile Networks" },
+  {
+    name: "9Mobile",
+    value: 180,
+    color: "#006600",
+    fullName: "9Mobile Networks",
+  },
   { name: "Others", value: 100, color: "#bebebe", fullName: "Other Parties" },
 ];
 
-const totalOperatorRedemptions = operatorData.reduce((sum, operator) => sum + operator.value, 0);
+const totalOperatorRedemptions = operatorData.reduce(
+  (sum, operator) => sum + operator.value,
+  0
+);
 
 const renderActiveShape = (props: any) => {
   const RADIAN = Math.PI / 180;
@@ -211,7 +219,9 @@ export function OperatorDistributionChart() {
     <Card>
       <CardHeader>
         <CardTitle>Operator Distribution</CardTitle>
-        <CardDescription>Airtime and data redemptions by mobile operator.</CardDescription>
+        <CardDescription>
+          Airtime and data redemptions by mobile operator.
+        </CardDescription>
       </CardHeader>
       <CardContent>
         <ResponsiveContainer width="100%" height={350}>
@@ -251,6 +261,205 @@ export function OperatorDistributionChart() {
             />
           </BarChart>
         </ResponsiveContainer>
+      </CardContent>
+    </Card>
+  );
+}
+
+const beneficiaryDistributionData = [
+  { name: "Teachers", value: 1200, color: "#3B82F6", fullName: "Teachers" },
+  {
+    name: "Healthcare Workers",
+    value: 950,
+    color: "#10B981",
+    fullName: "Healthcare Workers",
+  },
+  { name: "Students", value: 1800, color: "#F59E0B", fullName: "Students" },
+  {
+    name: "Business Owners",
+    value: 650,
+    color: "#8B5CF6",
+    fullName: "Small Business Owners",
+  },
+  {
+    name: "Others",
+    value: 400,
+    color: "#6B7280",
+    fullName: "Other Beneficiaries",
+  },
+];
+
+const totalBeneficiaries = beneficiaryDistributionData.reduce(
+  (sum, beneficiary) => sum + beneficiary.value,
+  0
+);
+
+export function BeneficiaryDistributionChart() {
+  const [activeIndex, setActiveIndex] = useState(0);
+
+  const onPieEnter = (_: any, index: number) => {
+    setActiveIndex(index);
+  };
+
+  const currentBeneficiary = beneficiaryDistributionData[activeIndex];
+  const percentage = (
+    (currentBeneficiary.value / totalBeneficiaries) *
+    100
+  ).toFixed(1);
+
+  return (
+    <Card>
+      <CardHeader>
+        <CardTitle>Beneficiary Distribution</CardTitle>
+        <CardDescription>
+          Distribution of airtime and data across beneficiary groups (
+          {totalBeneficiaries.toLocaleString()} total)
+        </CardDescription>
+      </CardHeader>
+      <CardContent>
+        {/* Summary Section */}
+        <div className="mb-6 grid gap-4 md:grid-cols-3 lg:grid-cols-5">
+          {beneficiaryDistributionData.map((beneficiary, index) => (
+            <div
+              key={beneficiary.name}
+              className={`relative rounded-lg border-2 p-3 cursor-pointer transition-all hover:shadow-md ${
+                activeIndex === index
+                  ? "border-primary shadow-lg"
+                  : "border-border"
+              }`}
+              onClick={() => setActiveIndex(index)}
+              onMouseEnter={() => setActiveIndex(index)}
+            >
+              <div className="flex items-center gap-2 mb-1">
+                <div
+                  className="h-3 w-3 rounded-full"
+                  style={{ backgroundColor: beneficiary.color }}
+                />
+                <span className="text-xs font-semibold">
+                  {beneficiary.name}
+                </span>
+              </div>
+              <div className="text-lg font-bold">
+                {beneficiary.value.toLocaleString()}
+              </div>
+              <div className="text-xs text-muted-foreground">
+                {((beneficiary.value / totalBeneficiaries) * 100).toFixed(1)}%
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* Active Beneficiary Info */}
+        <div className="mb-4 rounded-lg bg-muted/50 p-4">
+          <div className="flex items-center justify-between">
+            <div>
+              <div className="flex items-center gap-2">
+                <div
+                  className="h-4 w-4 rounded-full"
+                  style={{ backgroundColor: currentBeneficiary.color }}
+                />
+                <h3 className="text-lg font-semibold">
+                  {currentBeneficiary.fullName || currentBeneficiary.name}
+                </h3>
+              </div>
+              <p className="text-sm text-muted-foreground mt-1">
+                Hover over or click any category to see details
+              </p>
+            </div>
+            <div className="text-right">
+              <div className="text-3xl font-bold">
+                {currentBeneficiary.value.toLocaleString()}
+              </div>
+              <div className="text-sm text-muted-foreground">
+                {percentage}% of beneficiaries
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Pie Chart */}
+        <div className="relative">
+          <ResponsiveContainer width="100%" height={450} className="mx-auto">
+            <PieChart>
+              <Pie
+                activeIndex={activeIndex}
+                activeShape={renderActiveShape}
+                data={beneficiaryDistributionData}
+                cx="50%"
+                cy="50%"
+                innerRadius={90}
+                outerRadius={130}
+                fill="hsl(var(--primary))"
+                dataKey="value"
+                onMouseEnter={onPieEnter}
+                onClick={(_, index) => setActiveIndex(index)}
+              >
+                {beneficiaryDistributionData.map((entry, index) => (
+                  <Cell
+                    key={`cell-${index}`}
+                    fill={entry.color}
+                    className="cursor-pointer transition-opacity hover:opacity-80"
+                  />
+                ))}
+              </Pie>
+              <Tooltip
+                content={({ active, payload }) => {
+                  if (active && payload && payload.length) {
+                    const data = payload[0].payload;
+                    return (
+                      <div className="rounded-lg border bg-card p-3 shadow-lg">
+                        <div className="flex items-center gap-2 mb-2">
+                          <div
+                            className="h-3 w-3 rounded-full"
+                            style={{ backgroundColor: data.color }}
+                          />
+                          <p className="font-semibold">
+                            {data.fullName || data.name}
+                          </p>
+                        </div>
+                        <p className="text-sm">
+                          <span className="font-bold">
+                            {data.value.toLocaleString()}
+                          </span>{" "}
+                          beneficiaries
+                        </p>
+                        <p className="text-xs text-muted-foreground">
+                          {((data.value / totalBeneficiaries) * 100).toFixed(1)}
+                          % of total
+                        </p>
+                      </div>
+                    );
+                  }
+                  return null;
+                }}
+              />
+            </PieChart>
+          </ResponsiveContainer>
+        </div>
+
+        {/* Legend and Statistics */}
+        <div className="mt-6 grid gap-3 text-sm">
+          <div className="flex items-center justify-between border-t pt-3">
+            <span className="text-muted-foreground">Total Beneficiaries:</span>
+            <span className="font-bold">
+              {totalBeneficiaries.toLocaleString()}
+            </span>
+          </div>
+          <div className="flex items-center justify-between">
+            <span className="text-muted-foreground">Largest Group:</span>
+            <span className="font-semibold flex items-center gap-2">
+              <div
+                className="h-3 w-3 rounded-full"
+                style={{
+                  backgroundColor: beneficiaryDistributionData[0].color,
+                }}
+              />
+              {beneficiaryDistributionData[0].name} (
+              {beneficiaryDistributionData[0].value.toLocaleString()}{" "}
+              beneficiaries)
+            </span>
+          </div>
+        </div>
       </CardContent>
     </Card>
   );

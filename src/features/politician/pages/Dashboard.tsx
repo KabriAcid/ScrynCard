@@ -2,6 +2,7 @@
 import { DashboardSkeleton } from "@/components/dashboard/skeletons";
 import { useAuthStore } from "@/stores/authStore";
 import { getRecentOrders, getRecentRedemptions } from "@/lib/mock";
+import { BeneficiaryDistributionChart } from "@/components/dashboard/analytics-charts";
 import {
   DashboardHeader,
   KPICards,
@@ -9,10 +10,18 @@ import {
   RecentOrdersSection,
 } from "./components";
 
+interface Order {
+  id: string;
+  batchId: string;
+  totalCardValue: number;
+  status: "pending" | "processing" | "completed" | "cancelled";
+  createdAt: string;
+}
+
 export default function PoliticianDashboardPage() {
   const { user } = useAuthStore();
   const [isLoading, setIsLoading] = useState(true);
-  const [recentOrders, setRecentOrders] = useState([]);
+  const [recentOrders, setRecentOrders] = useState<Order[]>([]);
   const [dashboardStats, setDashboardStats] = useState<any>(null);
 
   useEffect(() => {
@@ -42,6 +51,9 @@ export default function PoliticianDashboardPage() {
 
       <KPICards stats={dashboardStats} />
 
+      {/* Beneficiary Distribution */}
+      <BeneficiaryDistributionChart />
+
       {/* Redemption Overview */}
       <RedemptionOverviewSection />
 
@@ -50,4 +62,3 @@ export default function PoliticianDashboardPage() {
     </div>
   );
 }
-
