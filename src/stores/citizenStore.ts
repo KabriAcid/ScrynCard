@@ -30,30 +30,55 @@ export const useCitizenStore = create<CitizenState>((set) => ({
   validateGift: async (giftCode: string) => {
     set({ isLoading: true, error: null });
     try {
-      // Simulate gift validation
-      // In production, this would validate against backend
+      // Mock gift validation - validate card code only (18 characters)
+      // Serial number is just for physical card tracking, not for validation
       const validGifts: Record<string, any> = {
-        "MTN-5K-B001-A3F7B9C2-X7": {
+        // Airtime gifts (18-char card codes)
+        "WSO-D939-39DX-39DK": {
           giftType: "airtime",
           amount: 5000,
+          expiryDate: new Date(
+            Date.now() + 365 * 24 * 60 * 60 * 1000
+          ).toISOString(),
         },
-        "AIRTEL-1GB-B001-C0D3E5F7-X8": {
-          giftType: "data",
-          amount: 1000,
-          dataSize: 1000,
-        },
-        "GLO-2K-B001-F6A7B8C9-X9": {
-          giftType: "airtime",
-          amount: 2000,
-        },
-        "9MOBILE-500MB-B002-D1E4F6A7-X0": {
-          giftType: "data",
-          amount: 1500,
-          dataSize: 500,
-        },
-        "MTN-10K-B002-B8C9D0E1-X1": {
+        "GOE-K423-A997-Y432": {
           giftType: "airtime",
           amount: 10000,
+          expiryDate: new Date(
+            Date.now() + 365 * 24 * 60 * 60 * 1000
+          ).toISOString(),
+        },
+        "MTN-X201-B904-Z847": {
+          giftType: "airtime",
+          amount: 2000,
+          expiryDate: new Date(
+            Date.now() + 365 * 24 * 60 * 60 * 1000
+          ).toISOString(),
+        },
+        // Data gifts (18-char card codes)
+        "AIR-T100-C203-D304": {
+          giftType: "data",
+          dataSize: 1000,
+          amount: 1500,
+          expiryDate: new Date(
+            Date.now() + 30 * 24 * 60 * 60 * 1000
+          ).toISOString(),
+        },
+        "GLO-F400-E505-F606": {
+          giftType: "data",
+          dataSize: 5000,
+          amount: 3500,
+          expiryDate: new Date(
+            Date.now() + 30 * 24 * 60 * 60 * 1000
+          ).toISOString(),
+        },
+        "NME-T500-G707-H808": {
+          giftType: "data",
+          dataSize: 500,
+          amount: 800,
+          expiryDate: new Date(
+            Date.now() + 30 * 24 * 60 * 60 * 1000
+          ).toISOString(),
         },
       };
 
@@ -66,20 +91,27 @@ export const useCitizenStore = create<CitizenState>((set) => ({
           giftType: gift.giftType,
           amount: gift.amount,
           dataSize: gift.dataSize,
+          expiryDate: gift.expiryDate,
+          errorCode: undefined,
         };
       } else {
         set({
-          error: "Invalid gift code. Please check and try again.",
+          error: "Invalid card code. Please check and try again.",
           isLoading: false,
         });
         return {
           success: false,
-          error: "Invalid gift code",
+          error: "Invalid card code. Card not found in system.",
+          errorCode: "VERIFICATION_FAILED",
         };
       }
     } catch (error: any) {
       set({ error: error.message, isLoading: false });
-      return { success: false, error: error.message };
+      return {
+        success: false,
+        error: error.message,
+        errorCode: "VERIFICATION_ERROR",
+      };
     }
   },
 

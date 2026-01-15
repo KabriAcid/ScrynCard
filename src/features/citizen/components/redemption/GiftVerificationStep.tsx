@@ -31,7 +31,11 @@ export function GiftVerificationStep({
   const form = useFormContext<RedemptionFormValues>();
   const [verificationLoading, setVerificationLoading] = React.useState(false);
   const [cardDetails, setCardDetails] = React.useState<any>(null);
-  const [error, setError] = React.useState<string | null>(null);
+  const [error, setError] = React.useState<{
+    message: string;
+    code: string;
+    details: string | null;
+  } | null>(null);
   const validateGift = useCitizenStore((state) => state.validateGift);
 
   const serialNumber = form.watch("serialNumber");
@@ -55,29 +59,39 @@ export function GiftVerificationStep({
     setVerificationLoading(true);
     setError(null);
     try {
-      // Validate both serial number and card code together
-      const result = await validateGift(`${serialNumber}-${cardCode}`);
-      if (result.success && result.giftDetails) {
-        setCardDetails(result.giftDetails);
+      // Validate card code only (serial number is just for tracking on the card)
+      const result = await validateGift(cardCode);
+      if (result.success) {
+        const giftDetails = {
+          giftType: result.giftType,
+          amount: result.amount,
+          dataSize: result.dataSize,
+          expiryDate: (result as any).expiryDate,
+        };
+        setCardDetails(giftDetails);
         setError(null);
+        // Auto-advance to next step after successful verification
+        setTimeout(() => {
+          onNext();
+        }, 800);
       } else {
-        setError(result.error || "Invalid card details");
+        setError({
+          message: result.error || "Invalid card code",
+          code: (result as any).errorCode || "VERIFICATION_FAILED",
+          details: (result as any).details || null,
+        });
         setCardDetails(null);
       }
     } catch (err) {
-      setError("Failed to verify card");
+      setError({
+        message: "Failed to verify card. Please try again.",
+        code: "VERIFICATION_ERROR",
+        details: err instanceof Error ? err.message : null,
+      });
       setCardDetails(null);
     } finally {
       setVerificationLoading(false);
     }
-  };
-
-  const handleNext = async () => {
-    if (!cardDetails) {
-      setError("Please verify your card first");
-      return;
-    }
-    await onNext();
   };
 
   return (
@@ -106,7 +120,9 @@ export function GiftVerificationStep({
                     {...field}
                     disabled={verificationLoading}
                     className="font-mono uppercase"
-                    onChange={(e) => field.onChange(e.target.value.toUpperCase())}
+                    onChange={(e) =>
+                      field.onChange(e.target.value.toUpperCase())
+                    }
                   />
                 </FormControl>
                 <p className="text-xs text-muted-foreground mt-1">
@@ -131,7 +147,9 @@ export function GiftVerificationStep({
                     {...field}
                     disabled={verificationLoading}
                     className="font-mono uppercase"
-                    onChange={(e) => field.onChange(e.target.value.toUpperCase())}
+                    onChange={(e) =>
+                      field.onChange(e.target.value.toUpperCase())
+                    }
                   />
                 </FormControl>
                 <p className="text-xs text-muted-foreground mt-1">
@@ -141,15 +159,26 @@ export function GiftVerificationStep({
               </FormItem>
             )}
           />
-            </FormItem>
-          )}
-        />
+        </div>
 
-        {error && (
-          <Alert variant="destructive">
-            <AlertCircle className="h-4 w-4" />
-            <AlertDescription>{error}</AlertDescription>
-          </Alert>
+        {verificationLoading && (
+          <Card className="p-8 bg-blue-50 border-blue-200">
+            <div className="space-y-4 text-center">
+              <div className="flex justify-center">
+                <Loader2 className="h-8 w-8 animate-spin text-blue-600" />
+              </div>
+              <div>
+                <h3 className="font-semibold text-blue-900">Verifying Card</h3>
+                <p className="text-sm text-blue-700 mt-1">
+                  Please wait while we verify your card details...
+                </p>
+              </div>
+              <div className="text-xs text-blue-600 font-mono pt-2">
+                <p>{serialNumber}</p>
+                <p>{cardCode}</p>
+              </div>
+            </div>
+          </Card>
         )}
 
         {cardDetails && (
@@ -214,15 +243,6 @@ export function GiftVerificationStep({
             Back
           </Button>
         )}
-        <Button
-          type="button"
-          onClick={handleNext}
-          disabled={!cardDetails || isLoading || verificationLoading}
-          className={isFirstStep ? "w-full" : "flex-1"}
-        >
-          {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-          Next: Phone Number
-        </Button>
       </div>
     </div>
   );

@@ -15,7 +15,10 @@ export const RedemptionSchema = z.object({
     .string()
     .min(18, "Card code must be at least 18 characters")
     .max(18, "Card code must be 18 characters")
-    .regex(/^[A-Z0-9\-]+$/, "Card code must contain only letters, numbers, and hyphens"),
+    .regex(
+      /^[A-Z0-9\-]+$/,
+      "Card code must contain only letters, numbers, and hyphens"
+    ),
 
   phoneNumber: z
     .string()
