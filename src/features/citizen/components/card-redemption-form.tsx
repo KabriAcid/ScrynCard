@@ -28,15 +28,11 @@ export function CardRedemptionForm() {
     resolver: zodResolver(RedemptionSchema),
     mode: "onChange",
     defaultValues: {
-      giftCode: "",
+      serialNumber: "",
+      cardCode: "",
       phoneNumber: "",
     },
   });
-
-  // Store gift details when verified
-  const handleGiftVerified = (details: any) => {
-    setGiftDetails(details);
-  };
 
   const handleNextStep = async () => {
     setIsLoading(true);
@@ -61,7 +57,9 @@ export function CardRedemptionForm() {
   const onSubmit = async (values: RedemptionFormValues) => {
     setIsLoading(true);
     try {
-      const result = await redeemGift(values.giftCode, values.phoneNumber);
+      // Combine serial number and card code for redemption
+      const combinedCode = `${values.serialNumber}-${values.cardCode}`;
+      const result = await redeemGift(combinedCode, values.phoneNumber);
       if (result.success) {
         setSubmittedValues(values);
         setShowSuccess(true);
@@ -108,7 +106,7 @@ export function CardRedemptionForm() {
             />
           )}
 
-          {/* Step 1: Verify Gift */}
+          {/* Step 1: Card Verification */}
           {!showSuccess && step === 1 && (
             <motion.div
               key="step-1"

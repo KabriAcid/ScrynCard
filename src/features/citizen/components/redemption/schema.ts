@@ -2,7 +2,20 @@ import { z } from "zod";
 import { NetworkDetector } from "@/lib/operators";
 
 export const RedemptionSchema = z.object({
-  giftCode: z.string().min(5, "Gift code is required").toUpperCase(),
+  serialNumber: z
+    .string()
+    .min(9, "Serial number must be at least 9 characters")
+    .max(9, "Serial number must be 9 characters")
+    .regex(
+      /^[A-Z0-9\-]+$/,
+      "Serial number must contain only letters, numbers, and hyphens"
+    ),
+
+  cardCode: z
+    .string()
+    .min(18, "Card code must be at least 18 characters")
+    .max(18, "Card code must be 18 characters")
+    .regex(/^[A-Z0-9\-]+$/, "Card code must contain only letters, numbers, and hyphens"),
 
   phoneNumber: z
     .string()
@@ -18,8 +31,8 @@ export type RedemptionFormValues = z.infer<typeof RedemptionSchema>;
 export const STEPS = [
   {
     id: 1,
-    title: "Verify Gift",
-    description: "Enter your gift code",
+    title: "Verify Card",
+    description: "Enter serial number and card code",
   },
   {
     id: 2,
