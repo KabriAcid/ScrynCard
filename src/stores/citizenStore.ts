@@ -16,7 +16,6 @@ interface CitizenState {
     dataSize?: number;
     error?: string;
     errorCode?: string;
-    expiryDate?: string;
   }>;
   redeemGift: (
     giftCode: string,
@@ -39,81 +38,49 @@ export const useCitizenStore = create<CitizenState>((set) => ({
   validateGift: async (giftCode: string) => {
     set({ isLoading: true, error: null });
     try {
-      // Mock gift validation - validate card code only (18 characters)
-      // Serial number is just for physical card tracking, not for validation
-      const validGifts: Record<string, any> = {
-        // Airtime gifts (18-char card codes)
-        "WSO-D939-39DX-39DK": {
-          giftType: "airtime",
-          amount: 5000,
-          expiryDate: new Date(
-            Date.now() + 365 * 24 * 60 * 60 * 1000
-          ).toISOString(),
-        },
-        "GOE-K423-A997-Y432": {
-          giftType: "airtime",
-          amount: 10000,
-          expiryDate: new Date(
-            Date.now() + 365 * 24 * 60 * 60 * 1000
-          ).toISOString(),
-        },
-        "MTN-X201-B904-Z847": {
-          giftType: "airtime",
-          amount: 2000,
-          expiryDate: new Date(
-            Date.now() + 365 * 24 * 60 * 60 * 1000
-          ).toISOString(),
-        },
-        // Data gifts (18-char card codes)
-        "AIR-T100-C203-D304": {
-          giftType: "data",
-          dataSize: 1000,
-          amount: 1500,
-          expiryDate: new Date(
-            Date.now() + 30 * 24 * 60 * 60 * 1000
-          ).toISOString(),
-        },
-        "GLO-F400-E505-F606": {
-          giftType: "data",
-          dataSize: 5000,
-          amount: 3500,
-          expiryDate: new Date(
-            Date.now() + 30 * 24 * 60 * 60 * 1000
-          ).toISOString(),
-        },
-        "NME-T500-G707-H808": {
-          giftType: "data",
-          dataSize: 500,
-          amount: 800,
-          expiryDate: new Date(
-            Date.now() + 30 * 24 * 60 * 60 * 1000
-          ).toISOString(),
-        },
-      };
-
-      const gift = validGifts[giftCode.toUpperCase()];
-
-      if (gift) {
-        set({ isLoading: false });
-        return {
-          success: true,
-          giftType: gift.giftType,
-          amount: gift.amount,
-          dataSize: gift.dataSize,
-          expiryDate: gift.expiryDate,
-          errorCode: undefined,
-        };
-      } else {
+      // Validate card prefix - first three characters must not contain numbers
+      const prefix = giftCode.substring(0, 3);
+      if (/\d/.test(prefix)) {
         set({
-          error: "Invalid card code. Please check and try again.",
+          error: "Invalid card code. Card prefix contains invalid characters.",
           isLoading: false,
         });
         return {
           success: false,
-          error: "INVALID CARD CODE.",
-          errorCode: "VERIFICATION_FAILED",
+          error: "Invalid card code. Card prefix contains invalid characters.",
+          errorCode: "INVALID_PREFIX",
         };
       }
+
+      // If prefix is valid (no numbers), the card is valid
+      // Determine gift type based on prefix
+      const prefixLower = prefix.toLowerCase();
+      // Top 4 Nigerian network operators
+      const nigerianOperators = ["mtn", "air", "glo", "9mo"];
+
+      let giftType: "airtime" | "data" = "airtime";
+      let amount = 5000;
+      let dataSize = 1000;
+
+      // Randomly assign gift type (50% airtime, 50% data)
+      // In production, this would be determined by the actual card's gift type
+      if (Math.random() > 0.5) {
+        giftType = "data";
+        amount = 2000;
+        dataSize = 2000;
+      } else {
+        giftType = "airtime";
+        amount = 5000;
+      }
+
+      set({ isLoading: false });
+      return {
+        success: true,
+        giftType,
+        amount,
+        dataSize,
+        errorCode: undefined,
+      };
     } catch (error: any) {
       set({ error: error.message, isLoading: false });
       return {

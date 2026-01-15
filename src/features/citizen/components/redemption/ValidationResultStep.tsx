@@ -11,7 +11,6 @@ interface ValidationResultStepProps {
     giftType: string;
     amount?: number;
     dataSize?: number;
-    expiryDate?: string;
   };
   error?: {
     message: string;
@@ -135,14 +134,6 @@ export function ValidationResultStep({
                     : `₦${(giftDetails.amount || 0).toLocaleString()}`}
                 </p>
               </div>
-              {giftDetails.expiryDate && (
-                <div className="col-span-2 space-y-1">
-                  <p className="text-sm text-muted-foreground">Expires</p>
-                  <p className="font-semibold">
-                    {new Date(giftDetails.expiryDate).toLocaleDateString()}
-                  </p>
-                </div>
-              )}
             </div>
           </div>
         </Card>

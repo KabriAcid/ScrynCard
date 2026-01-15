@@ -48,7 +48,6 @@ export function CardRedemptionForm() {
             giftType: result.giftType,
             amount: result.amount,
             dataSize: result.dataSize,
-            expiryDate: (result as any).expiryDate,
           };
           setGiftDetails(details);
           setValidationError(null);
