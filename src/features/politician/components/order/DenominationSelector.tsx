@@ -27,39 +27,39 @@ export function DenominationSelector({
 
   return (
     <Card>
-      <CardHeader className="pb-3 sm:pb-4">
-        <CardTitle className="text-lg sm:text-xl">Select Products</CardTitle>
+      <CardHeader className="pb-2.5 sm:pb-3">
+        <CardTitle className="text-base sm:text-lg">Select Products</CardTitle>
         <CardDescription className="text-xs sm:text-sm">
           Choose data bundles or airtime vouchers to order
         </CardDescription>
       </CardHeader>
-      <CardContent className="space-y-3 sm:space-y-4 px-3 sm:px-6">
+      <CardContent className="space-y-2.5 sm:space-y-3 px-2.5 sm:px-4">
         {/* Tabs */}
-        <div className="flex gap-1.5 sm:gap-2">
+        <div className="flex gap-1 sm:gap-2">
           <Button
             type="button"
             variant={activeTab === "data" ? "default" : "outline"}
             onClick={() => setActiveTab("data")}
-            className="flex-1 items-center gap-1 sm:gap-2 text-xs sm:text-sm h-9 sm:h-10"
+            className="flex-1 items-center justify-center gap-1 text-xs sm:text-sm h-8 sm:h-9 px-2 sm:px-3"
           >
-            <Wifi className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
-            <span className="hidden sm:inline">Data Bundles</span>
-            <span className="sm:hidden">Data</span>
+            <Wifi className="h-3 w-3 sm:h-3.5 sm:w-3.5" />
+            <span className="hidden sm:inline">Data</span>
+            <span className="sm:hidden text-xs">D</span>
           </Button>
           <Button
             type="button"
             variant={activeTab === "airtime" ? "default" : "outline"}
             onClick={() => setActiveTab("airtime")}
-            className="flex-1 items-center gap-1 sm:gap-2 text-xs sm:text-sm h-9 sm:h-10"
+            className="flex-1 items-center justify-center gap-1 text-xs sm:text-sm h-8 sm:h-9 px-2 sm:px-3"
           >
-            <Smartphone className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
-            <span className="hidden sm:inline">Airtime Vouchers</span>
-            <span className="sm:hidden">Airtime</span>
+            <Smartphone className="h-3 w-3 sm:h-3.5 sm:w-3.5" />
+            <span className="hidden sm:inline">Airtime</span>
+            <span className="sm:hidden text-xs">A</span>
           </Button>
         </div>
 
         {/* Product Grid */}
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-2 sm:gap-3">
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-1.5 sm:gap-2">
           {displayProducts.map((denom) => {
             const isSelected = selected.has(denom.id);
             return (
@@ -67,12 +67,12 @@ export function DenominationSelector({
                 key={denom.id}
                 type="button"
                 onClick={() => onToggle(denom.id)}
-                className={`relative p-2.5 sm:p-3 md:p-4 rounded-lg border-2 transition-all hover:shadow-md active:scale-95 ${isSelected
+                className={`relative p-2 sm:p-2.5 rounded-lg border-2 transition-all hover:shadow-md active:scale-95 ${isSelected
                   ? "border-primary bg-primary/10"
                   : "border-border hover:border-primary/50"
                   }`}
               >
-                <div className="text-sm sm:text-base md:text-lg font-bold">{denom.label}</div>
+                <div className="text-xs sm:text-sm font-bold">{denom.label}</div>
               </button>
             );
           })}

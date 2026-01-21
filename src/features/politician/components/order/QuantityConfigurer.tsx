@@ -32,14 +32,14 @@ export function QuantityConfigurer({
 
   return (
     <Card>
-      <CardHeader className="pb-3 sm:pb-4">
-        <CardTitle className="text-lg sm:text-xl">Configure Quantities</CardTitle>
+      <CardHeader className="pb-2.5 sm:pb-3">
+        <CardTitle className="text-base sm:text-lg">Configure Quantities</CardTitle>
         <CardDescription className="text-xs sm:text-sm">
           Set the quantity for each selected denomination
         </CardDescription>
       </CardHeader>
-      <CardContent className="px-3 sm:px-6">
-        <div className="space-y-2 sm:space-y-3">
+      <CardContent className="px-2.5 sm:px-4">
+        <div className="space-y-1.5 sm:space-y-2">
           {fields.map((field, index) => {
             const denom = denominations.find(
               (d) => d.id === field.denomination
@@ -49,26 +49,26 @@ export function QuantityConfigurer({
             return (
               <div
                 key={field.id}
-                className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2.5 sm:gap-4 p-2.5 sm:p-3 md:p-4 rounded-lg border bg-card"
+                className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 sm:gap-3 p-2 sm:p-2.5 rounded-lg border bg-card"
               >
                 <div className="flex-1 min-w-0">
-                  <div className="text-sm sm:text-base font-semibold">{denom?.label}</div>
-                  <div className="text-xs sm:text-sm text-muted-foreground mt-0.5">
+                  <div className="text-xs sm:text-sm font-semibold">{denom?.label}</div>
+                  <div className="text-xs text-muted-foreground mt-0.5">
                     {formatCurrency(Math.max(1, field.quantity) * (denom?.value || 0))} total ({Math.max(1, field.quantity)} {denom?.unit})
                   </div>
                 </div>
-                <div className="flex items-center gap-0 sm:gap-1.5">
+                <div className="flex items-center gap-0.5 sm:gap-1">
                   <Button
                     type="button"
                     variant="outline"
                     size="sm"
-                    className="h-8 w-8 sm:h-9 sm:w-9 p-0"
+                    className="h-7 w-7 sm:h-8 sm:w-8 p-0"
                     onClick={() => onUpdateQuantity(index, -10)}
                     disabled={field.quantity <= minQty}
                   >
-                    <Minus className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
+                    <Minus className="h-3 w-3 sm:h-3.5 sm:w-3.5" />
                   </Button>
-                  <div className="w-16 sm:w-20 text-center px-1 sm:px-2">
+                  <div className="w-12 sm:w-16 text-center px-0.5 sm:px-1">
                     <FormField
                       control={control}
                       name={`items.${index}.quantity`}
@@ -84,7 +84,7 @@ export function QuantityConfigurer({
                                 )
                               }
                               min={minQty}
-                              className="w-full text-center font-bold text-sm sm:text-base border-0 bg-transparent focus:outline-none focus:ring-0"
+                              className="w-full text-center font-bold text-xs sm:text-sm border-0 bg-transparent focus:outline-none focus:ring-0"
                             />
                           </FormControl>
                           <FormMessage className="text-xs" />
@@ -96,10 +96,10 @@ export function QuantityConfigurer({
                     type="button"
                     variant="outline"
                     size="sm"
-                    className="h-8 w-8 sm:h-9 sm:w-9 p-0"
+                    className="h-7 w-7 sm:h-8 sm:w-8 p-0"
                     onClick={() => onUpdateQuantity(index, 10)}
                   >
-                    <Plus className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
+                    <Plus className="h-3 w-3 sm:h-3.5 sm:w-3.5" />
                   </Button>
                 </div>
               </div>
