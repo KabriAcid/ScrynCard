@@ -272,8 +272,8 @@ export function AirtimeRedemptionTable({
                           {redemption.status === "completed"
                             ? "Completed"
                             : redemption.status === "failed"
-                            ? "Failed"
-                            : "Pending"}
+                              ? "Failed"
+                              : "Pending"}
                         </Badge>
                       </TableCell>
                       <TableCell className="text-right">
@@ -281,7 +281,7 @@ export function AirtimeRedemptionTable({
                           variant="ghost"
                           size="sm"
                           onClick={() =>
-                            navigate(`/politician/redemptions/${redemption.id}`)
+                            navigate(`/politician/redemption/${redemption.id}`)
                           }
                         >
                           View

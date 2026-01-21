@@ -146,7 +146,7 @@ export default function CardsPage() {
     return cards.filter((card) => {
       const matchesSearch =
         searchQuery === "" ||
-        card.code.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        card.giftCode.toLowerCase().includes(searchQuery.toLowerCase()) ||
         card.serialNumber.toLowerCase().includes(searchQuery.toLowerCase());
 
       const matchesStatus =
@@ -400,7 +400,7 @@ export default function CardsPage() {
                     return (
                       <TableRow key={card.id}>
                         <TableCell className="font-mono text-xs">
-                          {card.code.substring(0, 8)}...
+                          {card.giftCode.substring(0, 8)}...
                         </TableCell>
                         <TableCell className="font-mono text-xs">
                           {card.serialNumber}
@@ -481,9 +481,9 @@ export default function CardsPage() {
               <h3 className="mt-4 text-lg font-semibold">No Cards Found</h3>
               <p className="text-muted-foreground">
                 {searchQuery ||
-                statusFilter !== "all" ||
-                denominationFilter !== "all" ||
-                batchFilter !== "all"
+                  statusFilter !== "all" ||
+                  denominationFilter !== "all" ||
+                  batchFilter !== "all"
                   ? "Try adjusting your filters"
                   : "No scratch cards have been created yet"}
               </p>

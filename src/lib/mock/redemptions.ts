@@ -1,10 +1,9 @@
 import { Redemption } from "@/lib/mockTypes";
-import { generateId } from "./utils";
 import { mockScratchCards } from "./cards";
 
 export const mockRedemptions: Redemption[] = [
   {
-    id: generateId("RED"),
+    id: "RED-000001",
     cardId: mockScratchCards[0].id,
     card: mockScratchCards[0],
     phoneNumber: "08067234567",
@@ -20,7 +19,7 @@ export const mockRedemptions: Redemption[] = [
     createdAt: new Date(2024, 2, 20).toISOString(),
   },
   {
-    id: generateId("RED"),
+    id: "RED-000002",
     cardId: mockScratchCards[1].id,
     card: mockScratchCards[1],
     phoneNumber: "07031234567",
@@ -37,7 +36,7 @@ export const mockRedemptions: Redemption[] = [
     createdAt: new Date(2024, 2, 21).toISOString(),
   },
   {
-    id: generateId("RED"),
+    id: "RED-000003",
     cardId: mockScratchCards[2].id,
     card: mockScratchCards[2],
     phoneNumber: "07051234567",
@@ -50,7 +49,7 @@ export const mockRedemptions: Redemption[] = [
     createdAt: new Date(2024, 3, 10).toISOString(),
   },
   {
-    id: generateId("RED"),
+    id: "RED-000004",
     cardId: mockScratchCards[3].id,
     card: mockScratchCards[3],
     phoneNumber: "08091234567",
@@ -67,7 +66,7 @@ export const mockRedemptions: Redemption[] = [
     createdAt: new Date(2024, 3, 15).toISOString(),
   },
   {
-    id: generateId("RED"),
+    id: "RED-000005",
     cardId: mockScratchCards[4].id,
     card: mockScratchCards[4],
     phoneNumber: "07011234567",
@@ -83,7 +82,7 @@ export const mockRedemptions: Redemption[] = [
     createdAt: new Date(2024, 3, 18).toISOString(),
   },
   {
-    id: generateId("RED"),
+    id: "RED-000006",
     cardId: mockScratchCards[5]?.id || mockScratchCards[0].id,
     card: mockScratchCards[5] || mockScratchCards[0],
     phoneNumber: "07031234568",
@@ -99,7 +98,7 @@ export const mockRedemptions: Redemption[] = [
     createdAt: new Date(2024, 3, 20).toISOString(),
   },
   {
-    id: generateId("RED"),
+    id: "RED-000007",
     cardId: mockScratchCards[4].id,
     card: mockScratchCards[4],
     phoneNumber: "07051234568",
@@ -116,7 +115,7 @@ export const mockRedemptions: Redemption[] = [
     createdAt: new Date(2024, 3, 22).toISOString(),
   },
   {
-    id: generateId("RED"),
+    id: "RED-000008",
     cardId: mockScratchCards[3].id,
     card: mockScratchCards[3],
     phoneNumber: "08091234568",
