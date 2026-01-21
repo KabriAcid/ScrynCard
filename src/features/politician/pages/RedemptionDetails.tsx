@@ -1,7 +1,7 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { mockRedemptions } from "@/lib/mock";
-import { ArrowLeft, Check, Clock } from "lucide-react";
+import { ArrowLeft, Check, Clock, Zap, HardDrive } from "lucide-react";
 import {
   Card,
   CardContent,
@@ -9,14 +9,11 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Separator } from "@/components/ui/separator";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import type { Redeemer } from "@/lib/types";
 import {
-  PersonalInfoSection,
-  BankDetailsSection,
-  LocationTimeSection,
+  RedemptionDetailsContainer,
   RedemptionDetailsSkeleton,
 } from "./components";
 
@@ -39,13 +36,12 @@ export default function RedemptionDetailsPage() {
 
       if (foundRedemption) {
         setRedemption(foundRedemption);
-        // Transform mockRedemption to Redeemer format
         // Using available data from the redemption structure
         const foundRedeemer: Redeemer = {
           id: foundRedemption.id,
           personalInfo: {
-            name: "Citizen User",
-            email: "citizen@example.com",
+            name: "Ahmad Ali",
+            email: "ahmad.ali@example.com",
             phone: foundRedemption.phoneNumber || "N/A",
             nin: "12345678901234",
             dob: "1990-01-15",
@@ -108,14 +104,14 @@ export default function RedemptionDetailsPage() {
         Back to Redemptions
       </Button>
 
-      {/* Header Card with Status */}
+      {/* Unified Details Card */}
       <Card>
         <CardHeader className="space-y-4">
           <div className="flex items-start justify-between">
             <div>
               <CardTitle className="text-2xl">Redemption Details</CardTitle>
               <CardDescription className="mt-2">
-                Detailed information for this redemption record
+                Airtime and data gift redemption record
               </CardDescription>
             </div>
             <Badge variant={redemption?.status === "completed" ? "default" : "secondary"} className="h-fit">
@@ -135,28 +131,32 @@ export default function RedemptionDetailsPage() {
               <p className="text-xs text-muted-foreground">Phone Number</p>
               <p className="font-medium">{redemption?.phoneNumber}</p>
             </div>
-            <div>
+            <div className="flex items-start gap-2">
               <p className="text-xs text-muted-foreground">Operator</p>
               <p className="font-medium">{redemption?.mobileOperator}</p>
             </div>
             <div>
               <p className="text-xs text-muted-foreground">Gift Type</p>
-              <Badge variant="outline" className="capitalize">
-                {redemption?.giftType}
-              </Badge>
+              <div className="flex items-center gap-1 mt-1">
+                {redemption?.giftType === "data" ? (
+                  <>
+                    <HardDrive className="h-4 w-4 text-blue-500" />
+                    <Badge variant="outline">Data</Badge>
+                  </>
+                ) : (
+                  <>
+                    <Zap className="h-4 w-4 text-yellow-500" />
+                    <Badge variant="outline">Airtime</Badge>
+                  </>
+                )}
+              </div>
             </div>
           </div>
         </CardHeader>
-      </Card>
 
-      {/* Detailed Information */}
-      <Card>
-        <CardContent className="space-y-8 pt-6">
-          <PersonalInfoSection personalInfo={redeemer.personalInfo} />
-          <Separator />
-          <BankDetailsSection bankDetails={redeemer.bankDetails} />
-          <Separator />
-          <LocationTimeSection location={redeemer.location} />
+        {/* Detailed Information - Using Unified Container */}
+        <CardContent className="pt-6">
+          <RedemptionDetailsContainer redeemer={redeemer} />
         </CardContent>
       </Card>
     </div>

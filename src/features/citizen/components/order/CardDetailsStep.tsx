@@ -100,12 +100,6 @@ export function CardDetailsStep({
 
       {/* Denomination Selector */}
       <Card>
-        <CardHeader>
-          <CardTitle>Select Products</CardTitle>
-          <CardDescription>
-            Choose data bundles or airtime vouchers to order
-          </CardDescription>
-        </CardHeader>
         <CardContent className="space-y-4">
           {/* Tabs */}
           <div className="flex gap-2">

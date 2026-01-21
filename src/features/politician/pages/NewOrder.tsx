@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Form } from "@/components/ui/form";
@@ -24,6 +24,11 @@ export default function NewOrderPage() {
     toggleDenomination,
     updateQuantity,
   } = useOrderForm();
+
+  // Reset form when page mounts to ensure clean state
+  useEffect(() => {
+    form.reset({ items: [] });
+  }, [form]);
 
   const onSubmit = async () => {
     const isValid = await form.trigger();
@@ -59,26 +64,27 @@ export default function NewOrderPage() {
   };
 
   return (
-    <div className="space-y-6">
-      <div className="flex items-center gap-4">
-        <Button variant="ghost" onClick={() => navigate("/politician/orders")}>
-          <ArrowLeft className="mr-2 h-4 w-4" />
-          Back to Orders
+    <div className="space-y-4 sm:space-y-6">
+      <div className="flex items-center gap-2 sm:gap-4">
+        <Button variant="ghost" onClick={() => navigate("/politician/orders")} className="h-9 sm:h-10 px-2 sm:px-4 text-sm sm:text-base">
+          <ArrowLeft className="mr-1 sm:mr-2 h-4 w-4" />
+          <span className="hidden sm:inline">Back to Orders</span>
+          <span className="sm:hidden">Back</span>
         </Button>
       </div>
 
-      <div>
-        <h1 className="text-3xl font-bold tracking-tight">Order Data & Airtime</h1>
-        <p className="text-muted-foreground mt-1">
+      <div className="px-2 sm:px-0">
+        <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight">Order Data & Airtime</h1>
+        <p className="text-muted-foreground mt-1 text-xs sm:text-sm">
           Select data bundles and airtime vouchers for distribution
         </p>
       </div>
 
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-          <div className="grid gap-6 lg:grid-cols-3">
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 sm:space-y-6">
+          <div className="grid gap-4 sm:gap-6 lg:grid-cols-3">
             {/* Left Column - Denomination Selection */}
-            <div className="lg:col-span-2 space-y-6">
+            <div className="lg:col-span-2 space-y-4 sm:space-y-6">
               <DenominationSelector
                 selected={selectedDenoms}
                 onToggle={toggleDenomination}
@@ -96,7 +102,7 @@ export default function NewOrderPage() {
             </div>
 
             {/* Right Column - Order Summary */}
-            <div className="space-y-6">
+            <div className="space-y-4 sm:space-y-6 lg:sticky lg:top-4 lg:h-fit">
               <OrderSummaryCard
                 calculations={calculations}
                 isSubmitting={isSubmitting}
