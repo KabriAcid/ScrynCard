@@ -32,7 +32,7 @@ export default function OrderCardsPage() {
               Order Data & Airtime
             </CardTitle>
             <CardDescription>
-              Select data bundles and airtime vouchers to distribute. Minimum order value is ₦800,000.
+              Select data bundles and airtime vouchers to distribute.
             </CardDescription>
           </CardHeader>
           <CardContent>

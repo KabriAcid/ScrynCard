@@ -13,6 +13,7 @@ import { Phone } from "lucide-react";
 import { RedemptionFormValues } from "./schema";
 import { NetworkDetector } from "@/lib/operators";
 import { Badge } from "@/components/ui/badge";
+import { PhoneFormatter } from "@/lib/formatters";
 
 interface PhoneVerificationStepProps {
   isLoading: boolean;
@@ -40,7 +41,9 @@ export function PhoneVerificationStep({
   // Detect operator in real-time
   React.useEffect(() => {
     if (phoneNumber && phoneNumber.length >= 10) {
-      const result = NetworkDetector.detect(phoneNumber);
+      // Clean the phone number by removing hyphens before detection
+      const cleanedPhone = phoneNumber.replace(/-/g, "");
+      const result = NetworkDetector.detect(cleanedPhone);
       if (result.isValid) {
         setDetectionResult(result);
         setError(null);
@@ -66,9 +69,14 @@ export function PhoneVerificationStep({
               <div className="relative">
                 <Phone className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                 <Input
-                  placeholder="0703 123 4567"
-                maxLength={11}
-                  {...field}
+                  placeholder="0703-123-4567"
+                  maxLength={13}
+                  value={field.value}
+                  onChange={(e) => {
+                    // Format input with hyphens as user types
+                    const formatted = PhoneFormatter.formatWithHyphens(e.target.value);
+                    field.onChange(formatted);
+                  }}
                   disabled={isLoading}
                   className="pl-10"
                 />
@@ -107,4 +115,3 @@ export function PhoneVerificationStep({
     </div>
   );
 }
-                
