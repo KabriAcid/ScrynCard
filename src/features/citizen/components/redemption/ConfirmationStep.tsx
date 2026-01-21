@@ -2,7 +2,13 @@ import React from "react";
 import { useFormContext } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { AlertCircle, CheckCircle2, Loader2, Gift, Phone } from "lucide-react";
+import {
+  AlertCircle,
+  CheckCircle2,
+  Loader2,
+  CreditCard,
+  Phone,
+} from "lucide-react";
 import { RedemptionFormValues } from "./schema";
 import { useCitizenStore } from "@/stores/citizenStore";
 import { NetworkDetector } from "@/lib/operators";
@@ -25,7 +31,8 @@ export function ConfirmationStep({
   const form = useFormContext<RedemptionFormValues>();
   const [submitError, setSubmitError] = React.useState<string | null>(null);
 
-  const giftCode = form.getValues("giftCode");
+  const serialNumber = form.getValues("serialNumber");
+  const cardCode = form.getValues("cardCode");
   const phoneNumber = form.getValues("phoneNumber");
   const detectionResult = NetworkDetector.detect(phoneNumber);
 
@@ -61,42 +68,50 @@ export function ConfirmationStep({
       </div>
 
       <div className="space-y-4">
-        {/* Gift Details */}
+        {/* Card Details */}
         <Card className="p-4 border-2 border-blue-200 bg-blue-50">
           <div className="space-y-3">
             <div className="flex items-center gap-2 mb-3">
-              <Gift className="h-5 w-5 text-blue-600" />
-              <h3 className="font-semibold text-blue-900">Gift Details</h3>
+              <CreditCard className="h-5 w-5 text-blue-600" />
+              <h3 className="font-semibold text-blue-900">Card Details</h3>
             </div>
-            <div className="grid grid-cols-2 gap-4 text-sm">
-              <div className="space-y-1">
+            <div className="space-y-3 text-sm">
+              <div>
                 <p className="text-blue-700 text-xs uppercase font-semibold">
-                  Gift Code
+                  Serial Number
                 </p>
-                <p className="font-mono font-bold">{giftCode}</p>
+                <p className="font-mono font-bold">{serialNumber}</p>
               </div>
-              <div className="space-y-1">
+              <div>
                 <p className="text-blue-700 text-xs uppercase font-semibold">
-                  Type
+                  Card Code
                 </p>
-                <Badge className="w-fit capitalize">
-                  {giftDetails.giftType}
-                </Badge>
+                <p className="font-mono font-bold">{cardCode}</p>
               </div>
-              <div className="space-y-1">
-                <p className="text-blue-700 text-xs uppercase font-semibold">
-                  Amount
-                </p>
-                <p className="font-semibold">
-                  {giftDetails.giftType === "data"
-                    ? `${giftDetails.dataSize}MB`
-                    : `₦${giftDetails.amount.toLocaleString()}`}
-                </p>
-              </div>
-              {giftDetails.expiryDate && (
-                <div className="space-y-1">
+              <div className="grid grid-cols-2 gap-4 pt-2 border-t border-blue-200">
+                <div>
                   <p className="text-blue-700 text-xs uppercase font-semibold">
-                    Expires
+                    Type
+                  </p>
+                  <Badge className="w-fit capitalize mt-1">
+                    {giftDetails?.giftType || "Unknown"}
+                  </Badge>
+                </div>
+                <div>
+                  <p className="text-blue-700 text-xs uppercase font-semibold">
+                    Value
+                  </p>
+                  <p className="font-semibold mt-1">
+                    {giftDetails?.giftType === "data"
+                      ? `${giftDetails?.dataSize || "N/A"}MB`
+                      : `₦${(giftDetails?.amount || 0).toLocaleString()}`}
+                  </p>
+                </div>
+              </div>
+              {giftDetails?.expiryDate && (
+                <div className="pt-2 border-t border-blue-200">
+                  <p className="text-blue-700 text-xs uppercase font-semibold">
+                    Expiry Date
                   </p>
                   <p className="font-semibold">
                     {new Date(giftDetails.expiryDate).toLocaleDateString()}
@@ -133,7 +148,7 @@ export function ConfirmationStep({
                 </span>
               </p>
               <p className="text-xs text-green-700">
-                Your {giftDetails.giftType} will be sent to this number
+                Your {giftDetails?.giftType} will be sent to this number
               </p>
             </div>
           </div>
@@ -152,7 +167,7 @@ export function ConfirmationStep({
             <span>⚠️</span> Important
           </p>
           <p>
-            By confirming, you're redeeming this {giftDetails.giftType} gift to
+            By confirming, you're redeeming this {giftDetails?.giftType} gift to
             the phone number above. Make sure the number is correct.
           </p>
         </div>

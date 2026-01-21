@@ -9,13 +9,10 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
-import { AlertCircle, Gift, Loader2 } from "lucide-react";
 import { RedemptionFormValues } from "./schema";
-import { useCitizenStore } from "@/stores/citizenStore";
-import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Spinner } from "@/components/ui/spinner";
 
-interface GiftVerificationStepProps {
+interface CardVerificationStepProps {
   isLoading: boolean;
   onNext: () => Promise<void>;
   onPrev: () => void;
@@ -27,133 +24,109 @@ export function GiftVerificationStep({
   onNext,
   onPrev,
   isFirstStep = false,
-}: GiftVerificationStepProps) {
+}: CardVerificationStepProps) {
   const form = useFormContext<RedemptionFormValues>();
   const [verificationLoading, setVerificationLoading] = React.useState(false);
-  const [giftDetails, setGiftDetails] = React.useState<any>(null);
-  const [error, setError] = React.useState<string | null>(null);
-  const validateGift = useCitizenStore((state) => state.validateGift);
 
-  const handleVerifyGift = async () => {
-    const giftCode = form.getValues("giftCode");
-    if (!giftCode) {
-      form.setError("giftCode", {
-        message: "Gift code is required",
-      });
+  const serialNumber = form.watch("serialNumber");
+  const cardCode = form.watch("cardCode");
+
+  const handleVerifyCard = async () => {
+    if (!serialNumber || !cardCode) {
+      if (!serialNumber) {
+        form.setError("serialNumber", {
+          message: "Serial number is required",
+        });
+      }
+      if (!cardCode) {
+        form.setError("cardCode", {
+          message: "Card code is required",
+        });
+      }
       return;
     }
 
     setVerificationLoading(true);
-    setError(null);
-    try {
-      const result = await validateGift(giftCode);
-      if (result.success && result.giftDetails) {
-        setGiftDetails(result.giftDetails);
-        setError(null);
-      } else {
-        setError(result.error || "Invalid gift code");
-        setGiftDetails(null);
-      }
-    } catch (err) {
-      setError("Failed to verify gift code");
-      setGiftDetails(null);
-    } finally {
-      setVerificationLoading(false);
-    }
-  };
-
-  const handleNext = async () => {
-    if (!giftDetails) {
-      setError("Please verify your gift code first");
-      return;
-    }
-    await onNext();
+    // Proceed to the result step (which shows the spinner and result)
+    onNext();
   };
 
   return (
     <div className="space-y-6">
       <div>
-        <h2 className="text-2xl font-bold">Verify Your Gift</h2>
+        <h2 className="text-2xl font-bold">Verify Your Card</h2>
         <p className="text-muted-foreground mt-1">
-          Enter the gift code from your scratch card
+          Enter the serial number and card code from your scratch card
         </p>
       </div>
 
       <div className="space-y-4">
-        <FormField
-          control={form.control}
-          name="giftCode"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Gift Code</FormLabel>
-              <FormControl>
-                <Input
-                  placeholder="e.g., MTN-5K-B001-A3F7B9C2-X7"
-                  {...field}
-                  disabled={verificationLoading}
-                  className="font-mono"
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
-        {error && (
-          <Alert variant="destructive">
-            <AlertCircle className="h-4 w-4" />
-            <AlertDescription>{error}</AlertDescription>
-          </Alert>
-        )}
-
-        {giftDetails && (
-          <Card className="p-4 bg-green-50 border-green-200">
-            <div className="space-y-3">
-              <div className="flex items-center gap-2">
-                <Gift className="h-5 w-5 text-green-600" />
-                <p className="font-semibold text-green-900">Gift Verified!</p>
-              </div>
-              <div className="grid grid-cols-2 gap-3 text-sm">
-                <div>
-                  <p className="text-gray-600">Type</p>
-                  <p className="font-semibold capitalize">
-                    {giftDetails.giftType}
-                  </p>
-                </div>
-                <div>
-                  <p className="text-gray-600">Amount</p>
-                  <p className="font-semibold">
-                    {giftDetails.giftType === "data"
-                      ? `${giftDetails.dataSize}MB`
-                      : `₦${giftDetails.amount.toLocaleString()}`}
-                  </p>
-                </div>
-                {giftDetails.expiryDate && (
-                  <div className="col-span-2">
-                    <p className="text-gray-600">Expires</p>
-                    <p className="font-semibold">
-                      {new Date(giftDetails.expiryDate).toLocaleDateString()}
-                    </p>
-                  </div>
-                )}
-              </div>
-            </div>
-          </Card>
-        )}
-
-        {!giftDetails && (
-          <Button
-            type="button"
-            onClick={handleVerifyGift}
-            disabled={verificationLoading || !form.getValues("giftCode")}
-            className="w-full"
-          >
-            {verificationLoading && (
-              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+        {/* Serial Number & Card Code Fields - Responsive Grid */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+          {/* Serial Number Field - Smaller on large screens */}
+          <FormField
+            control={form.control}
+            name="serialNumber"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Serial Number</FormLabel>
+                <FormControl>
+                  <Input
+                    placeholder="SN-D93F93"
+                    maxLength={9}
+                    {...field}
+                    disabled={verificationLoading}
+                    className="font-mono uppercase"
+                    onChange={(e) =>
+                      field.onChange(e.target.value.toUpperCase())
+                    }
+                  />
+                </FormControl>
+                <p className="text-xs text-muted-foreground mt-1">
+                  {field.value.length}/9 characters
+                </p>
+                <FormMessage />
+              </FormItem>
             )}
-            Verify Gift Code
-          </Button>
-        )}
+          />
+
+          {/* Card Code Field - Larger on large screens */}
+          <FormField
+            control={form.control}
+            name="cardCode"
+            render={({ field }) => (
+              <FormItem className="lg:col-span-2">
+                <FormLabel>Card Code</FormLabel>
+                <FormControl>
+                  <Input
+                    placeholder="WSO-D939-39DX-39DK"
+                    maxLength={18}
+                    {...field}
+                    disabled={verificationLoading}
+                    className="font-mono uppercase"
+                    onChange={(e) =>
+                      field.onChange(e.target.value.toUpperCase())
+                    }
+                  />
+                </FormControl>
+                <p className="text-xs text-muted-foreground mt-1">
+                  {field.value.length}/18 characters
+                </p>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </div>
+
+        <Button
+          type="button"
+          onClick={handleVerifyCard}
+          disabled={verificationLoading || !serialNumber || !cardCode}
+          isLoading={verificationLoading}
+          className="w-full"
+        >
+          Verify Card
+        </Button>
       </div>
 
       <div className="flex gap-3 pt-4">
@@ -168,15 +141,6 @@ export function GiftVerificationStep({
             Back
           </Button>
         )}
-        <Button
-          type="button"
-          onClick={handleNext}
-          disabled={!giftDetails || isLoading || verificationLoading}
-          className={isFirstStep ? "w-full" : "flex-1"}
-        >
-          {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-          Next: Phone Number
-        </Button>
       </div>
     </div>
   );

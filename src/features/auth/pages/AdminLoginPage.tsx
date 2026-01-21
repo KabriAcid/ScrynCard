@@ -76,11 +76,7 @@ export default function AdminLoginPage() {
 
         {/* Login Card */}
         <Card className="shadow-2xl border-2">
-          <CardHeader className="text-center">
-            <CardTitle className="text-2xl">Admin Login</CardTitle>
-            <CardDescription>
-              Enter your admin credentials to access the control panel
-            </CardDescription>
+          <CardHeader className="text-center p-3">
           </CardHeader>
           <CardContent>
             <form onSubmit={handleSubmit} className="space-y-4">

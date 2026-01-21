@@ -15,8 +15,16 @@ interface CitizenState {
     amount?: number;
     dataSize?: number;
     error?: string;
+    errorCode?: string;
   }>;
-  redeemGift: (giftCode: string, phoneNumber: string) => Promise<void>;
+  redeemGift: (
+    giftCode: string,
+    phoneNumber: string
+  ) => Promise<{
+    success: boolean;
+    error?: string;
+    message?: string;
+  }>;
   resetError: () => void;
 }
 
@@ -30,56 +38,56 @@ export const useCitizenStore = create<CitizenState>((set) => ({
   validateGift: async (giftCode: string) => {
     set({ isLoading: true, error: null });
     try {
-      // Simulate gift validation
-      // In production, this would validate against backend
-      const validGifts: Record<string, any> = {
-        "MTN-5K-B001-A3F7B9C2-X7": {
-          giftType: "airtime",
-          amount: 5000,
-        },
-        "AIRTEL-1GB-B001-C0D3E5F7-X8": {
-          giftType: "data",
-          amount: 1000,
-          dataSize: 1000,
-        },
-        "GLO-2K-B001-F6A7B8C9-X9": {
-          giftType: "airtime",
-          amount: 2000,
-        },
-        "9MOBILE-500MB-B002-D1E4F6A7-X0": {
-          giftType: "data",
-          amount: 1500,
-          dataSize: 500,
-        },
-        "MTN-10K-B002-B8C9D0E1-X1": {
-          giftType: "airtime",
-          amount: 10000,
-        },
-      };
-
-      const gift = validGifts[giftCode.toUpperCase()];
-
-      if (gift) {
-        set({ isLoading: false });
-        return {
-          success: true,
-          giftType: gift.giftType,
-          amount: gift.amount,
-          dataSize: gift.dataSize,
-        };
-      } else {
+      // Validate card prefix - first three characters must not contain numbers
+      const prefix = giftCode.substring(0, 3);
+      if (/\d/.test(prefix)) {
         set({
-          error: "Invalid gift code. Please check and try again.",
+          error: "Invalid card code. Card prefix contains invalid characters.",
           isLoading: false,
         });
         return {
           success: false,
-          error: "Invalid gift code",
+          error: "Invalid card code. Card prefix contains invalid characters.",
+          errorCode: "INVALID_PREFIX",
         };
       }
+
+      // If prefix is valid (no numbers), the card is valid
+      // Determine gift type based on prefix
+      const prefixLower = prefix.toLowerCase();
+      // Top 4 Nigerian network operators
+      const nigerianOperators = ["mtn", "air", "glo", "9mo"];
+
+      let giftType: "airtime" | "data" = "airtime";
+      let amount = 5000;
+      let dataSize = 1000;
+
+      // Randomly assign gift type (50% airtime, 50% data)
+      // In production, this would be determined by the actual card's gift type
+      if (Math.random() > 0.5) {
+        giftType = "data";
+        amount = 2000;
+        dataSize = 2000;
+      } else {
+        giftType = "airtime";
+        amount = 5000;
+      }
+
+      set({ isLoading: false });
+      return {
+        success: true,
+        giftType,
+        amount,
+        dataSize,
+        errorCode: undefined,
+      };
     } catch (error: any) {
       set({ error: error.message, isLoading: false });
-      return { success: false, error: error.message };
+      return {
+        success: false,
+        error: error.message,
+        errorCode: "VERIFICATION_ERROR",
+      };
     }
   },
 
@@ -93,7 +101,10 @@ export const useCitizenStore = create<CitizenState>((set) => ({
           error: phoneValidation.errorMessage || "Invalid phone number",
           isLoading: false,
         });
-        return;
+        return {
+          success: false,
+          error: phoneValidation.errorMessage || "Invalid phone number",
+        };
       }
 
       // Step 2: Validate gift code
@@ -106,7 +117,10 @@ export const useCitizenStore = create<CitizenState>((set) => ({
           error: giftValidation.error || "Invalid gift code",
           isLoading: false,
         });
-        return;
+        return {
+          success: false,
+          error: giftValidation.error || "Invalid gift code",
+        };
       }
 
       // Step 3: Call AirtimeService to redeem
@@ -123,14 +137,26 @@ export const useCitizenStore = create<CitizenState>((set) => ({
           redemptions: [...state.redemptions, response as any],
           isLoading: false,
         }));
+        return {
+          success: true,
+        };
       } else {
         set({
           error: response.message || "Redemption failed",
           isLoading: false,
         });
+        return {
+          success: false,
+          error: response.message || "Redemption failed",
+        };
       }
     } catch (error: any) {
-      set({ error: error.message || "An error occurred", isLoading: false });
+      const errorMessage = error.message || "An error occurred";
+      set({ error: errorMessage, isLoading: false });
+      return {
+        success: false,
+        error: errorMessage,
+      };
     }
   },
 

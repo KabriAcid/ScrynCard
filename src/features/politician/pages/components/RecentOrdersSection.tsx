@@ -22,7 +22,7 @@ interface Order {
   id: string;
   batchId: string;
   totalCardValue: number;
-  status: "completed" | "processing" | "pending";
+  status: "pending" | "processing" | "completed" | "cancelled";
   createdAt: string;
 }
 
