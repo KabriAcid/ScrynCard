@@ -5,9 +5,16 @@ import { useToast } from "@/hooks/use-toast";
 import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { Form } from "@/components/ui/form";
-import { RedemptionSchema, RedemptionFormValues } from "./redemption/schema";
+import { CheckCircle, CreditCard, User, Phone, FileCheck } from "lucide-react";
+import { cn } from "@/lib/utils";
+import {
+  RedemptionSchema,
+  RedemptionFormValues,
+  STEPS,
+} from "./redemption/schema";
 import { GiftVerificationStep } from "./redemption/GiftVerificationStep";
 import { ValidationResultStep } from "./redemption/ValidationResultStep";
+import { BioDataStep } from "./redemption/BioDataStep";
 import { PhoneVerificationStep } from "./redemption/PhoneVerificationStep";
 import { ConfirmationStep } from "./redemption/ConfirmationStep";
 import { SuccessConfirmation } from "./redemption/SuccessConfirmation";
@@ -18,7 +25,8 @@ export function CardRedemptionForm() {
   const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
-  const [step, setStep] = useState(1); // Form step (1-4: CardVerification, ValidationResult, Phone, Confirmation)
+  const [step, setStep] = useState(1); // Form step (1-5: CardVerification, ValidationResult, BioData, Phone, Confirmation)
+  const [direction, setDirection] = useState(1);
   const [giftDetails, setGiftDetails] = useState<any>(null);
   const [validationError, setValidationError] = useState<any>(null);
   const [submittedValues, setSubmittedValues] =
@@ -32,6 +40,8 @@ export function CardRedemptionForm() {
     defaultValues: {
       serialNumber: "",
       cardCode: "",
+      nin: "",
+      occupation: "",
       phoneNumber: "",
     },
   });
@@ -51,6 +61,7 @@ export function CardRedemptionForm() {
           };
           setGiftDetails(details);
           setValidationError(null);
+          setDirection(1);
           setStep(2); // Move to validation result step
         } else {
           setValidationError({
@@ -59,6 +70,7 @@ export function CardRedemptionForm() {
             details: (result as any).details || null,
           });
           setGiftDetails(null);
+          setDirection(1);
           setStep(2); // Still show validation result step with error
         }
       } catch (error) {
@@ -68,13 +80,15 @@ export function CardRedemptionForm() {
           details: error instanceof Error ? error.message : null,
         });
         setGiftDetails(null);
+        setDirection(1);
         setStep(2);
       } finally {
         setIsLoading(false);
       }
     } else {
       // For other steps, just move forward
-      setStep((prev) => (prev < 4 ? prev + 1 : prev));
+      setDirection(1);
+      setStep((prev) => (prev < 5 ? prev + 1 : prev));
     }
   };
 
@@ -88,10 +102,12 @@ export function CardRedemptionForm() {
   const handlePrevStep = () => {
     if (step === 2) {
       // From validation result, go back to card verification
+      setDirection(-1);
       setStep(1);
       setGiftDetails(null);
       setValidationError(null);
     } else {
+      setDirection(-1);
       setStep((prev) => (prev > 1 ? prev - 1 : prev));
     }
   };
@@ -139,7 +155,54 @@ export function CardRedemptionForm() {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="w-full space-y-8">
-        <AnimatePresence mode="wait">
+        {/* Step Indicators - Only show when not on success screen or validation result step */}
+        {!showSuccess && step !== 2 && (
+          <div className="flex items-center justify-center space-x-4">
+            {[
+              { id: 1, title: "Card", icon: CreditCard, stepNumber: 1 },
+              { id: 2, title: "Biodata", icon: User, stepNumber: 3 },
+              { id: 3, title: "Phone", icon: Phone, stepNumber: 4 },
+              { id: 4, title: "Confirm", icon: FileCheck, stepNumber: 5 },
+            ].map((s, index) => (
+              <React.Fragment key={s.id}>
+                <div className="flex flex-col items-center gap-2">
+                  <div
+                    className={cn(
+                      "flex h-10 w-10 items-center justify-center rounded-full transition-colors border-2",
+                      step > s.stepNumber
+                        ? "bg-primary border-primary text-primary-foreground"
+                        : "",
+                      step === s.stepNumber
+                        ? "border-primary text-primary"
+                        : "border-border bg-muted text-muted-foreground"
+                    )}
+                  >
+                    {step > s.stepNumber ? (
+                      <CheckCircle className="h-6 w-6" />
+                    ) : (
+                      <s.icon className="h-6 w-6" />
+                    )}
+                  </div>
+                  <p
+                    className={cn(
+                      "text-sm text-center",
+                      step === s.stepNumber
+                        ? "font-semibold text-primary"
+                        : "text-muted-foreground"
+                    )}
+                  >
+                    {s.title}
+                  </p>
+                </div>
+                {index < 3 && (
+                  <div className="flex-1 mt-[-20px] border-t-2 border-dashed border-border" />
+                )}
+              </React.Fragment>
+            ))}
+          </div>
+        )}
+
+        <AnimatePresence mode="wait" custom={direction}>
           {/* Success Screen */}
           {showSuccess && submittedValues && (
             <SuccessConfirmation
@@ -183,15 +246,35 @@ export function CardRedemptionForm() {
                 error={validationError}
                 isLoading={isLoading}
                 onRetry={handleRetryValidation}
-                onProceed={() => setStep(3)}
+                onProceed={() => {
+                  setDirection(1);
+                  setStep(3);
+                }}
               />
             </motion.div>
           )}
 
-          {/* Step 3: Phone Verification */}
+          {/* Step 3: Bio Data */}
           {!showSuccess && step === 3 && (
             <motion.div
               key="step-3"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              transition={{ duration: 0.3 }}
+            >
+              <BioDataStep
+                isLoading={isLoading}
+                onNext={handleNextStep}
+                onPrev={handlePrevStep}
+              />
+            </motion.div>
+          )}
+
+          {/* Step 4: Phone Verification */}
+          {!showSuccess && step === 4 && (
+            <motion.div
+              key="step-4"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -20 }}
@@ -205,10 +288,10 @@ export function CardRedemptionForm() {
             </motion.div>
           )}
 
-          {/* Step 4: Confirmation */}
-          {!showSuccess && step === 4 && (
+          {/* Step 5: Confirmation */}
+          {!showSuccess && step === 5 && (
             <motion.div
-              key="step-4"
+              key="step-5"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -20 }}

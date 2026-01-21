@@ -20,6 +20,13 @@ export const RedemptionSchema = z.object({
       "Card code must contain only letters, numbers, and hyphens"
     ),
 
+  nin: z
+    .string()
+    .length(11, "NIN must be exactly 11 digits")
+    .regex(/^\d{11}$/, "NIN must contain only numbers"),
+
+  occupation: z.string().min(1, "Please select an occupation"),
+
   phoneNumber: z
     .string()
     .min(11, "Phone number must be valid Nigerian format")
@@ -31,6 +38,19 @@ export const RedemptionSchema = z.object({
 
 export type RedemptionFormValues = z.infer<typeof RedemptionSchema>;
 
+export const OCCUPATION_OPTIONS = [
+  "Teacher",
+  "Healthcare Worker",
+  "Student",
+  "Business Owner",
+  "Civil Servant",
+  "Artisan",
+  "Farmer",
+  "Driver",
+  "Trader",
+  "Others",
+] as const;
+
 export const STEPS = [
   {
     id: 1,
@@ -39,12 +59,17 @@ export const STEPS = [
   },
   {
     id: 2,
+    title: "Biodata",
+    description: "NIN and occupation details",
+  },
+  {
+    id: 3,
     title: "Phone Number",
     description: "Verify your phone number",
   },
   {
-    id: 3,
+    id: 4,
     title: "Confirm",
-    description: "Confirm redemption",
+    description: "Review and confirm",
   },
 ];
