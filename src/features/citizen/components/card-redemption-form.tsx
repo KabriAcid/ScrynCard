@@ -5,54 +5,22 @@ import { useToast } from "@/hooks/use-toast";
 import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { Form } from "@/components/ui/form";
-import {
-  RedemptionSchema,
-  RedemptionFormValues,
-  STEPS,
-} from "./redemption/schema";
-import { StepIndicator } from "./redemption/StepIndicator";
-import { BioDataStep } from "./redemption/BioDataStep";
+import { RedemptionSchema, RedemptionFormValues } from "./redemption/schema";
 import { GiftVerificationStep } from "./redemption/GiftVerificationStep";
 import { ValidationResultStep } from "./redemption/ValidationResultStep";
 import { PhoneVerificationStep } from "./redemption/PhoneVerificationStep";
-import { SummaryStep } from "./redemption/SummaryStep";
+import { ConfirmationStep } from "./redemption/ConfirmationStep";
 import { SuccessConfirmation } from "./redemption/SuccessConfirmation";
 import { useCitizenStore } from "@/stores/citizenStore";
-import { NetworkDetector } from "@/lib/operators";
-
-const stepVariants = {
-  hidden: (direction: number) => ({
-    opacity: 0,
-    x: direction > 0 ? "50%" : "-50%",
-  }),
-  visible: {
-    opacity: 1,
-    x: "0%",
-    transition: {
-      duration: 0.5,
-      ease: "easeInOut",
-    },
-  },
-  exit: (direction: number) => ({
-    opacity: 0,
-    x: direction < 0 ? "50%" : "-50%",
-    transition: {
-      duration: 0.5,
-      ease: "easeInOut",
-    },
-  }),
-};
 
 export function CardRedemptionForm() {
   const navigate = useNavigate();
   const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
-  const [step, setStep] = useState(1); // Form step (1-4: BioData, CardVerification, Phone, Summary)
-  const [direction, setDirection] = useState(1);
+  const [step, setStep] = useState(1); // Form step (1-4: CardVerification, ValidationResult, Phone, Confirmation)
   const [giftDetails, setGiftDetails] = useState<any>(null);
   const [validationError, setValidationError] = useState<any>(null);
-  const [detectedNetwork, setDetectedNetwork] = useState<string | null>(null);
   const [submittedValues, setSubmittedValues] =
     useState<RedemptionFormValues | null>(null);
   const redeemGift = useCitizenStore((state) => state.redeemGift);
@@ -62,8 +30,6 @@ export function CardRedemptionForm() {
     resolver: zodResolver(RedemptionSchema),
     mode: "onChange",
     defaultValues: {
-      nin: "",
-      occupation: "",
       serialNumber: "",
       cardCode: "",
       phoneNumber: "",
@@ -71,15 +37,8 @@ export function CardRedemptionForm() {
   });
 
   const handleNextStep = async () => {
-    // Step 1: BioData - no validation needed, just move forward
+    // If we're on step 1 (Card Verification), validate the card first
     if (step === 1) {
-      setDirection(1);
-      setStep(2);
-      return;
-    }
-
-    // Step 2: Card Verification - validate the card
-    if (step === 2) {
       const cardCode = form.getValues("cardCode");
       setIsLoading(true);
       try {
@@ -92,8 +51,7 @@ export function CardRedemptionForm() {
           };
           setGiftDetails(details);
           setValidationError(null);
-          setDirection(1);
-          setStep(3); // Move to phone verification
+          setStep(2); // Move to validation result step
         } else {
           setValidationError({
             message: result.error || "Invalid card code",
@@ -101,7 +59,7 @@ export function CardRedemptionForm() {
             details: (result as any).details || null,
           });
           setGiftDetails(null);
-          // Stay on step 2 but show validation result
+          setStep(2); // Still show validation result step with error
         }
       } catch (error) {
         setValidationError({
@@ -110,42 +68,31 @@ export function CardRedemptionForm() {
           details: error instanceof Error ? error.message : null,
         });
         setGiftDetails(null);
+        setStep(2);
       } finally {
         setIsLoading(false);
       }
-      return;
-    }
-
-    // Step 3: Phone Verification - detect network and move forward
-    if (step === 3) {
-      const phoneNumber = form.getValues("phoneNumber");
-      const networkDetection = NetworkDetector.detect(phoneNumber);
-      setDetectedNetwork(networkDetection.operatorName || null);
-      setDirection(1);
-      setStep(4);
-      return;
-    }
-
-    // Step 4: Summary - final step
-    if (step === 4) {
-      setDirection(1);
-      setStep(5);
+    } else {
+      // For other steps, just move forward
+      setStep((prev) => (prev < 4 ? prev + 1 : prev));
     }
   };
 
   const handleRetryValidation = () => {
     // Go back to card verification step
-    setDirection(-1);
-    setStep(2);
+    setStep(1);
     setGiftDetails(null);
     setValidationError(null);
   };
 
   const handlePrevStep = () => {
-    setDirection(-1);
-    setStep((prev) => (prev > 1 ? prev - 1 : prev));
-    if (step === 3) {
-      setDetectedNetwork(null);
+    if (step === 2) {
+      // From validation result, go back to card verification
+      setStep(1);
+      setGiftDetails(null);
+      setValidationError(null);
+    } else {
+      setStep((prev) => (prev > 1 ? prev - 1 : prev));
     }
   };
 
@@ -155,8 +102,6 @@ export function CardRedemptionForm() {
     setStep(1);
     setGiftDetails(null);
     setValidationError(null);
-    setDetectedNetwork(null);
-    setDirection(1);
     navigate("/");
   };
 
@@ -194,9 +139,6 @@ export function CardRedemptionForm() {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="w-full space-y-8">
-        {/* Step Indicator */}
-        {!showSuccess && <StepIndicator currentStep={step} totalSteps={4} />}
-
         <AnimatePresence mode="wait">
           {/* Success Screen */}
           {showSuccess && submittedValues && (
@@ -207,17 +149,16 @@ export function CardRedemptionForm() {
             />
           )}
 
-          {/* Step 1: Personal Information (BioData) */}
+          {/* Step 1: Card Verification */}
           {!showSuccess && step === 1 && (
             <motion.div
               key="step-1"
-              custom={direction}
-              variants={stepVariants}
-              initial="hidden"
-              animate="visible"
-              exit="exit"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              transition={{ duration: 0.3 }}
             >
-              <BioDataStep
+              <GiftVerificationStep
                 isLoading={isLoading}
                 onNext={handleNextStep}
                 onPrev={handlePrevStep}
@@ -226,37 +167,24 @@ export function CardRedemptionForm() {
             </motion.div>
           )}
 
-          {/* Step 2: Card Verification */}
+          {/* Step 2: Validation Result */}
           {!showSuccess && step === 2 && (
             <motion.div
               key="step-2"
-              custom={direction}
-              variants={stepVariants}
-              initial="hidden"
-              animate="visible"
-              exit="exit"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              transition={{ duration: 0.3 }}
             >
-              {!validationError && !giftDetails ? (
-                <GiftVerificationStep
-                  isLoading={isLoading}
-                  onNext={handleNextStep}
-                  onPrev={handlePrevStep}
-                  isFirstStep={false}
-                />
-              ) : (
-                <ValidationResultStep
-                  serialNumber={form.getValues("serialNumber")}
-                  cardCode={form.getValues("cardCode")}
-                  giftDetails={giftDetails}
-                  error={validationError}
-                  isLoading={isLoading}
-                  onRetry={handleRetryValidation}
-                  onProceed={() => {
-                    setDirection(1);
-                    setStep(3);
-                  }}
-                />
-              )}
+              <ValidationResultStep
+                serialNumber={form.getValues("serialNumber")}
+                cardCode={form.getValues("cardCode")}
+                giftDetails={giftDetails}
+                error={validationError}
+                isLoading={isLoading}
+                onRetry={handleRetryValidation}
+                onProceed={() => setStep(3)}
+              />
             </motion.div>
           )}
 
@@ -264,11 +192,10 @@ export function CardRedemptionForm() {
           {!showSuccess && step === 3 && (
             <motion.div
               key="step-3"
-              custom={direction}
-              variants={stepVariants}
-              initial="hidden"
-              animate="visible"
-              exit="exit"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              transition={{ duration: 0.3 }}
             >
               <PhoneVerificationStep
                 isLoading={isLoading}
@@ -278,20 +205,18 @@ export function CardRedemptionForm() {
             </motion.div>
           )}
 
-          {/* Step 4: Summary & Confirmation */}
+          {/* Step 4: Confirmation */}
           {!showSuccess && step === 4 && (
             <motion.div
               key="step-4"
-              custom={direction}
-              variants={stepVariants}
-              initial="hidden"
-              animate="visible"
-              exit="exit"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              transition={{ duration: 0.3 }}
             >
-              <SummaryStep
+              <ConfirmationStep
                 isLoading={isLoading}
                 giftDetails={giftDetails}
-                detectedNetwork={detectedNetwork}
                 onPrev={handlePrevStep}
                 onSubmit={onSubmit}
               />

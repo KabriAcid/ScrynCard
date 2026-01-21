@@ -74,6 +74,7 @@ export function PersonalDetailsStep({
                                         <FormLabel>Full Name</FormLabel>
                                         <FormControl>
                                             <Input
+                                                type="text"
                                                 placeholder="Enter your full name"
                                                 {...field}
                                             />
@@ -92,6 +93,8 @@ export function PersonalDetailsStep({
                                         <FormLabel>National ID Number (NIN)</FormLabel>
                                         <FormControl>
                                             <Input
+                                                maxLength={11}
+                                                inputMode="numeric"
                                                 placeholder="Enter your NIN"
                                                 {...field}
                                             />
@@ -112,7 +115,6 @@ export function PersonalDetailsStep({
             >
                 <Button
                     type="button"
-                    variant="outline"
                     onClick={onNext}
                     size="lg"
                 >

@@ -50,7 +50,7 @@ export function ValidationResultStep({
     // Spinner state
     return (
       <div className="space-y-6">
-        <div>
+        <div className="text-center">
           <h2 className="text-2xl font-bold">Processing Card</h2>
           <p className="text-muted-foreground mt-1">
             Validating your card details...
@@ -80,13 +80,6 @@ export function ValidationResultStep({
   if (!displayError && giftDetails) {
     return (
       <div className="space-y-6">
-        <div>
-          <h2 className="text-2xl font-bold">Card Verified</h2>
-          <p className="text-muted-foreground mt-1">
-            Your card has been successfully validated
-          </p>
-        </div>
-
         {/* Success Message Card */}
         <Card className="p-6 bg-green-50 border-green-200">
           <div className="space-y-4">
