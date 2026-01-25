@@ -16,7 +16,8 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
-import { Briefcase, CreditCard } from "lucide-react";
+import { Briefcase, CreditCard, User } from "lucide-react";
+import { StepHeader } from "../order/shared";
 import { RedemptionFormValues, OCCUPATION_OPTIONS } from "./schema";
 
 interface BioDataStepProps {
@@ -37,12 +38,13 @@ export function BioDataStep({ isLoading, onNext, onPrev }: BioDataStepProps) {
 
   return (
     <div className="space-y-6">
-      <div>
-        <h2 className="text-2xl font-bold">Beneficiary Information</h2>
-        <p className="text-muted-foreground mt-1">
-          Enter your NIN and occupation details
-        </p>
-      </div>
+      <StepHeader
+        icon={User}
+        title="Beneficiary Information"
+        description="Provide your National Identification Number and occupation for record purposes"
+        step={2}
+        totalSteps={4}
+      />
 
       <div className="space-y-4">
         {/* NIN Field */}

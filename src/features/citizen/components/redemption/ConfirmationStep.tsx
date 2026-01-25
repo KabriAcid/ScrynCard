@@ -1,14 +1,16 @@
 import React from "react";
 import { useFormContext } from "react-hook-form";
-import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
 import {
+  FileCheck,
   AlertCircle,
   CheckCircle2,
   Loader2,
   CreditCard,
   Phone,
 } from "lucide-react";
+import { StepHeader } from "../order/shared";
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
 import { RedemptionFormValues } from "./schema";
 import { useCitizenStore } from "@/stores/citizenStore";
 import { NetworkDetector } from "@/lib/operators";
@@ -60,37 +62,38 @@ export function ConfirmationStep({
 
   return (
     <div className="space-y-6">
-      <div>
-        <h2 className="text-2xl font-bold">Confirm Redemption</h2>
-        <p className="text-muted-foreground mt-1">
-          Please review your details before confirming
-        </p>
-      </div>
+      <StepHeader
+        icon={FileCheck}
+        title="Confirm Redemption"
+        description="Review your details carefully before confirming your gift redemption"
+        step={4}
+        totalSteps={4}
+      />
 
       <div className="space-y-4">
         {/* Card Details */}
-        <Card className="p-4 border-2 border-blue-200 bg-blue-50">
+        <Card className="p-4 border-2 border-border bg-accent/50">
           <div className="space-y-3">
             <div className="flex items-center gap-2 mb-3">
-              <CreditCard className="h-5 w-5 text-blue-600" />
-              <h3 className="font-semibold text-blue-900">Card Details</h3>
+              <CreditCard className="h-5 w-5 text-primary" />
+              <h3 className="font-semibold text-foreground">Card Details</h3>
             </div>
             <div className="space-y-3 text-sm">
               <div>
-                <p className="text-blue-700 text-xs uppercase font-semibold">
+                <p className="text-muted-foreground text-xs uppercase font-semibold">
                   Serial Number
                 </p>
                 <p className="font-mono font-bold">{serialNumber}</p>
               </div>
               <div>
-                <p className="text-blue-700 text-xs uppercase font-semibold">
+                <p className="text-muted-foreground text-xs uppercase font-semibold">
                   Card Code
                 </p>
                 <p className="font-mono font-bold">{cardCode}</p>
               </div>
-              <div className="grid grid-cols-2 gap-4 pt-2 border-t border-blue-200">
+              <div className="grid grid-cols-2 gap-4 pt-2 border-t border-border">
                 <div>
-                  <p className="text-blue-700 text-xs uppercase font-semibold">
+                  <p className="text-muted-foreground text-xs uppercase font-semibold">
                     Type
                   </p>
                   <Badge className="w-fit capitalize mt-1">
@@ -98,7 +101,7 @@ export function ConfirmationStep({
                   </Badge>
                 </div>
                 <div>
-                  <p className="text-blue-700 text-xs uppercase font-semibold">
+                  <p className="text-muted-foreground text-xs uppercase font-semibold">
                     Value
                   </p>
                   <p className="font-semibold mt-1">
@@ -109,8 +112,8 @@ export function ConfirmationStep({
                 </div>
               </div>
               {giftDetails?.expiryDate && (
-                <div className="pt-2 border-t border-blue-200">
-                  <p className="text-blue-700 text-xs uppercase font-semibold">
+                <div className="pt-2 border-t border-border">
+                  <p className="text-muted-foreground text-xs uppercase font-semibold">
                     Expiry Date
                   </p>
                   <p className="font-semibold">
@@ -123,12 +126,12 @@ export function ConfirmationStep({
         </Card>
 
         {/* Phone Details */}
-        <Card className="p-4 border-2 border-green-200 bg-green-50">
+        <Card className="p-4 border-2 border-border bg-accent/50">
           <div className="space-y-3">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <Phone className="h-5 w-5 text-green-600" />
-                <h3 className="font-semibold text-green-900">
+                <Phone className="h-5 w-5 text-primary" />
+                <h3 className="font-semibold text-foreground">
                   Recipient Phone
                 </h3>
               </div>
@@ -142,12 +145,14 @@ export function ConfirmationStep({
             </div>
             <div className="space-y-2 text-sm">
               <p>
-                <span className="text-green-700 font-semibold">Number:</span>{" "}
+                <span className="text-muted-foreground font-semibold">
+                  Number:
+                </span>{" "}
                 <span className="font-mono font-bold">
                   {detectionResult.phoneNumber}
                 </span>
               </p>
-              <p className="text-xs text-green-700">
+              <p className="text-xs text-muted-foreground">
                 Your {giftDetails?.giftType} will be sent to this number
               </p>
             </div>

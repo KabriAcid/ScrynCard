@@ -10,6 +10,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Phone } from "lucide-react";
+import { StepHeader } from "../order/shared";
 import { RedemptionFormValues } from "./schema";
 import { NetworkDetector } from "@/lib/operators";
 import { Badge } from "@/components/ui/badge";
@@ -55,56 +56,62 @@ export function PhoneVerificationStep({
   }, [phoneNumber]);
 
   return (
-    <div className="h-full overflow-y-auto pr-4 space-y-4 no-scrollbar">
-      <FormField
-        control={form.control}
-        name="phoneNumber"
-        render={({ field }) => (
-          <FormItem>
-            <FormLabel>Phone Number</FormLabel>
-            <FormControl>
-              <div className="relative">
-                <Phone className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                <Input
-                  placeholder="0703 123 4567"
-                maxLength={11}
-                  {...field}
-                  disabled={isLoading}
-                  className="pl-10"
-                />
-              </div>
-            </FormControl>
-            <FormMessage />
-          </FormItem>
-        )}
+    <div className="space-y-6">
+      <StepHeader
+        icon={Phone}
+        title="Recipient Phone Number"
+        description="Enter the phone number where you want to receive your gift"
+        step={3}
+        totalSteps={4}
       />
 
+      <div className="space-y-4">
+        <FormField
+          control={form.control}
+          name="phoneNumber"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Phone Number</FormLabel>
+              <FormControl>
+                <div className="relative">
+                  <Phone className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                  <Input
+                    placeholder="0703 123 4567"
+                    maxLength={11}
+                    {...field}
+                    disabled={isLoading}
+                    className="pl-10"
+                  />
+                </div>
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
 
-      {error && (
-        <p className="text-sm text-destructive">{error}</p>
-      )}
+        {error && <p className="text-sm text-destructive">{error}</p>}
 
-      {/* Action Buttons */}
-      <div className="flex gap-3 pt-4">
-        <Button
-          type="button"
-          variant="outline"
-          onClick={onPrev}
-          disabled={isLoading}
-          className="flex-1"
-        >
-          Back
-        </Button>
-        <Button
-          type="button"
-          onClick={handleNext}
-          disabled={isLoading || !phoneNumber}
-          className="flex-1"
-        >
-          Next
-        </Button>
+        {/* Action Buttons */}
+        <div className="flex gap-3 pt-4">
+          <Button
+            type="button"
+            variant="outline"
+            onClick={onPrev}
+            disabled={isLoading}
+            className="flex-1"
+          >
+            Back
+          </Button>
+          <Button
+            type="button"
+            onClick={handleNext}
+            disabled={isLoading || !phoneNumber}
+            className="flex-1"
+          >
+            Next
+          </Button>
+        </div>
       </div>
     </div>
   );
 }
-                

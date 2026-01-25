@@ -49,7 +49,7 @@ export function PersonalDetailsStep({
             {/* Step Header */}
             <StepHeader
                 icon={User}
-                title="Your Information"
+                title="Personal Info"
                 description="Please provide your personal details"
                 step={1}
                 totalSteps={3}

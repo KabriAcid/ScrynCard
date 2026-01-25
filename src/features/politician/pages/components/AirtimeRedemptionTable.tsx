@@ -281,7 +281,7 @@ export function AirtimeRedemptionTable({
                           variant="ghost"
                           size="sm"
                           onClick={() =>
-                            navigate(`/politician/redemptions/${redemption.id}`)
+                            navigate(`/politician/redemption/${redemption.id}`)
                           }
                         >
                           View
