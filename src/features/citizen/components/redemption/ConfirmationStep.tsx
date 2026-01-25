@@ -7,6 +7,8 @@ import {
   Loader2,
   CreditCard,
   Phone,
+  User,
+  Briefcase,
 } from "lucide-react";
 import { StepHeader } from "../order/shared";
 import { Button } from "@/components/ui/button";
@@ -36,6 +38,8 @@ export function ConfirmationStep({
   const serialNumber = form.getValues("serialNumber");
   const cardCode = form.getValues("cardCode");
   const phoneNumber = form.getValues("phoneNumber");
+  const nin = form.getValues("nin");
+  const occupation = form.getValues("occupation");
   const detectionResult = NetworkDetector.detect(phoneNumber);
 
   const handleSubmit = async () => {
@@ -155,6 +159,35 @@ export function ConfirmationStep({
               <p className="text-xs text-muted-foreground">
                 Your {giftDetails?.giftType} will be sent to this number
               </p>
+            </div>
+          </div>
+        </Card>
+
+        {/* Beneficiary Information */}
+        <Card className="p-4 border-2 border-border bg-accent/50">
+          <div className="space-y-3">
+            <div className="flex items-center gap-2 mb-3">
+              <User className="h-5 w-5 text-primary" />
+              <h3 className="font-semibold text-foreground">
+                Beneficiary Information
+              </h3>
+            </div>
+            <div className="grid grid-cols-2 gap-4 text-sm">
+              <div>
+                <p className="text-muted-foreground text-xs uppercase font-semibold">
+                  NIN
+                </p>
+                <p className="font-mono font-bold mt-1">{nin}</p>
+              </div>
+              <div>
+                <p className="text-muted-foreground text-xs uppercase font-semibold">
+                  Occupation
+                </p>
+                <div className="flex items-center gap-2 mt-1">
+                  <Briefcase className="h-4 w-4 text-muted-foreground" />
+                  <p className="font-medium">{occupation}</p>
+                </div>
+              </div>
             </div>
           </div>
         </Card>
