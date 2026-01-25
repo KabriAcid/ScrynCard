@@ -31,7 +31,9 @@ export const RedemptionSchema = z.object({
     .string()
     .min(11, "Phone number must be valid Nigerian format")
     .refine((phone) => {
-      const result = NetworkDetector.detect(phone);
+      // Clean the phone number by removing hyphens before validation
+      const cleanedPhone = phone.replace(/-/g, "");
+      const result = NetworkDetector.detect(cleanedPhone);
       return result.isValid;
     }, "Invalid Nigerian phone number. Use 0XXXXXXXXXX format"),
 });

@@ -166,21 +166,7 @@ export function RedemptionOverviewChart() {
       </CardHeader>
       <CardContent>
         <ResponsiveContainer width="100%" height={350}>
-          <AreaChart data={redemptionData}>
-            <defs>
-              <linearGradient id="colorTotal" x1="0" y1="0" x2="0" y2="1">
-                <stop
-                  offset="5%"
-                  stopColor="hsl(var(--primary))"
-                  stopOpacity={0.8}
-                />
-                <stop
-                  offset="95%"
-                  stopColor="hsl(var(--primary))"
-                  stopOpacity={0}
-                />
-              </linearGradient>
-            </defs>
+          <BarChart data={redemptionData}>
             <XAxis
               dataKey="name"
               stroke="hsl(var(--muted-foreground))"
@@ -201,13 +187,12 @@ export function RedemptionOverviewChart() {
                 borderColor: "hsl(var(--border))",
               }}
             />
-            <Area
-              type="monotone"
+            <Bar
               dataKey="total"
-              stroke="hsl(var(--primary))"
-              fill="url(#colorTotal)"
+              fill="hsl(var(--primary))"
+              radius={[8, 8, 0, 0]}
             />
-          </AreaChart>
+          </BarChart>
         </ResponsiveContainer>
       </CardContent>
     </Card>
@@ -322,11 +307,10 @@ export function BeneficiaryDistributionChart() {
           {beneficiaryDistributionData.map((beneficiary, index) => (
             <div
               key={beneficiary.name}
-              className={`relative rounded-lg border-2 p-3 cursor-pointer transition-all hover:shadow-md ${
-                activeIndex === index
+              className={`relative rounded-lg border-2 p-3 cursor-pointer transition-all hover:shadow-md ${activeIndex === index
                   ? "border-primary shadow-lg"
                   : "border-border"
-              }`}
+                }`}
               onClick={() => setActiveIndex(index)}
               onMouseEnter={() => setActiveIndex(index)}
             >

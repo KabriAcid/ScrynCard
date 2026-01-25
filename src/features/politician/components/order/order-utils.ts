@@ -15,7 +15,7 @@ export const airtimeProducts = [
   { id: "airtime-100k", label: "₦100,000", value: 100000, type: "airtime" as const, unit: "₦", minQuantity: 1 },
 ] as const;
 
-export const denominations = [...dataProducts, ...airtimeProducts] as const;
+export const denominations = [...dataProducts, ...airtimeProducts];
 
 export const SERVICE_FEE_RATE = 0.15; // 15%
 export const PRINTING_COST_PER_CARD = 200; // ₦200 per unit

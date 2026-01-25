@@ -46,7 +46,7 @@ export function DashboardNav({ onNavigate }: DashboardNavProps = {}) {
   const navigate = useNavigate();
 
   return (
-    <nav className="grid items-start px-2 text-sm font-medium lg:px-4">
+    <nav className="grid items-start px-2 text-base font-medium lg:px-4">
       {navItems.map((item) => (
         <Button
           key={item.label}
@@ -59,7 +59,7 @@ export function DashboardNav({ onNavigate }: DashboardNavProps = {}) {
             }
           }}
           className={cn(
-            "flex items-center justify-start gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary w-full",
+            "flex items-center justify-start gap-3 rounded-lg px-4 py-3 text-muted-foreground transition-all hover:text-primary w-full",
             {
               "bg-muted text-primary":
                 location.pathname.startsWith(item.href) &&
@@ -68,7 +68,7 @@ export function DashboardNav({ onNavigate }: DashboardNavProps = {}) {
             }
           )}
         >
-          <item.icon className="h-4 w-4" />
+          <item.icon className="h-5 w-5" />
           {item.label}
         </Button>
       ))}

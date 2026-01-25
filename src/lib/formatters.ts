@@ -96,6 +96,23 @@ export class PhoneFormatter {
     const normalized = this.normalize(phoneNumber);
     return normalized.substring(0, 4);
   }
+
+  /**
+   * Format phone number with hyphens as user types
+   * Automatically inserts hyphens at standard spacing: 0xxx-xxx-xxxx
+   * 07031234567 -> 0703-123-4567
+   */
+  static formatWithHyphens(phoneNumber: string): string {
+    const cleaned = phoneNumber.replace(/\D/g, "");
+
+    if (cleaned.length === 0) return "";
+    if (cleaned.length <= 4) return cleaned;
+    if (cleaned.length <= 7) {
+      return `${cleaned.slice(0, 4)}-${cleaned.slice(4)}`;
+    }
+
+    return `${cleaned.slice(0, 4)}-${cleaned.slice(4, 7)}-${cleaned.slice(7, 11)}`;
+  }
 }
 
 /**

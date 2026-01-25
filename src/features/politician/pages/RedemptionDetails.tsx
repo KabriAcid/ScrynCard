@@ -1,6 +1,7 @@
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { mockRedemptions } from "@/lib/mock";
+import { ArrowLeft, Check, Clock, Zap, HardDrive } from "lucide-react";
 import {
   Card,
   CardContent,
@@ -8,17 +9,18 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Separator } from "@/components/ui/separator";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 import type { Redeemer } from "@/lib/types";
 import {
-  PersonalInfoSection,
-  BankDetailsSection,
-  LocationTimeSection,
+  RedemptionDetailsContainer,
   RedemptionDetailsSkeleton,
 } from "./components";
 
 export default function RedemptionDetailsPage() {
   const { id } = useParams();
+  const navigate = useNavigate();
+  const [redemption, setRedemption] = useState<any>(null);
   const [redeemer, setRedeemer] = useState<Redeemer | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [hasLoaded, setHasLoaded] = useState(false);
@@ -30,17 +32,17 @@ export default function RedemptionDetailsPage() {
       await new Promise((resolve) => setTimeout(resolve, 500));
 
       // Find the redemption from mockRedemptions
-      const redemption = mockRedemptions.find((r) => r.id === id);
+      const foundRedemption = mockRedemptions.find((r) => r.id === id);
 
-      if (redemption) {
-        // Transform mockRedemption to Redeemer format
+      if (foundRedemption) {
+        setRedemption(foundRedemption);
         // Using available data from the redemption structure
         const foundRedeemer: Redeemer = {
-          id: redemption.id,
+          id: foundRedemption.id,
           personalInfo: {
-            name: "Citizen User",
-            email: "citizen@example.com",
-            phone: redemption.phoneNumber || "N/A",
+            name: "Ahmad Ali",
+            email: "ahmad.ali@example.com",
+            phone: foundRedemption.phoneNumber || "N/A",
             nin: "12345678901234",
             dob: "1990-01-15",
           },
@@ -53,11 +55,12 @@ export default function RedemptionDetailsPage() {
             state: "Lagos",
             lga: "Lagos Island",
             ipAddress: "192.168.1.1",
-            redemptionDate: redemption.completedAt || redemption.createdAt,
+            redemptionDate: foundRedemption.completedAt || foundRedemption.createdAt,
           },
         };
         setRedeemer(foundRedeemer);
       } else {
+        setRedemption(null);
         setRedeemer(null);
       }
 
@@ -76,32 +79,86 @@ export default function RedemptionDetailsPage() {
 
   if (!redeemer) {
     return (
-      <Card>
-        <CardHeader>
-          <CardTitle>Redemption Not Found</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <p>The redemption record you're looking for does not exist.</p>
-        </CardContent>
-      </Card>
+      <div className="space-y-6">
+        <Button variant="ghost" onClick={() => navigate("/politician/redemption")}>
+          <ArrowLeft className="mr-2 h-4 w-4" />
+          Back to Redemptions
+        </Button>
+        <Card>
+          <CardHeader>
+            <CardTitle>Redemption Not Found</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <p>The redemption record you're looking for does not exist.</p>
+          </CardContent>
+        </Card>
+      </div>
     );
   }
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>Redemption Details</CardTitle>
-        <CardDescription>
-          Detailed information for this redemption record.
-        </CardDescription>
-      </CardHeader>
-      <CardContent className="space-y-8">
-        <PersonalInfoSection personalInfo={redeemer.personalInfo} />
-        <Separator />
-        <BankDetailsSection bankDetails={redeemer.bankDetails} />
-        <Separator />
-        <LocationTimeSection location={redeemer.location} />
-      </CardContent>
-    </Card>
+    <div className="space-y-6">
+      {/* Back Button */}
+      <Button variant="ghost" onClick={() => navigate("/politician/redemption")}>
+        <ArrowLeft className="mr-2 h-4 w-4" />
+        Back to Redemptions
+      </Button>
+
+      {/* Unified Details Card */}
+      <Card>
+        <CardHeader className="space-y-4">
+          <div className="flex items-start justify-between">
+            <div>
+              <CardTitle className="text-2xl">Redemption Details</CardTitle>
+              <CardDescription className="mt-2">
+                Airtime and data gift redemption record
+              </CardDescription>
+            </div>
+            <Badge variant={redemption?.status === "completed" ? "default" : "secondary"} className="h-fit">
+              {redemption?.status === "completed" && <Check className="mr-2 h-4 w-4" />}
+              {redemption?.status === "processing" && <Clock className="mr-2 h-4 w-4" />}
+              {redemption?.status === "completed" ? "Completed" : "Processing"}
+            </Badge>
+          </div>
+
+          {/* Quick Info Grid */}
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 pt-4 border-t">
+            <div>
+              <p className="text-xs text-muted-foreground">Redemption ID</p>
+              <p className="font-mono text-sm font-medium">{redemption?.id}</p>
+            </div>
+            <div>
+              <p className="text-xs text-muted-foreground">Phone Number</p>
+              <p className="font-medium">{redemption?.phoneNumber}</p>
+            </div>
+            <div className="flex items-start gap-2">
+              <p className="text-xs text-muted-foreground">Operator</p>
+              <p className="font-medium">{redemption?.mobileOperator}</p>
+            </div>
+            <div>
+              <p className="text-xs text-muted-foreground">Gift Type</p>
+              <div className="flex items-center gap-1 mt-1">
+                {redemption?.giftType === "data" ? (
+                  <>
+                    <HardDrive className="h-4 w-4 text-blue-500" />
+                    <Badge variant="outline">Data</Badge>
+                  </>
+                ) : (
+                  <>
+                    <Zap className="h-4 w-4 text-yellow-500" />
+                    <Badge variant="outline">Airtime</Badge>
+                  </>
+                )}
+              </div>
+            </div>
+          </div>
+        </CardHeader>
+
+        {/* Detailed Information - Using Unified Container */}
+        <CardContent className="pt-6">
+          <RedemptionDetailsContainer redeemer={redeemer} />
+        </CardContent>
+      </Card>
+    </div>
   );
 }

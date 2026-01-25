@@ -24,33 +24,33 @@ export function OrderSummaryCard({
 }: OrderSummaryCardProps) {
   return (
     <Card className="sticky top-4">
-      <CardHeader>
-        <CardTitle className="flex items-center gap-2">
-          <ShoppingCart className="h-5 w-5" />
+      <CardHeader className="pb-2.5 sm:pb-3">
+        <CardTitle className="flex items-center gap-2 text-base sm:text-lg">
+          <ShoppingCart className="h-4 w-4" />
           Order Summary
         </CardTitle>
       </CardHeader>
-      <CardContent className="space-y-4">
-        <div className="space-y-3">
-          <div className="flex justify-between text-sm">
+      <CardContent className="space-y-2.5 sm:space-y-3 px-2.5 sm:px-4">
+        <div className="space-y-1.5 sm:space-y-2">
+          <div className="flex justify-between text-xs">
             <span className="text-muted-foreground">Total Units:</span>
             <span className="font-semibold">
               {calculations.totalCards.toLocaleString()}
             </span>
           </div>
-          <div className="flex justify-between text-sm">
+          <div className="flex justify-between text-xs">
             <span className="text-muted-foreground">Product Value:</span>
             <span className="font-semibold">
               {formatCurrency(calculations.cardValue)}
             </span>
           </div>
-          <div className="flex justify-between text-sm">
+          <div className="flex justify-between text-xs">
             <span className="text-muted-foreground">Service Fee (15%):</span>
             <span className="font-semibold text-orange-600 dark:text-orange-400">
               {formatCurrency(calculations.serviceFee)}
             </span>
           </div>
-          <div className="flex justify-between text-sm">
+          <div className="flex justify-between text-xs">
             <span className="text-muted-foreground">Processing Cost:</span>
             <span className="font-semibold">
               {formatCurrency(calculations.printingCost)}
@@ -58,8 +58,8 @@ export function OrderSummaryCard({
           </div>
           <div className="h-px bg-border" />
           <div className="flex justify-between">
-            <span className="font-semibold">Total to Pay:</span>
-            <span className="text-2xl font-bold text-primary">
+            <span className="text-xs sm:text-sm font-semibold">Total to Pay:</span>
+            <span className="text-lg sm:text-xl font-bold text-primary">
               {formatCurrency(calculations.totalToPay)}
             </span>
           </div>
@@ -68,19 +68,18 @@ export function OrderSummaryCard({
         {onSubmit && (
           <Button
             type="submit"
-            className="w-full"
-            size="lg"
+            className="w-full text-xs sm:text-sm h-9 sm:h-10"
             disabled={!hasItems || isSubmitting}
             onClick={onSubmit}
           >
             {isSubmitting ? (
               <>
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                <Loader2 className="mr-2 h-3.5 w-3.5 sm:h-4 sm:w-4 animate-spin" />
                 Processing...
               </>
             ) : (
               <>
-                <Sparkles className="mr-2 h-4 w-4" />
+                <Sparkles className="mr-2 h-3.5 w-3.5 sm:h-4 sm:w-4" />
                 {submitLabel}
               </>
             )}
@@ -89,8 +88,8 @@ export function OrderSummaryCard({
 
         {showPaymentInfo && (
           <Alert>
-            <Info className="h-4 w-4" />
-            <AlertDescription className="text-xs">
+            <Info className="h-4 w-4 mt-0.5 flex-shrink-0" />
+            <AlertDescription className="text-xs sm:text-xs">
               After placing your order, you'll receive bank details to complete
               the payment. Your cards will be processed upon payment
               confirmation.

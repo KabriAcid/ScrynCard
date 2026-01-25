@@ -1,10 +1,9 @@
 import { ScratchCard } from "@/lib/mockTypes";
-import { generateId } from "./utils";
 import { mockOrders } from "./orders";
 
 export const mockScratchCards: ScratchCard[] = [
   {
-    id: generateId("CARD"),
+    id: "CARD-000001",
     serialNumber: "SN-2024-001",
     giftCode: "MTN-5K-B001-A3F7B9C2-X7",
     denomination: 5000,
@@ -19,7 +18,7 @@ export const mockScratchCards: ScratchCard[] = [
     createdAt: new Date(2024, 1, 15).toISOString(),
   },
   {
-    id: generateId("CARD"),
+    id: "CARD-000002",
     serialNumber: "SN-2024-002",
     giftCode: "AIRTEL-1GB-B001-C0D3E5F7-X8",
     denomination: 1000,
@@ -35,7 +34,7 @@ export const mockScratchCards: ScratchCard[] = [
     createdAt: new Date(2024, 1, 15).toISOString(),
   },
   {
-    id: generateId("CARD"),
+    id: "CARD-000003",
     serialNumber: "SN-2024-003",
     giftCode: "GLO-2K-B001-F6A7B8C9-X9",
     denomination: 2000,
@@ -48,7 +47,7 @@ export const mockScratchCards: ScratchCard[] = [
     createdAt: new Date(2024, 1, 15).toISOString(),
   },
   {
-    id: generateId("CARD"),
+    id: "CARD-000004",
     serialNumber: "SN-2024-004",
     giftCode: "9MOBILE-500MB-B002-D1E4F6A7-X0",
     denomination: 1500,
@@ -62,7 +61,7 @@ export const mockScratchCards: ScratchCard[] = [
     createdAt: new Date(2024, 2, 10).toISOString(),
   },
   {
-    id: generateId("CARD"),
+    id: "CARD-000005",
     serialNumber: "SN-2024-005",
     giftCode: "MTN-10K-B002-B8C9D0E1-X1",
     denomination: 10000,

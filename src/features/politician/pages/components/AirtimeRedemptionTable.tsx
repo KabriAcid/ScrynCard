@@ -272,8 +272,8 @@ export function AirtimeRedemptionTable({
                           {redemption.status === "completed"
                             ? "Completed"
                             : redemption.status === "failed"
-                            ? "Failed"
-                            : "Pending"}
+                              ? "Failed"
+                              : "Pending"}
                         </Badge>
                       </TableCell>
                       <TableCell className="text-right">
