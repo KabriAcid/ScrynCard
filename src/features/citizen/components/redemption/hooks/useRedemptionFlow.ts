@@ -113,7 +113,7 @@ export function useRedemptionFlow() {
     setIsLoading(true);
     try {
       const combinedCode = `${values.serialNumber}-${values.cardCode}`;
-      const result = await redeemGift(combinedCode, values.phoneNumber);
+      const result = await redeemGift(combinedCode, values.phoneNumber, values.network);
       if (result.success) {
         setSubmittedValues(values);
         setShowSuccess(true);
