@@ -15,7 +15,7 @@
 - Primary color: Forest Green (#228B22) symbolizes growth and trust.
 - Background color: Light Green (#E0F8E0), a soft and desaturated tint of the primary hue, ensures a gentle and unobtrusive backdrop, consistent with the light color scheme.
 - Accent color: Teal (#008080) to provide contrast for call-to-action elements, while remaining analogous to the primary color, forest green.
-- Body and headline font: 'Inter', a grotesque-style sans-serif, offering a modern, machined, objective, and neutral appearance.
+- Body and headline font: 'Plus Jakarta Sans', a modern, friendly sans-serif that conveys professionalism while remaining approachable and accessible.
 - Employ modern icons from Lucide Icons, customized to represent political engagement and financial transactions.
 - Design a responsive layout that adapts seamlessly to various screen sizes, ensuring accessibility across all devices.
 - Incorporate subtle animations using Framer Motion to enhance user engagement and provide visual feedback during interactions.

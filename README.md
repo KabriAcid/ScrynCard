@@ -216,7 +216,7 @@ Each redemption receives a risk score (0-100):
 - **Primary**: Forest Green (#228B22) - Growth and trust
 - **Background**: Light Green (#E0F8E0) - Soft, gentle backdrop
 - **Accent**: Teal (#008080) - Call-to-action elements
-- **Font**: Inter (sans-serif) - Modern, clean, neutral
+- **Font**: Plus Jakarta Sans (sans-serif) - Modern, friendly, approachable
 
 ### UI Components (40+ Radix UI Components)
 - Buttons, Inputs, Forms
@@ -485,7 +485,7 @@ Revenue: ₦3.1M
 ## 📄 License & Contact
 
 **Version**: 0.1.0  
-**Last Updated**: January 27, 2026  
+**Last Updated**: March 2, 2026  
 **Status**: MVP Development  
 
 **Contact**: kabriacid01@gmail.com  

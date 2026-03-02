@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap");
 
 @tailwind base;
 @tailwind components;
@@ -83,16 +83,21 @@
   * {
     @apply border-border;
   }
+
   html,
   body {
     @apply bg-background text-foreground;
+    font-family: "Plus Jakarta Sans", system-ui, sans-serif;
+    font-feature-settings: "rlig" 1, "calt" 1;
     overflow: hidden;
     overflow-y: auto;
   }
+
   html::-webkit-scrollbar,
   body::-webkit-scrollbar {
     display: none;
   }
+
   html,
   body {
     -ms-overflow-style: none;
@@ -104,15 +109,19 @@
   .no-scrollbar::-webkit-scrollbar {
     display: none;
   }
+
   .no-scrollbar {
-    -ms-overflow-style: none; /* IE and Edge */
-    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none;
+    /* IE and Edge */
+    scrollbar-width: none;
+    /* Firefox */
   }
 
   @keyframes shimmer {
     0% {
       background-position: 200% 0;
     }
+
     100% {
       background-position: -200% 0;
     }
@@ -122,6 +131,7 @@
     0% {
       transform: translateX(-100%) skewX(-15deg);
     }
+
     100% {
       transform: translateX(200%) skewX(-15deg);
     }
