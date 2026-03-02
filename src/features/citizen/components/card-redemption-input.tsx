@@ -106,7 +106,7 @@ export function CardRedemptionInput({
               id="serial-number"
               type="text"
               name="serial_number"
-              placeholder="ABC-123456"
+              placeholder="AB-123456"
               value={serialNumber}
               onChange={handleSerialChange}
               onBlur={() => setTouched({ ...touched, serial: true })}

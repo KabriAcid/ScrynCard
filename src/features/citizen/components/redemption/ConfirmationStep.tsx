@@ -70,8 +70,8 @@ export function ConfirmationStep({
         icon={FileCheck}
         title="Confirm Redemption"
         description="Review your details carefully before confirming your gift redemption"
-        step={4}
-        totalSteps={4}
+        step={3}
+        totalSteps={3}
       />
 
       <div className="space-y-4">

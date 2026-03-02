@@ -42,8 +42,8 @@ export function BioDataStep({ isLoading, onNext, onPrev }: BioDataStepProps) {
         icon={User}
         title="Beneficiary Information"
         description="Provide your National Identification Number and occupation for record purposes"
-        step={2}
-        totalSteps={4}
+        step={1}
+        totalSteps={3}
       />
 
       <div className="space-y-4">
@@ -91,10 +91,12 @@ export function BioDataStep({ isLoading, onNext, onPrev }: BioDataStepProps) {
                 disabled={isLoading}
               >
                 <FormControl>
-                  <SelectTrigger className="pl-10">
-                    <Briefcase className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                    <SelectValue placeholder="Select your occupation" />
-                  </SelectTrigger>
+                  <div className="relative">
+                    <Briefcase className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground z-10" />
+                    <SelectTrigger className="pl-10">
+                      <SelectValue placeholder="Select your occupation" />
+                    </SelectTrigger>
+                  </div>
                 </FormControl>
                 <SelectContent>
                   {OCCUPATION_OPTIONS.map((occupation) => (

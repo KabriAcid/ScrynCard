@@ -13,6 +13,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { RedemptionFormValues } from "./schema";
 import { Spinner } from "@/components/ui/spinner";
+import { formatSerialNumber, formatCardCode } from "@/lib/card-security";
 
 interface CardVerificationStepProps {
   isLoading: boolean;
@@ -74,13 +75,13 @@ export function GiftVerificationStep({
                 <FormLabel>Serial Number</FormLabel>
                 <FormControl>
                   <Input
-                    placeholder="SN-D93F93"
+                    placeholder="AB-123456"
                     maxLength={9}
                     {...field}
                     disabled={verificationLoading}
                     className="font-mono uppercase"
                     onChange={(e) =>
-                      field.onChange(e.target.value.toUpperCase())
+                      field.onChange(formatSerialNumber(e.target.value))
                     }
                   />
                 </FormControl>
@@ -101,13 +102,13 @@ export function GiftVerificationStep({
                 <FormLabel>Card Code</FormLabel>
                 <FormControl>
                   <Input
-                    placeholder="WSO-D939-39DX-39DK"
+                    placeholder="ABC-1234-5678-9012"
                     maxLength={18}
                     {...field}
                     disabled={verificationLoading}
                     className="font-mono uppercase"
                     onChange={(e) =>
-                      field.onChange(e.target.value.toUpperCase())
+                      field.onChange(formatCardCode(e.target.value))
                     }
                   />
                 </FormControl>

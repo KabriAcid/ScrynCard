@@ -64,8 +64,8 @@ export function PhoneVerificationStep({
         icon={Phone}
         title="Recipient Phone Number"
         description="Enter the phone number where you want to receive your gift"
-        step={3}
-        totalSteps={4}
+        step={2}
+        totalSteps={3}
       />
 
       <div className="space-y-4">
