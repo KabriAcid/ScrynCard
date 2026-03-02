@@ -85,6 +85,15 @@ export function useRedemptionFlow() {
     setStep(1);
     setGiftDetails(null);
     setValidationError(null);
+    // Clear form inputs
+    form.reset({
+      serialNumber: "",
+      cardCode: "",
+      nin: "",
+      occupation: "",
+      phoneNumber: "",
+      network: "",
+    });
   };
 
   const handlePrevStep = () => {
@@ -110,11 +119,16 @@ export function useRedemptionFlow() {
   };
 
   const onSubmit = async (values: RedemptionFormValues) => {
+    console.log("🚀 onSubmit called with values:", values);
     setIsLoading(true);
     try {
       const combinedCode = `${values.serialNumber}-${values.cardCode}`;
+      console.log("📞 Calling redeemGift with:", { combinedCode, phoneNumber: values.phoneNumber, network: values.network });
       const result = await redeemGift(combinedCode, values.phoneNumber, values.network);
+      console.log("✅ redeemGift result:", result);
+
       if (result.success) {
+        console.log("🎉 Success! Setting showSuccess to true");
         setSubmittedValues(values);
         setShowSuccess(true);
         toast({
@@ -122,6 +136,7 @@ export function useRedemptionFlow() {
           description: `Your ${giftDetails?.giftType} has been sent to ${values.phoneNumber}`,
         });
       } else {
+        console.log("❌ Redemption failed:", result.error);
         toast({
           variant: "destructive",
           title: "Redemption Failed",
@@ -129,6 +144,7 @@ export function useRedemptionFlow() {
         });
       }
     } catch (error) {
+      console.error("💥 Error in onSubmit:", error);
       toast({
         variant: "destructive",
         title: "Error",

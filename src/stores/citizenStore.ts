@@ -119,6 +119,7 @@ export const useCitizenStore = create<CitizenState>((set) => ({
         phoneNumber,
         giftCode,
         giftType,
+        network,
         amount
       );
 

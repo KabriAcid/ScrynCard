@@ -220,7 +220,7 @@ export function ValidationResultStep({
         <Button
           type="button"
           variant="outline"
-          onClick={onProceed}
+          onClick={onRetry}
           disabled={isLoading}
           className="flex-1"
         >

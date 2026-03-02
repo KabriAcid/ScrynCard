@@ -1,6 +1,5 @@
 import { ebillsService } from "./providers/ebillsService";
 import type { RedemptionRequest, RedemptionResponse } from "@/lib/api/types";
-import { NetworkDetector } from "@/lib/operators/networkDetector";
 import { API_CONFIG } from "@/config/api";
 
 /**
@@ -9,34 +8,50 @@ import { API_CONFIG } from "@/config/api";
  */
 export class AirtimeService {
   /**
-   * Main redemption method - handles network detection and API call
+   * Main redemption method - handles network and API call
    */
   static async redeem(
     phoneNumber: string,
     giftCode: string,
     giftType: "airtime" | "data",
+    network: string,
     amount?: number
   ): Promise<RedemptionResponse> {
     try {
-      // Step 1: Detect network operator from phone number
-      const networkResult = NetworkDetector.detect(phoneNumber);
+      // Development/Mock Mode: Return success if no API keys configured
+      const apiKey = API_CONFIG.AIRTIME_API.EBILLS.API_KEY;
+      if (!apiKey || import.meta.env.DEV) {
+        console.log("🔧 Mock redemption mode - returning success");
+        return {
+          status: "success",
+          referenceNumber: giftCode,
+          phoneNumber,
+          operator: network as any,
+          amount: amount || 0,
+          message: "Redemption successful (mock mode)",
+          timestamp: new Date().toISOString(),
+          apiReference: `MOCK-${Date.now()}`,
+          expiryDate: new Date(Date.now() + 90 * 24 * 60 * 60 * 1000).toISOString(),
+        };
+      }
 
-      if (!networkResult.isValid) {
+      // Step 1: Validate phone number format
+      if (!phoneNumber || phoneNumber.length !== 11 || !phoneNumber.startsWith('0')) {
         return {
           status: "failed",
           referenceNumber: giftCode,
           phoneNumber,
-          operator: "MTN",
+          operator: network as any,
           amount: amount || 0,
-          message: networkResult.errorMessage || "Invalid phone number",
+          message: "Invalid phone number format",
           timestamp: new Date().toISOString(),
         };
       }
 
       // Step 2: Build request object
       const request: RedemptionRequest = {
-        phoneNumber: networkResult.phoneNumber,
-        operator: networkResult.operator,
+        phoneNumber,
+        operator: network as any,
         giftCode,
         giftType,
         amount: amount || 0,
@@ -59,19 +74,12 @@ export class AirtimeService {
         status: "failed",
         referenceNumber: giftCode,
         phoneNumber,
-        operator: "MTN",
+        operator: network as any,
         amount: amount || 0,
         message: error.message || "Redemption service error",
         timestamp: new Date().toISOString(),
       };
     }
-  }
-
-  /**
-   * Validate phone number without redeeming
-   */
-  static validatePhoneNumber(phoneNumber: string) {
-    return NetworkDetector.detect(phoneNumber);
   }
 
   /**

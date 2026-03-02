@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { User } from "lucide-react";
+import { User, CreditCard } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -73,11 +73,15 @@ export function PersonalDetailsStep({
                                     <FormItem>
                                         <FormLabel>Full Name</FormLabel>
                                         <FormControl>
-                                            <Input
-                                                type="text"
-                                                placeholder="Enter your full name"
-                                                {...field}
-                                            />
+                                            <div className="relative">
+                                                <User className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                                                <Input
+                                                    type="text"
+                                                    placeholder="Enter your full name"
+                                                    className="pl-10"
+                                                    {...field}
+                                                />
+                                            </div>
                                         </FormControl>
                                         <FormMessage />
                                     </FormItem>
@@ -92,12 +96,16 @@ export function PersonalDetailsStep({
                                     <FormItem>
                                         <FormLabel>National ID Number (NIN)</FormLabel>
                                         <FormControl>
-                                            <Input
-                                                maxLength={11}
-                                                inputMode="numeric"
-                                                placeholder="Enter your NIN"
-                                                {...field}
-                                            />
+                                            <div className="relative">
+                                                <CreditCard className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                                                <Input
+                                                    maxLength={11}
+                                                    inputMode="numeric"
+                                                    placeholder="Enter your NIN"
+                                                    className="pl-10"
+                                                    {...field}
+                                                />
+                                            </div>
                                         </FormControl>
                                         <FormMessage />
                                     </FormItem>

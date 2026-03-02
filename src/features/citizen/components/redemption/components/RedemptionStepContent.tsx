@@ -45,11 +45,19 @@ export function RedemptionStepContent({
     <AnimatePresence mode="wait" custom={direction}>
       {/* Success Screen */}
       {showSuccess && submittedValues && (
-        <SuccessConfirmation
-          values={submittedValues}
-          giftDetails={giftDetails}
-          onComplete={onSuccessComplete}
-        />
+        <motion.div
+          key="success"
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          exit={{ opacity: 0, scale: 0.9 }}
+          transition={{ duration: 0.5 }}
+        >
+          <SuccessConfirmation
+            values={submittedValues}
+            giftDetails={giftDetails}
+            onComplete={onSuccessComplete}
+          />
+        </motion.div>
       )}
 
       {/* Step 1: Card Verification */}

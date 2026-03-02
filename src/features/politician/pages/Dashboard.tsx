@@ -29,11 +29,10 @@ export default function PoliticianDashboardPage() {
     const timer = setTimeout(() => {
       setRecentOrders(getRecentOrders(5));
       setDashboardStats({
-        totalOrders: 12,
-        totalRedemptions: 2458,
-        totalAirtimeDistributed: 18550000,
-        uniqueVoters: 1400,
-        completionRate: 85,
+        totalOrderValue: 4050000, // ₦45.75M total distributed
+        activeOrders: 8, // 8 active orders
+        totalRedemptions: 2458, // 2,458 successful redemptions
+        redemptionRate: 78.5, // 78.5% redemption rate
       });
       setIsLoading(false);
     }, 800);
