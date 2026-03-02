@@ -1,5 +1,4 @@
 import { z } from "zod";
-import { NetworkDetector } from "@/lib/operators";
 
 export const RedemptionSchema = z.object({
   serialNumber: z
@@ -29,13 +28,10 @@ export const RedemptionSchema = z.object({
 
   phoneNumber: z
     .string()
-    .min(11, "Phone number must be valid Nigerian format")
-    .refine((phone) => {
-      // Clean the phone number by removing hyphens before validation
-      const cleanedPhone = phone.replace(/-/g, "");
-      const result = NetworkDetector.detect(cleanedPhone);
-      return result.isValid;
-    }, "Invalid Nigerian phone number. Use 0XXXXXXXXXX format"),
+    .length(11, "Phone number must be exactly 11 digits")
+    .regex(/^0[7-9][0-1]\d{8}$/, "Invalid Nigerian phone number format"),
+
+  network: z.string().min(1, "Please select a network provider"),
 });
 
 export type RedemptionFormValues = z.infer<typeof RedemptionSchema>;
@@ -50,6 +46,14 @@ export const OCCUPATION_OPTIONS = [
   "Farmer",
   "Driver",
   "Trader",
+  "Others",
+] as const;
+
+export const NETWORK_OPTIONS = [
+  "MTN",
+  "Airtel",
+  "Glo",
+  "9Mobile",
   "Others",
 ] as const;
 

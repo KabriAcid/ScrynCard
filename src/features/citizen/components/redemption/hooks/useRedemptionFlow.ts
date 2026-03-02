@@ -30,6 +30,7 @@ export function useRedemptionFlow() {
       nin: "",
       occupation: "",
       phoneNumber: "",
+      network: "",
     },
   });
 

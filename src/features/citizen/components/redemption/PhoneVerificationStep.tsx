@@ -8,13 +8,17 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
-import { Phone } from "lucide-react";
+import { Phone, Wifi } from "lucide-react";
 import { StepHeader } from "../order/shared";
-import { RedemptionFormValues } from "./schema";
-import { NetworkDetector } from "@/lib/operators";
-import { Badge } from "@/components/ui/badge";
-import { PhoneFormatter } from "@/lib/formatters";
+import { RedemptionFormValues, NETWORK_OPTIONS } from "./schema";
 
 interface PhoneVerificationStepProps {
   isLoading: boolean;
@@ -29,34 +33,14 @@ export function PhoneVerificationStep({
 }: PhoneVerificationStepProps) {
   const form = useFormContext<RedemptionFormValues>();
   const phoneNumber = form.watch("phoneNumber");
-  const [detectionResult, setDetectionResult] = React.useState<any>(null);
-  const [error, setError] = React.useState<string | null>(null);
+  const network = form.watch("network");
 
   const handleNext = async () => {
-    const isValid = await form.trigger(["phoneNumber"]);
+    const isValid = await form.trigger(["phoneNumber", "network"]);
     if (isValid) {
       onNext();
     }
   };
-
-  // Detect operator in real-time
-  React.useEffect(() => {
-    if (phoneNumber && phoneNumber.length >= 10) {
-      // Clean the phone number by removing hyphens before detection
-      const cleanedPhone = phoneNumber.replace(/-/g, "");
-      const result = NetworkDetector.detect(cleanedPhone);
-      if (result.isValid) {
-        setDetectionResult(result);
-        setError(null);
-      } else {
-        setDetectionResult(null);
-        setError(result.errorMessage || "Invalid phone number format");
-      }
-    } else {
-      setDetectionResult(null);
-      setError(null);
-    }
-  }, [phoneNumber]);
 
   return (
     <div className="space-y-6">
@@ -69,6 +53,7 @@ export function PhoneVerificationStep({
       />
 
       <div className="space-y-4">
+        {/* Phone Number Field */}
         <FormField
           control={form.control}
           name="phoneNumber"
@@ -79,20 +64,58 @@ export function PhoneVerificationStep({
                 <div className="relative">
                   <Phone className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                   <Input
-                    placeholder="0703 123 4567"
+                    placeholder="08012345678"
                     maxLength={11}
                     {...field}
                     disabled={isLoading}
                     className="pl-10"
+                    onChange={(e) => {
+                      const value = e.target.value.replace(/\D/g, "");
+                      field.onChange(value);
+                    }}
                   />
                 </div>
               </FormControl>
+              <p className="text-xs text-muted-foreground mt-1">
+                {field.value?.length || 0}/11 digits
+              </p>
               <FormMessage />
             </FormItem>
           )}
         />
 
-        {error && <p className="text-sm text-destructive">{error}</p>}
+        {/* Network Provider Field */}
+        <FormField
+          control={form.control}
+          name="network"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Network Provider</FormLabel>
+              <Select
+                onValueChange={field.onChange}
+                defaultValue={field.value}
+                disabled={isLoading}
+              >
+                <FormControl>
+                  <div className="relative">
+                    <Wifi className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground z-10" />
+                    <SelectTrigger className="pl-10">
+                      <SelectValue placeholder="Select your network provider" />
+                    </SelectTrigger>
+                  </div>
+                </FormControl>
+                <SelectContent>
+                  {NETWORK_OPTIONS.map((network) => (
+                    <SelectItem key={network} value={network}>
+                      {network}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
 
         {/* Action Buttons */}
         <div className="flex gap-3 pt-4">
@@ -108,10 +131,10 @@ export function PhoneVerificationStep({
           <Button
             type="button"
             onClick={handleNext}
-            disabled={isLoading || !phoneNumber}
+            disabled={isLoading || !phoneNumber || !network}
             className="flex-1"
           >
-            Next
+            Continue
           </Button>
         </div>
       </div>

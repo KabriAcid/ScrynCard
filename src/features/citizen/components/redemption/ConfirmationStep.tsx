@@ -15,7 +15,6 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { RedemptionFormValues } from "./schema";
 import { useCitizenStore } from "@/stores/citizenStore";
-import { NetworkDetector } from "@/lib/operators";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
 
@@ -40,7 +39,7 @@ export function ConfirmationStep({
   const phoneNumber = form.getValues("phoneNumber");
   const nin = form.getValues("nin");
   const occupation = form.getValues("occupation");
-  const detectionResult = NetworkDetector.detect(phoneNumber);
+  const network = form.getValues("network");
 
   const handleSubmit = async () => {
     setSubmitError(null);
@@ -141,10 +140,10 @@ export function ConfirmationStep({
               </div>
               <Badge
                 className={`text-xs font-semibold border ${getOperatorColor(
-                  detectionResult.operator
+                  network
                 )}`}
               >
-                {detectionResult.operator}
+                {network}
               </Badge>
             </div>
             <div className="space-y-2 text-sm">
@@ -153,7 +152,7 @@ export function ConfirmationStep({
                   Number:
                 </span>{" "}
                 <span className="font-mono font-bold">
-                  {detectionResult.phoneNumber}
+                  {phoneNumber}
                 </span>
               </p>
               <p className="text-xs text-muted-foreground">
