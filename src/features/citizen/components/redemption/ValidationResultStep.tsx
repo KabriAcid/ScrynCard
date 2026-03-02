@@ -51,8 +51,8 @@ export function ValidationResultStep({
     return (
       <div className="space-y-6">
         <div className="text-center">
-          <h2 className="text-2xl font-bold">Processing Card</h2>
-          <p className="text-muted-foreground mt-1">
+          <h2 className="text-xl sm:text-2xl font-bold">Processing Card</h2>
+          <p className="text-sm sm:text-base text-muted-foreground mt-1">
             Validating your card details...
           </p>
         </div>
@@ -63,10 +63,10 @@ export function ValidationResultStep({
               <Spinner size="lg" className="text-primary" />
             </div>
             <div>
-              <h3 className="font-semibold text-primary text-lg">
+              <h3 className="font-semibold text-primary text-base sm:text-lg">
                 Verifying Card
               </h3>
-              <p className="text-sm text-muted-foreground mt-2">
+              <p className="text-xs sm:text-sm text-muted-foreground mt-2">
                 Please wait while we validate your card...
               </p>
             </div>
@@ -84,12 +84,12 @@ export function ValidationResultStep({
         <Card className="p-6 bg-green-50 border-green-200">
           <div className="space-y-4">
             <div className="flex items-center gap-3">
-              <CheckCircle2 className="h-6 w-6 text-green-600 flex-shrink-0" />
+              <CheckCircle2 className="h-5 w-5 sm:h-6 sm:w-6 text-green-600 flex-shrink-0" />
               <div>
-                <p className="font-semibold text-green-900 text-lg">
+                <p className="font-semibold text-green-900 text-base sm:text-lg">
                   Validation Successful!
                 </p>
-                <p className="text-sm text-green-700 mt-1">
+                <p className="text-xs sm:text-sm text-green-700 mt-1">
                   Your card details have been verified and confirmed.
                 </p>
               </div>
@@ -101,8 +101,8 @@ export function ValidationResultStep({
         <Card className="p-6">
           <div className="space-y-4">
             <div className="flex items-center gap-2 mb-4">
-              <CreditCard className="h-5 w-5 text-primary" />
-              <h3 className="font-semibold">Card Details</h3>
+              <CreditCard className="h-4 w-4 sm:h-5 sm:w-5 text-primary" />
+              <h3 className="font-semibold text-sm sm:text-base">Card Details</h3>
             </div>
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-1">
@@ -159,8 +159,8 @@ export function ValidationResultStep({
   return (
     <div className="space-y-6">
       <div>
-        <h2 className="text-2xl font-bold">Validation Failed</h2>
-        <p className="text-muted-foreground mt-1">
+        <h2 className="text-xl sm:text-2xl font-bold">Validation Failed</h2>
+        <p className="text-sm sm:text-base text-muted-foreground mt-1">
           We couldn't verify your card. Please try again.
         </p>
       </div>
@@ -169,13 +169,13 @@ export function ValidationResultStep({
       <Card className="p-6 bg-red-50 border-red-200">
         <div className="space-y-4">
           <div className="flex items-start gap-3">
-            <AlertCircle className="h-6 w-6 text-red-600 flex-shrink-0 mt-0.5" />
+            <AlertCircle className="h-5 w-5 sm:h-6 sm:w-6 text-red-600 flex-shrink-0 mt-0.5" />
             <div className="flex-1">
-              <p className="font-semibold text-red-900">
+              <p className="font-semibold text-red-900 text-sm sm:text-base">
                 {displayError?.message || "Card verification failed"}
               </p>
               {displayError?.details && (
-                <p className="text-sm text-red-700 mt-2">
+                <p className="text-xs sm:text-sm text-red-700 mt-2">
                   {displayError.details}
                 </p>
               )}
@@ -191,8 +191,8 @@ export function ValidationResultStep({
       <Card className="p-6">
         <div className="space-y-4">
           <div className="flex items-center gap-2 mb-4">
-            <CreditCard className="h-5 w-5 text-primary" />
-            <h3 className="font-semibold">Card Information</h3>
+            <CreditCard className="h-4 w-4 sm:h-5 sm:w-5 text-primary" />
+            <h3 className="font-semibold text-sm sm:text-base">Card Information</h3>
           </div>
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-1">

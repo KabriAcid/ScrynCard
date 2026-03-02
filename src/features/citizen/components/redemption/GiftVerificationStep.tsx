@@ -57,8 +57,8 @@ export function GiftVerificationStep({
   return (
     <div className="space-y-6">
       <div>
-        <h2 className="text-2xl font-bold">Verify Your Card</h2>
-        <p className="text-muted-foreground mt-1">
+        <h2 className="text-xl sm:text-2xl font-bold">Verify Your Card</h2>
+        <p className="text-sm sm:text-base text-muted-foreground mt-1">
           Enter the serial number and card code from your scratch card
         </p>
       </div>

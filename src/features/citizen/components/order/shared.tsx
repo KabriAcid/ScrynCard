@@ -87,22 +87,22 @@ export function StepHeader({
           transition={{ type: "spring", stiffness: 400 }}
         >
           <div className="absolute inset-0 bg-primary/20 rounded-xl blur-lg" />
-          <div className="relative p-3 bg-gradient-to-br from-primary to-primary/80 rounded-xl shadow-lg">
-            <Icon className="h-6 w-6 text-primary-foreground" />
+          <div className="relative p-2 sm:p-3 bg-gradient-to-br from-primary to-primary/80 rounded-xl shadow-lg">
+            <Icon className="h-5 w-5 sm:h-6 sm:w-6 text-primary-foreground" />
           </div>
         </motion.div>
 
         {/* Text content */}
         <div className="flex-1 min-w-0">
-          <div className="flex items-center gap-3 mb-1">
-            <h2 className="text-xl font-bold text-foreground tracking-tight">
+          <div className="flex items-center gap-2 sm:gap-3 mb-1">
+            <h2 className="text-lg sm:text-xl font-bold text-foreground tracking-tight">
               {title}
             </h2>
-            <span className="px-2 py-0.5 text-xs font-medium bg-primary/10 text-primary rounded-full">
+            <span className="px-2 py-0.5 text-xs font-medium bg-primary/10 text-primary rounded-full whitespace-nowrap">
               {step}/{totalSteps}
             </span>
           </div>
-          <p className="text-muted-foreground text-sm leading-relaxed">
+          <p className="text-muted-foreground text-xs sm:text-sm leading-relaxed">
             {description}
           </p>
         </div>
@@ -193,7 +193,7 @@ export function GlassCard({
         "backdrop-blur-xl border border-border/50",
         "shadow-[0_8px_30px_rgb(0,0,0,0.04)]",
         hover &&
-          "hover:border-primary/30 hover:shadow-lg transition-all duration-300",
+        "hover:border-primary/30 hover:shadow-lg transition-all duration-300",
         className
       )}
     >

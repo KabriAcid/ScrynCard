@@ -78,8 +78,8 @@ export function ConfirmationStep({
         <Card className="p-4 border-2 border-border">
           <div className="space-y-3">
             <div className="flex items-center gap-2 mb-3">
-              <CreditCard className="h-5 w-5 text-primary" />
-              <h3 className="font-semibold text-foreground">Card Details</h3>
+              <CreditCard className="h-4 w-4 sm:h-5 sm:w-5 text-primary" />
+              <h3 className="font-semibold text-foreground text-sm sm:text-base">Card Details</h3>
             </div>
             <div className="space-y-3 text-sm">
               <div>
@@ -133,8 +133,8 @@ export function ConfirmationStep({
           <div className="space-y-3">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <Phone className="h-5 w-5 text-primary" />
-                <h3 className="font-semibold text-foreground">
+                <Phone className="h-4 w-4 sm:h-5 sm:w-5 text-primary" />
+                <h3 className="font-semibold text-foreground text-sm sm:text-base">
                   Recipient Phone
                 </h3>
               </div>
@@ -166,8 +166,8 @@ export function ConfirmationStep({
         <Card className="p-4 border-2 border-border">
           <div className="space-y-3">
             <div className="flex items-center gap-2 mb-3">
-              <User className="h-5 w-5 text-primary" />
-              <h3 className="font-semibold text-foreground">
+              <User className="h-4 w-4 sm:h-5 sm:w-5 text-primary" />
+              <h3 className="font-semibold text-foreground text-sm sm:text-base">
                 Beneficiary Information
               </h3>
             </div>
@@ -199,7 +199,7 @@ export function ConfirmationStep({
         )}
 
         {/* Important Notice */}
-        <div className="bg-amber-50 border border-amber-200 rounded-lg p-3 text-xs text-amber-800 space-y-1">
+        <div className="bg-amber-50 border border-amber-200 rounded-lg p-3 text-xs sm:text-sm text-amber-800 space-y-1">
           <p className="font-semibold flex items-center gap-2">
             <span>⚠️</span> Important
           </p>

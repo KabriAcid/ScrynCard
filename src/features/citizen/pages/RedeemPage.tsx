@@ -21,7 +21,8 @@ export default function RedeemPage() {
           <Logo />
           <Button variant="ghost" onClick={() => navigate("/")}>
             <ArrowLeft className="mr-2 h-4 w-4" />
-            Back to Home
+            <span className="hidden sm:inline">Back to Home</span>
+            <span className="sm:hidden">Back</span>
           </Button>
         </div>
       </header>
@@ -29,10 +30,10 @@ export default function RedeemPage() {
       <main className="w-full max-w-2xl mt-20">
         <Card className="shadow-2xl">
           <CardHeader className="text-center">
-            <CardTitle className="text-3xl font-bold">
+            <CardTitle className="text-2xl sm:text-3xl font-bold">
               Redeem Your Gift
             </CardTitle>
-            <CardDescription>
+            <CardDescription className="text-sm sm:text-base">
               Complete the process in three simple steps
             </CardDescription>
           </CardHeader>

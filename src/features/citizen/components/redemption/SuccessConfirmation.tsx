@@ -99,17 +99,17 @@ export const SuccessConfirmation = ({
         variants={checkmarkVariants}
         initial="initial"
         animate="animate"
-        className="flex h-20 w-20 items-center justify-center rounded-full bg-gradient-to-br from-green-400 to-green-600"
+        className="flex h-16 w-16 sm:h-20 sm:w-20 items-center justify-center rounded-full bg-gradient-to-br from-green-400 to-green-600"
       >
-        <Check className="h-10 w-10 text-white" strokeWidth={3} />
+        <Check className="h-8 w-8 sm:h-10 sm:w-10 text-white" strokeWidth={3} />
       </motion.div>
 
       {/* Success Message */}
-      <motion.div variants={itemVariants} className="text-center">
-        <h2 className="text-2xl font-bold text-foreground">
+      <motion.div variants={itemVariants} className="text-center px-4">
+        <h2 className="text-xl sm:text-2xl font-bold text-foreground">
           Gift Redeemed Successfully!
         </h2>
-        <p className="mt-2 text-sm text-muted-foreground">
+        <p className="mt-2 text-xs sm:text-sm text-muted-foreground">
           Your {giftDetails?.giftType} has been sent to your phone
         </p>
       </motion.div>
@@ -119,8 +119,8 @@ export const SuccessConfirmation = ({
         {/* Gift Card */}
         <div className="rounded-lg border-2 border-blue-200 bg-blue-50 p-4">
           <div className="flex items-center gap-2 mb-3">
-            <Gift className="h-5 w-5 text-blue-600" />
-            <h3 className="font-semibold text-blue-900">Gift Details</h3>
+            <Gift className="h-4 w-4 sm:h-5 sm:w-5 text-blue-600" />
+            <h3 className="font-semibold text-blue-900 text-sm sm:text-base">Gift Details</h3>
           </div>
           <div className="space-y-2 text-sm text-blue-900">
             <div className="flex justify-between">
@@ -149,8 +149,8 @@ export const SuccessConfirmation = ({
         {/* Phone Card */}
         <div className="rounded-lg border-2 border-green-200 bg-green-50 p-4">
           <div className="flex items-center gap-2 mb-3">
-            <Phone className="h-5 w-5 text-green-600" />
-            <h3 className="font-semibold text-green-900">Recipient</h3>
+            <Phone className="h-4 w-4 sm:h-5 sm:w-5 text-green-600" />
+            <h3 className="font-semibold text-green-900 text-sm sm:text-base">Recipient</h3>
           </div>
           <div className="space-y-2 text-sm text-green-900">
             <div className="flex justify-between items-center">
@@ -172,7 +172,7 @@ export const SuccessConfirmation = ({
       {/* Countdown */}
       <motion.div
         variants={itemVariants}
-        className="text-center text-sm text-muted-foreground"
+        className="text-center text-xs sm:text-sm text-muted-foreground"
       >
         <p>Redirecting to home in</p>
         <motion.div
@@ -181,7 +181,7 @@ export const SuccessConfirmation = ({
           initial="initial"
           animate="animate"
           exit="exit"
-          className="mt-2 text-3xl font-bold text-primary"
+          className="mt-2 text-2xl sm:text-3xl font-bold text-primary"
         >
           {countdown}
         </motion.div>
