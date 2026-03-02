@@ -75,7 +75,7 @@ export function ConfirmationStep({
 
       <div className="space-y-4">
         {/* Card Details */}
-        <Card className="p-4 border-2 border-border bg-accent/50">
+        <Card className="p-4 border-2 border-border">
           <div className="space-y-3">
             <div className="flex items-center gap-2 mb-3">
               <CreditCard className="h-5 w-5 text-primary" />
@@ -129,7 +129,7 @@ export function ConfirmationStep({
         </Card>
 
         {/* Phone Details */}
-        <Card className="p-4 border-2 border-border bg-accent/50">
+        <Card className="p-4 border-2 border-border">
           <div className="space-y-3">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
@@ -163,7 +163,7 @@ export function ConfirmationStep({
         </Card>
 
         {/* Beneficiary Information */}
-        <Card className="p-4 border-2 border-border bg-accent/50">
+        <Card className="p-4 border-2 border-border">
           <div className="space-y-3">
             <div className="flex items-center gap-2 mb-3">
               <User className="h-5 w-5 text-primary" />
