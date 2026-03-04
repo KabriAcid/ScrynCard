@@ -3,8 +3,6 @@ import { useFormContext } from "react-hook-form";
 import {
   FileCheck,
   AlertCircle,
-  CheckCircle2,
-  Loader2,
   CreditCard,
   Phone,
   User,
@@ -14,7 +12,6 @@ import { StepHeader } from "../order/shared";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { RedemptionFormValues } from "./schema";
-import { useCitizenStore } from "@/stores/citizenStore";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
 
@@ -48,7 +45,7 @@ export function ConfirmationStep({
       await onSubmit(values);
     } catch (error) {
       setSubmitError(
-        error instanceof Error ? error.message : "Failed to process redemption"
+        error instanceof Error ? error.message : "Failed to process redemption",
       );
     }
   };
@@ -79,7 +76,9 @@ export function ConfirmationStep({
           <div className="space-y-3">
             <div className="flex items-center gap-2 mb-3">
               <CreditCard className="h-4 w-4 sm:h-5 sm:w-5 text-primary" />
-              <h3 className="font-semibold text-foreground text-sm sm:text-base">Card Details</h3>
+              <h3 className="font-semibold text-foreground text-sm sm:text-base">
+                Card Details
+              </h3>
             </div>
             <div className="space-y-3 text-sm">
               <div>
@@ -140,7 +139,7 @@ export function ConfirmationStep({
               </div>
               <Badge
                 className={`text-xs font-semibold border ${getOperatorColor(
-                  network
+                  network,
                 )}`}
               >
                 {network}
@@ -151,9 +150,7 @@ export function ConfirmationStep({
                 <span className="text-muted-foreground font-semibold">
                   Number:
                 </span>{" "}
-                <span className="font-mono font-bold">
-                  {phoneNumber}
-                </span>
+                <span className="font-mono font-bold">{phoneNumber}</span>
               </p>
               <p className="text-xs text-muted-foreground">
                 Your {giftDetails?.giftType} will be sent to this number
@@ -223,10 +220,9 @@ export function ConfirmationStep({
         <Button
           type="button"
           onClick={handleSubmit}
-          disabled={isLoading}
+          isLoading={isLoading}
           className="flex-1"
         >
-          {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
           {isLoading ? "Processing..." : "Confirm & Redeem"}
         </Button>
       </div>

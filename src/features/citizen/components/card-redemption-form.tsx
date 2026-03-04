@@ -20,11 +20,8 @@ export function CardRedemptionForm() {
     onSubmit,
   } = useRedemptionFlow();
 
-  console.log("📊 CardRedemptionForm render - showSuccess:", showSuccess, "submittedValues:", submittedValues);
-
   // Show success screen outside of form context
   if (showSuccess && submittedValues) {
-    console.log("🎊 Rendering success screen outside form");
     return (
       <RedemptionStepContent
         step={step}
