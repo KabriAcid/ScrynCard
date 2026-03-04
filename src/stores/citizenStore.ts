@@ -19,7 +19,7 @@ interface CitizenState {
   redeemGift: (
     giftCode: string,
     phoneNumber: string,
-    network: string
+    network: string,
   ) => Promise<{
     success: boolean;
     error?: string;
@@ -91,11 +91,19 @@ export const useCitizenStore = create<CitizenState>((set) => ({
     }
   },
 
-  redeemGift: async (giftCode: string, phoneNumber: string, network: string) => {
+  redeemGift: async (
+    giftCode: string,
+    phoneNumber: string,
+    network: string,
+  ) => {
     set({ isLoading: true, error: null });
     try {
       // Step 1: Validate phone number format (basic)
-      if (!phoneNumber || phoneNumber.length !== 11 || !phoneNumber.startsWith('0')) {
+      if (
+        !phoneNumber ||
+        phoneNumber.length !== 11 ||
+        !phoneNumber.startsWith("0")
+      ) {
         set({
           error: "Invalid phone number format",
           isLoading: false,
@@ -116,7 +124,7 @@ export const useCitizenStore = create<CitizenState>((set) => ({
         giftCode,
         giftType,
         network,
-        amount
+        amount,
       );
 
       if (response.status === "success") {
