@@ -19,7 +19,7 @@ interface CitizenState {
   redeemGift: (
     giftCode: string,
     phoneNumber: string,
-    network: string
+    network: string,
   ) => Promise<{
     success: boolean;
     error?: string;
@@ -91,11 +91,19 @@ export const useCitizenStore = create<CitizenState>((set) => ({
     }
   },
 
-  redeemGift: async (giftCode: string, phoneNumber: string, network: string) => {
+  redeemGift: async (
+    giftCode: string,
+    phoneNumber: string,
+    network: string,
+  ) => {
     set({ isLoading: true, error: null });
     try {
       // Step 1: Validate phone number format (basic)
-      if (!phoneNumber || phoneNumber.length !== 11 || !phoneNumber.startsWith('0')) {
+      if (
+        !phoneNumber ||
+        phoneNumber.length !== 11 ||
+        !phoneNumber.startsWith("0")
+      ) {
         set({
           error: "Invalid phone number format",
           isLoading: false,
@@ -106,13 +114,9 @@ export const useCitizenStore = create<CitizenState>((set) => ({
         };
       }
 
-      // Step 2: Validate gift code (call the validateGift method from store)
-      // Get the current store state
-      const storeState = (set as any)(() => { });
-
-      // For now, simulate validation - in production, this should call actual validation
-      const giftType: "airtime" | "data" = "airtime"; // or "data" based on your logic
-      const amount = 100; // Mock amount
+      // Simulate gift type/amount - in production this comes from the validated card
+      const giftType: "airtime" | "data" = "airtime";
+      const amount = 100;
 
       // Step 3: Call AirtimeService to redeem
       const response = await AirtimeService.redeem(
@@ -120,7 +124,7 @@ export const useCitizenStore = create<CitizenState>((set) => ({
         giftCode,
         giftType,
         network,
-        amount
+        amount,
       );
 
       if (response.status === "success") {
