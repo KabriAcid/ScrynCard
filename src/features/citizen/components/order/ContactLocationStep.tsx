@@ -1,15 +1,11 @@
 import { motion } from "framer-motion";
 import {
-  Mail,
-  Phone,
   MapPin,
   Building2,
   ArrowRight,
-  ArrowLeft,
   Globe,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import {
   Select,
   SelectContent,
@@ -64,8 +60,8 @@ export function ContactLocationStep({
       {/* Step Header */}
       <StepHeader
         icon={MapPin}
-        title="Contact & Location"
-        description="How can we reach you and where should we deliver?"
+        title="Delivery Location"
+        description="Select your state and local government area for delivery"
         step={2}
         totalSteps={3}
       />
@@ -77,70 +73,6 @@ export function ContactLocationStep({
         animate="visible"
         className="space-y-6"
       >
-        {/* Contact Information Section */}
-        <GlassCard>
-          <FormSection
-            title="Contact Information"
-            description="We'll use this to send order updates and delivery notifications"
-          >
-            <FormGrid>
-              {/* Email Input */}
-              <motion.div variants={itemVariants}>
-                <FormField
-                  control={form.control}
-                  name="email"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel className="text-foreground font-medium">
-                        Email Address
-                      </FormLabel>
-                      <FormControl>
-                        <div className="relative">
-                          <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground pointer-events-none" />
-                          <Input
-                            type="email"
-                            placeholder="you@example.com"
-                            {...field}
-                            className="h-11 pl-10 bg-background/50 border-border/50 hover:border-primary/50 focus:border-primary transition-colors"
-                          />
-                        </div>
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </motion.div>
-
-              {/* Phone Input */}
-              <motion.div variants={itemVariants}>
-                <FormField
-                  control={form.control}
-                  name="phone"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel className="text-foreground font-medium">
-                        Phone Number
-                      </FormLabel>
-                      <FormControl>
-                        <div className="relative">
-                          <Phone className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground pointer-events-none" />
-                          <Input
-                            type="tel"
-                            placeholder="08012345678"
-                            {...field}
-                            className="h-11 pl-10 bg-background/50 border-border/50 hover:border-primary/50 focus:border-primary transition-colors"
-                          />
-                        </div>
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </motion.div>
-            </FormGrid>
-          </FormSection>
-        </GlassCard>
-
         {/* Location Section */}
         <GlassCard>
           <FormSection

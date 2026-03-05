@@ -7,7 +7,6 @@ import { Form } from "@/components/ui/form";
 import { useToast } from "@/hooks/use-toast";
 import { useNavigate } from "react-router-dom";
 import { OrderSchema, OrderFormValues, StepConfig } from "./schema";
-import { OrderStepIndicator } from "./OrderStepIndicator";
 import { PersonalDetailsStep } from "./PersonalDetailsStep";
 import { ContactLocationStep } from "./ContactLocationStep";
 import { CardDetailsStep } from "./CardDetailsStep";
@@ -20,11 +19,10 @@ const STEPS: StepConfig[] = [
   {
     id: 1,
     title: "Your Information",
-    description: "Your contact details",
+    description: "Your personal details",
     fields: [
       "fullName",
-      "email",
-      "phone",
+      "nin",
     ] as const,
     icon: User,
   },
@@ -61,8 +59,7 @@ export function OrderForm() {
     mode: "onChange",
     defaultValues: {
       fullName: "",
-      email: "",
-      phone: "",
+      nin: "",
       state: "",
       lga: "",
       orderItems: [],
@@ -80,8 +77,8 @@ export function OrderForm() {
           values,
           step: savedStep,
         } = JSON.parse(savedState);
-        // Remove old political fields if they exist
-        const { title, politicianName, politicalParty, politicalRole, photo, ward, ...cleanedValues } = values;
+        // Remove old fields if they exist (email, phone, political fields)
+        const { title, politicianName, politicalParty, politicalRole, photo, ward, email, phone, ...cleanedValues } = values;
         form.reset(cleanedValues);
         setStep(savedStep);
       }
@@ -189,9 +186,6 @@ export function OrderForm() {
           onSubmit={form.handleSubmit(handleFormSubmit)}
           className="space-y-8 w-full max-w-2xl mx-auto"
         >
-          {/* Step Indicator */}
-          <OrderStepIndicator steps={STEPS} currentStep={step} />
-
           {/* Form Content */}
           <div className="relative min-h-[600px]">
             <AnimatePresence mode="wait" initial={false}>

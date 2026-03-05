@@ -29,7 +29,7 @@ export default function PoliticianDashboardPage() {
     const timer = setTimeout(() => {
       setRecentOrders(getRecentOrders(5));
       setDashboardStats({
-        totalOrderValue: 4050000, // ₦45.75M total distributed
+        totalOrderValue: 4500000, // ₦4.5M total distributed
         activeOrders: 8, // 8 active orders
         totalRedemptions: 2458, // 2,458 successful redemptions
         redemptionRate: 78.5, // 78.5% redemption rate
