@@ -316,7 +316,7 @@ export default function PoliticiansPage() {
                               <AvatarImage
                                 src={
                                   politician.fullName === "Dikko Umar Radda"
-                                    ? "/img/dikko-radda.png"
+                                    ? "/img/avatar.jpg"
                                     : undefined
                                 }
                               />
@@ -344,10 +344,10 @@ export default function PoliticiansPage() {
                               politician.party === "APC"
                                 ? "border-green-500 text-green-600"
                                 : politician.party === "PDP"
-                                ? "border-red-500 text-red-600"
-                                : politician.party === "LP"
-                                ? "border-purple-500 text-purple-600"
-                                : ""
+                                  ? "border-red-500 text-red-600"
+                                  : politician.party === "LP"
+                                    ? "border-purple-500 text-purple-600"
+                                    : ""
                             }
                           >
                             {politician.party}

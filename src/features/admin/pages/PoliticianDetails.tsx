@@ -165,7 +165,7 @@ export default function PoliticianDetailsPage() {
             <AvatarImage
               src={
                 politician.fullName === "Dikko Umar Radda"
-                  ? "/img/dikko-radda.png"
+                  ? "/img/avatar.jpg"
                   : undefined
               }
             />
@@ -185,10 +185,10 @@ export default function PoliticianDetailsPage() {
                   politician.party === "APC"
                     ? "border-green-500 text-green-600"
                     : politician.party === "PDP"
-                    ? "border-red-500 text-red-600"
-                    : politician.party === "LP"
-                    ? "border-purple-500 text-purple-600"
-                    : ""
+                      ? "border-red-500 text-red-600"
+                      : politician.party === "LP"
+                        ? "border-purple-500 text-purple-600"
+                        : ""
                 }
               >
                 {politician.party}
@@ -278,8 +278,8 @@ export default function PoliticianDetailsPage() {
             <p className="text-xs text-muted-foreground">
               {totalOrders > 0
                 ? `${Math.round(
-                    (completedOrders / totalOrders) * 100
-                  )}% completion rate`
+                  (completedOrders / totalOrders) * 100
+                )}% completion rate`
                 : "No orders yet"}
             </p>
           </CardContent>
@@ -403,10 +403,10 @@ export default function PoliticianDetailsPage() {
                               order.status === "completed"
                                 ? "default"
                                 : order.status === "processing"
-                                ? "secondary"
-                                : order.status === "pending"
-                                ? "outline"
-                                : "destructive"
+                                  ? "secondary"
+                                  : order.status === "pending"
+                                    ? "outline"
+                                    : "destructive"
                             }
                             className={
                               order.status === "completed"

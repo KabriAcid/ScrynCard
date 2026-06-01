@@ -4,15 +4,18 @@ import { generateId } from "./utils";
 export const mockPoliticians: Politician[] = [
   {
     id: generateId("POL"),
-    fullName: "Dikko Umar Radda",
-    email: "dikko.radda@example.com",
-    phone: "+2348011234567",
-    role: "politician",
+    fullName: "Abdullahi Abubakar Kabri",
+    email: "abdullahikabri@gmail.com",
+    phone: "+2347037943396",
+    role: "businessman",
     verified: true,
     createdAt: new Date(2023, 4, 29).toISOString(),
     bvn: "22345678901",
     nin: "22345678901234",
     organization: "Community Development Initiative",
+    state: "Katsina",
+    lga: "Rimi",
+    position: "Managing Director"
   },
   {
     id: generateId("POL"),
@@ -25,6 +28,9 @@ export const mockPoliticians: Politician[] = [
     bvn: "12345678999",
     nin: "12345678999234",
     organization: "Business Enterprise Group",
+    state: "Katsina",
+    lga: "Rimi",
+    position: "Managing Director"
   },
   {
     id: generateId("POL"),
@@ -37,6 +43,9 @@ export const mockPoliticians: Politician[] = [
     bvn: "12345678903",
     nin: "12345678901236",
     organization: "Social Welfare Foundation",
+    state: "Katsina",
+    lga: "Mashi",
+    position: "Chief Operating Officer"
   },
   {
     id: generateId("POL"),
@@ -49,6 +58,9 @@ export const mockPoliticians: Politician[] = [
     bvn: "12345678904",
     nin: "12345678901237",
     organization: "Economic Development Corp",
+    state: "Katsina",
+    lga: "Batagarawa",
+    position: "Executive Officer"
   },
   {
     id: generateId("POL"),
@@ -61,5 +73,8 @@ export const mockPoliticians: Politician[] = [
     bvn: "12345678905",
     nin: "12345678901238",
     organization: "Trade & Commerce Network",
+    state: "Kano",
+    lga: "Bichi",
+    position: "Accountant"
   },
 ];

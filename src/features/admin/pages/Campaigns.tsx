@@ -368,8 +368,8 @@ export default function CampaignsPage() {
                                 <AvatarImage
                                   src={
                                     order.politician?.fullName ===
-                                    "Dikko Umar Radda"
-                                      ? "/img/dikko-radda.png"
+                                      "Dikko Umar Radda"
+                                      ? "/img/avatar.jpg"
                                       : undefined
                                   }
                                 />
@@ -478,8 +478,8 @@ export default function CampaignsPage() {
                   </h3>
                   <p className="text-muted-foreground">
                     {searchQuery ||
-                    statusFilter !== "all" ||
-                    partyFilter !== "all"
+                      statusFilter !== "all" ||
+                      partyFilter !== "all"
                       ? "Try adjusting your filters"
                       : "No campaigns have been created yet"}
                   </p>

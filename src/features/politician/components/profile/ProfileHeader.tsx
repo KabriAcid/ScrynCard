@@ -47,7 +47,7 @@ export function ProfileHeader({
             <div className="relative">
               <Avatar className="h-32 w-32 border-4 border-background shadow-xl">
                 <AvatarImage
-                  src="/img/dikko-radda.png"
+                  src="/img/avatar.jpg"
                   alt={userProfile.fullName}
                 />
                 <AvatarFallback className="text-3xl bg-primary text-primary-foreground">

@@ -133,9 +133,8 @@ function KPICard({
               }
             >
               <TrendingUp
-                className={`h-3 w-3 mr-1 ${
-                  !trend.isPositive ? "rotate-180" : ""
-                }`}
+                className={`h-3 w-3 mr-1 ${!trend.isPositive ? "rotate-180" : ""
+                  }`}
               />
               {trend.value}
             </Badge>
@@ -443,8 +442,8 @@ export default function AdminOverviewPage() {
                       order.status === "completed"
                         ? "default"
                         : order.status === "processing"
-                        ? "secondary"
-                        : "outline"
+                          ? "secondary"
+                          : "outline"
                     }
                     className={
                       order.status === "completed"
@@ -473,7 +472,7 @@ export default function AdminOverviewPage() {
                     <AvatarImage
                       src={
                         order.politician?.fullName === "Dikko Umar Radda"
-                          ? "/img/dikko-radda.png"
+                          ? "/img/avatar.jpg"
                           : undefined
                       }
                     />

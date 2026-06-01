@@ -84,7 +84,7 @@ const topPoliticians = [
     position: "Governor",
     cardsIssued: 15000,
     totalValue: 75000000,
-    avatar: "/img/dikko-radda.png",
+    avatar: "/img/avatar.jpg",
   },
   {
     name: "Ibrahim Masari",

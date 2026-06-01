@@ -30,7 +30,7 @@ export default function PoliticianLayout({
             <div className="flex items-center gap-3">
               <Avatar>
                 <AvatarImage
-                  src="/img/dikko-radda.png"
+                  src="/img/avatar.jpg"
                   alt="Dikko Umar Radda"
                 />
                 <AvatarFallback>

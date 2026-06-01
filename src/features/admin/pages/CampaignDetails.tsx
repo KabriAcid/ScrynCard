@@ -234,7 +234,7 @@ export default function CampaignDetailsPage() {
             <AvatarImage
               src={
                 campaign.politician?.fullName === "Dikko Umar Radda"
-                  ? "/img/dikko-radda.png"
+                  ? "/img/avatar.jpg"
                   : undefined
               }
             />
@@ -254,10 +254,10 @@ export default function CampaignDetailsPage() {
                   campaign.politician?.party === "APC"
                     ? "border-green-500 text-green-600"
                     : campaign.politician?.party === "PDP"
-                    ? "border-red-500 text-red-600"
-                    : campaign.politician?.party === "LP"
-                    ? "border-purple-500 text-purple-600"
-                    : ""
+                      ? "border-red-500 text-red-600"
+                      : campaign.politician?.party === "LP"
+                        ? "border-purple-500 text-purple-600"
+                        : ""
                 }
               >
                 {campaign.politician?.party}
@@ -624,7 +624,7 @@ export default function CampaignDetailsPage() {
                   <AvatarImage
                     src={
                       campaign.politician?.fullName === "Dikko Umar Radda"
-                        ? "/img/dikko-radda.png"
+                        ? "/img/avatar.jpg"
                         : undefined
                     }
                   />

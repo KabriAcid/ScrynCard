@@ -267,10 +267,10 @@ export default function CardDetailsPage() {
               {card.status === "redeemed"
                 ? "Value has been claimed"
                 : card.status === "active"
-                ? "Ready for redemption"
-                : card.status === "blocked"
-                ? "Card is disabled"
-                : "Card has expired"}
+                  ? "Ready for redemption"
+                  : card.status === "blocked"
+                    ? "Card is disabled"
+                    : "Card has expired"}
             </p>
           </CardContent>
         </Card>
@@ -302,9 +302,9 @@ export default function CardDetailsPage() {
             <div className="text-2xl font-bold">
               {card.expiresAt
                 ? new Date(card.expiresAt).toLocaleDateString("en-NG", {
-                    day: "numeric",
-                    month: "short",
-                  })
+                  day: "numeric",
+                  month: "short",
+                })
                 : "N/A"}
             </div>
             <p className="text-xs text-muted-foreground">
@@ -312,9 +312,9 @@ export default function CardDetailsPage() {
                 ? isExpired
                   ? "Card has expired"
                   : `${Math.ceil(
-                      (new Date(card.expiresAt).getTime() - Date.now()) /
-                        (1000 * 60 * 60 * 24)
-                    )} days remaining`
+                    (new Date(card.expiresAt).getTime() - Date.now()) /
+                    (1000 * 60 * 60 * 24)
+                  )} days remaining`
                 : "No expiry set"}
             </p>
           </CardContent>
@@ -389,10 +389,10 @@ export default function CardDetailsPage() {
                     value={
                       card.expiresAt
                         ? new Date(card.expiresAt).toLocaleDateString("en-NG", {
-                            day: "numeric",
-                            month: "long",
-                            year: "numeric",
-                          })
+                          day: "numeric",
+                          month: "long",
+                          year: "numeric",
+                        })
                         : "N/A"
                     }
                   />
@@ -440,15 +440,15 @@ export default function CardDetailsPage() {
                       value={
                         card.redeemedAt
                           ? new Date(card.redeemedAt).toLocaleDateString(
-                              "en-NG",
-                              {
-                                day: "numeric",
-                                month: "long",
-                                year: "numeric",
-                                hour: "2-digit",
-                                minute: "2-digit",
-                              }
-                            )
+                            "en-NG",
+                            {
+                              day: "numeric",
+                              month: "long",
+                              year: "numeric",
+                              hour: "2-digit",
+                              minute: "2-digit",
+                            }
+                          )
                           : "N/A"
                       }
                     />
@@ -522,7 +522,7 @@ export default function CardDetailsPage() {
                       <AvatarImage
                         src={
                           order.politician?.fullName === "Dikko Umar Radda"
-                            ? "/img/dikko-radda.png"
+                            ? "/img/avatar.jpg"
                             : undefined
                         }
                       />

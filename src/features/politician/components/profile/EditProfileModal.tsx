@@ -79,7 +79,7 @@ export function EditProfileModal({
             <div className="relative">
               <Avatar className="h-20 w-20">
                 <AvatarImage
-                  src="/img/dikko-radda.png"
+                  src="/img/avatar.jpg"
                   alt={userProfile.fullName}
                 />
                 <AvatarFallback className="text-lg">

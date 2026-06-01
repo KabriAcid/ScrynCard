@@ -26,7 +26,7 @@ export function getDemoUserProfile(): UserProfile {
 function enrichPoliticianProfile(politician: Politician): UserProfile {
   return {
     ...politician,
-    avatar: `/img/dikko-radda.png`,
+    avatar: `/img/avatar.jpg`,
     bio: "Dedicated public servant committed to development and innovation",
     statistics: {
       totalOrders: Math.floor(Math.random() * 50) + 10,
