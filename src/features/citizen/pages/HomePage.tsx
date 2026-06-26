@@ -35,11 +35,11 @@ export default function HomePage() {
           <div className="absolute inset-0 bg-gradient-to-t from-background to-background/50" />
           <div className="container relative z-10 mx-auto px-4 text-center md:px-6">
             <h1 className="text-4xl font-bold tracking-tighter text-foreground sm:text-5xl md:text-6xl lg:text-7xl">
-              Empowering Nigerian Communities
+              Rewarding Nigerian Citizens
             </h1>
             <p className="mx-auto mt-4 max-w-[700px] text-lg text-muted-foreground md:text-xl">
               A transparent, efficient, and secure platform for distributing
-              funds.
+              value.
             </p>
             <div className="mt-12 flex justify-center">
               <Button

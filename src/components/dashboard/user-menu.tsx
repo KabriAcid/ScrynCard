@@ -49,7 +49,6 @@ export function UserMenu() {
 
   const displayName = userProfile.fullName || user?.fullName || "User";
   const displayEmail = userProfile.email || user?.email || "user@example.com";
-  const displayParty = userProfile.party || "N/A";
   const avatar = userProfile.avatar;
   const initials = getInitials(displayName);
 
@@ -74,9 +73,6 @@ export function UserMenu() {
           <div className="flex flex-col space-y-1">
             <div className="flex items-center gap-2">
               <p className="text-sm font-medium leading-none">{displayName}</p>
-              <Badge variant="secondary" className="text-xs">
-                {displayParty}
-              </Badge>
             </div>
             <p className="text-xs leading-none text-muted-foreground">
               {displayEmail}

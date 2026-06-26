@@ -1,4 +1,4 @@
-// import Lottie from "lottie-react";
+import Lottie from "lottie-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useEffect, useState } from "react";
 import { Gift, Phone } from "lucide-react";
@@ -104,11 +104,11 @@ export function SuccessConfirmation({
   return (
     <div className="flex flex-col items-center gap-5 py-4 px-4">
       {/* Lottie animation */}
-      {/* <Lottie
+      <Lottie
         animationData={successAnimation}
         loop={false}
         style={{ width: 180, height: 180 }}
-      /> */}
+      />
 
       {/* Heading */}
       <motion.div
