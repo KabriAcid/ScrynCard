@@ -1,4 +1,4 @@
-https://www.figma.com/design/tPeHbkVtc1QERApjFLEUFI/Scryn?t=vN1psrGvzXz2t070-0
+https://www.figma.com/design/nLBMhGxzBkAdQ8AkrW2pte/ScrynCard?node-id=0-1&p=f&t=3ycuRnmutKolHq8y-0
 
 # ScrynCard - Mobile Airtime & Data Scratch Card Platform
 ## Complete Technical Documentation
