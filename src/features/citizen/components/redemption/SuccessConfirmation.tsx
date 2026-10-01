@@ -16,7 +16,7 @@ export interface SuccessConfirmationProps {
 }
 
 export function SuccessConfirmation({ onComplete }: SuccessConfirmationProps) {
-  const [animationData, setAnimationData] = useState<object | null>(null);
+  const [animationData, setAnimationData] = useState<any>(null);
 
   useEffect(() => {
     const timeoutId = window.setTimeout(onComplete, 10_000);
