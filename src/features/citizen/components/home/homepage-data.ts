@@ -1,7 +1,3 @@
-import { formatNaira } from "@/lib/formatters";
-import { mockPoliticians } from "@/lib/mock/politicians";
-import { mockRedemptions } from "@/lib/mock/redemptions";
-
 export const frontSamples = __SAMPLE_IMAGES__.filter(
 	(sample) => !sample.isBack,
 );
@@ -13,29 +9,18 @@ export const supportingSamples = frontSamples
 	.filter((sample) => sample.src !== featuredSample?.src)
 	.slice(0, 2);
 
-const completedRedemptions = mockRedemptions.filter(
-	(redemption) => redemption.status === "completed",
-);
-
 export const homeStats = [
 	{
 		label: "Partner organizations",
-		value: new Set(
-			mockPoliticians.map((politician) => politician.organization),
-		).size.toString(),
+		value: "148",
 	},
 	{
 		label: "Cards redeemed",
-		value: completedRedemptions.length.toString(),
+		value: "5,483",
 	},
 	{
 		label: "Value redeemed",
-		value: formatNaira(
-			completedRedemptions.reduce(
-				(total, redemption) => total + redemption.amount,
-				0,
-			),
-		),
+		value: "₦5,483,483",
 		compact: true,
 	},
 ];
