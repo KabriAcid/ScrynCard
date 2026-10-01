@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Check, CreditCard, User } from "lucide-react";
+import { CreditCard, User } from "lucide-react";
 import { StepHeader } from "../order/shared";
 import { RedemptionFormValues, OCCUPATION_OPTIONS } from "./schema";
 
@@ -101,20 +101,13 @@ export function BioDataStep({ isLoading, onNext, onPrev }: BioDataStepProps) {
 												className="peer sr-only"
 											/>
 											<span
-												key={occupation}
-												className={`inline-flex min-h-11 items-center gap-2 whitespace-nowrap border px-4 py-2 text-sm transition-colors peer-focus-visible:outline-none peer-focus-visible:ring-2 peer-focus-visible:ring-[#8e6c39] peer-focus-visible:ring-offset-2 ${
+												className={`inline-flex min-h-11 items-center whitespace-nowrap border px-4 py-2 text-sm font-medium transition-colors peer-focus-visible:outline-none peer-focus-visible:ring-2 peer-focus-visible:ring-[#8e6c39] peer-focus-visible:ring-offset-2 ${
 													field.value === occupation
-														? "border-[#173f2d] bg-[#f2f4ee] font-medium text-[#173f2d] ring-1 ring-[#173f2d]/15"
+														? "border-[#173f2d] bg-[#f2f4ee] text-[#173f2d] ring-1 ring-[#173f2d]/15"
 														: "border-[#e1dbcf] bg-[#fffdf8] text-[#536257] hover:border-[#b9a77e]"
 												}`}
 											>
 												{occupation}
-												{field.value === occupation && (
-													<Check
-														className="h-4 w-4 shrink-0"
-														aria-hidden="true"
-													/>
-												)}
 											</span>
 										</label>
 									))}

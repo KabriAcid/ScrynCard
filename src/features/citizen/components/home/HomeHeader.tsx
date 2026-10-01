@@ -65,7 +65,7 @@ export function HomeHeader() {
 			<nav
 				id="mobile-navigation"
 				aria-label="Mobile navigation"
-				className={`${isMobileMenuOpen ? "block" : "hidden"} absolute left-0 right-0 top-full mt-2 rounded-2xl border border-white/80 bg-[#faf8f3]/80 p-3 shadow-[0_18px_50px_rgba(23,45,34,0.18)] ring-1 ring-[#173f2d]/5 backdrop-blur-2xl lg:hidden`}
+				className={`${isMobileMenuOpen ? "block" : "hidden"} absolute left-0 right-0 top-full mt-2 rounded-2xl border border-white/80 bg-[#faf8f3]/80 p-3 shadow-[0_18px_50px_rgba(23,45,34,0.18)] ring-1 ring-[#173f2d]/5 backdrop-blur-md lg:hidden`}
 			>
 				{mobileNavigationItems.map(({ label, href }) => (
 					<Link
