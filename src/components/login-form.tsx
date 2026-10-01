@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   AlertCircle,
@@ -17,7 +17,7 @@ import { useAuthStore } from "@/stores/authStore";
 
 function SubmitButton({ isLoading }: { isLoading: boolean }) {
   return (
-    <Button type="submit" className="w-full" disabled={isLoading}>
+    <Button type="submit" className="h-12 w-full rounded-xl text-sm font-semibold shadow-sm" disabled={isLoading}>
       {isLoading ? (
         <>
           <LoaderCircle className="mr-2 h-4 w-4 animate-spin" />
@@ -87,21 +87,21 @@ export function LoginForm() {
       {error && (
         <Alert variant="destructive">
           <AlertCircle className="h-4 w-4" />
-          <AlertTitle>Error</AlertTitle>
+      <AlertTitle>Sign in failed</AlertTitle>
           <AlertDescription>{error}</AlertDescription>
         </Alert>
       )}
       <div className="space-y-2">
-        <Label htmlFor="email">Email Address</Label>
+        <Label htmlFor="email" className="text-[13px] font-semibold text-[#34443a]">Email address</Label>
         <div className="relative">
-          <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+          <Mail className="absolute left-3.5 top-1/2 h-[17px] w-[17px] -translate-y-1/2 text-[#89958c]" />
           <Input
             id="email"
             name="email"
             type="email"
             placeholder="you@example.com"
             required
-            className="pl-10"
+            className="h-12 rounded-xl border-[#e2e7e2] bg-[#fbfcfb] pl-11 text-sm shadow-none placeholder:text-[#a0aaa2] focus-visible:border-[#6b8b73] focus-visible:ring-[#6b8b73]/15"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             disabled={isLoading}
@@ -109,16 +109,16 @@ export function LoginForm() {
         </div>
       </div>
       <div className="space-y-2">
-        <Label htmlFor="password">Password</Label>
+        <Label htmlFor="password" className="text-[13px] font-semibold text-[#34443a]">Password</Label>
         <div className="relative">
-          <KeyRound className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+          <KeyRound className="absolute left-3.5 top-1/2 h-[17px] w-[17px] -translate-y-1/2 text-[#89958c]" />
           <Input
             id="password"
             name="password"
             type="password"
             placeholder="••••••••"
             required
-            className="pl-10"
+            className="h-12 rounded-xl border-[#e2e7e2] bg-[#fbfcfb] pl-11 text-sm shadow-none placeholder:text-[#a0aaa2] focus-visible:border-[#6b8b73] focus-visible:ring-[#6b8b73]/15"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             disabled={isLoading}
@@ -130,8 +130,8 @@ export function LoginForm() {
         Don't have an account?{" "}
         <button
           type="button"
-          onClick={() => navigate("/redeem/order")}
-          className="font-semibold text-primary hover:underline"
+          onClick={() => navigate("/order")}
+          className="font-semibold text-[#46624f] transition-colors hover:text-[#263e2e] hover:underline"
         >
           Create an order
         </button>

@@ -14,7 +14,7 @@ export function Logo() {
           <Fingerprint className="h-6 w-6 text-primary" />
         </button>
       </div>
-      <span className="text-primary dark:text-primary-foreground">Scryn</span>
+      {/* <span className="text-primary dark:text-primary-foreground">Scryn</span> */}
     </div>
   );
 }
