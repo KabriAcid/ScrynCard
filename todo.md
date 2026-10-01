@@ -10,16 +10,16 @@
 - [x] Simplify the step indicator so it shows the current step and total step count, rather than displaying the full list of steps.
 - [x] Reduce the placeholder text size in the first step.
 - [x] Display data sizes in an appropriate unit (for example, show 2 GB instead of 2000 MB).
-- [ ] Present occupation choices as a grid of selectable buttons, allowing the user to choose one option instead of using a dropdown.
+- [x] Present occupation choices as a grid of selectable buttons, allowing the user to choose one option instead of using a dropdown.
 - [ ] Automatically detect the mobile network as the user enters a phone number. Network prefixes will be provided separately.
 - [x] Include the user's NIN and occupation in the confirmation step.
-- [ ] Restore the redirect countdown in the confirmation step and show the remaining seconds.
-- [ ] Add a clear “Successful” status to the final step alongside the success animation, with a brief explanation of what happens while the transaction is processing.
+- [x] Restore the redirect countdown in the confirmation step and show the remaining seconds.
+- [x] Add a clear “Successful” status to the final step alongside the success animation, with a brief explanation of what happens while the transaction is processing.
 - [x] Play the success sound alongside the Lottie animation after a redemption succeeds.
 
 ## Homepage
 
-- [ ] Replace the current hero headline with copy that better reflects the product.
+- [x] Replace the current hero headline with copy that better reflects the product.
 - [ ] Update the statistics section with prominent, larger figures for relevant metrics, such as business partners, cards redeemed, and total value redeemed in naira. Replace the current placeholder or less relevant statistics.
 - [ ] Add a partner section with a marquee of partner logos.
 - [ ] Add a frequently asked questions section.
@@ -27,5 +27,5 @@
 
 ## Navigation and legal pages
 
-- [ ] Add a hamburger menu for mobile navigation with links to the card gallery, sign-in, card ordering, and “How it works.”
+- [x] Add a hamburger menu for mobile navigation with links to the card gallery, sign-in, card ordering, and “How it works.”
 - [ ] Add Privacy Policy and Terms and Conditions pages.

@@ -27,7 +27,7 @@ export const denominations = [...dataProducts, ...airtimeProducts] as const;
 // ORDER CALCULATIONS
 // ============================================================================
 export const PRINTING_COST_PER_CARD = 200; // ₦200 per unit
-export const MINIMUM_ORDER_VALUE = 800000; // ₦800k minimum
+export const MINIMUM_ORDER_VALUE = 50000; // Minimum card subtotal
 
 interface OrderCalculations {
   totalCards: number;
@@ -66,9 +66,7 @@ export const OrderSchema = z.object({
   businessName: z.string().min(2, "Enter your business name."),
   businessType: z.string().min(2, "Enter your business type."),
   fullName: z.string().min(3, "Name must be at least 3 characters."),
-  nin: z.string().regex(/^\d{11}$/, {
-    message: "Please enter a valid NIN (11 digits).",
-  }),
+  email: z.string().email("Enter a valid email address."),
   state: z.string({ required_error: "Please select a state." }),
   lga: z.string({ required_error: "Please select an LGA." }),
   orderItems: z
