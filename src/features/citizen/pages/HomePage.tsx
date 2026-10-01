@@ -9,8 +9,15 @@ import {
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Logo } from "@/components/logo";
-
-const mobileNetworks = ["MTN", "Airtel", "Glo", "9Mobile"];
+import {
+	Accordion,
+	AccordionContent,
+	AccordionItem,
+	AccordionTrigger,
+} from "@/components/ui/accordion";
+import { formatNaira } from "@/lib/formatters";
+import { mockPoliticians } from "@/lib/mock/politicians";
+import { mockRedemptions } from "@/lib/mock/redemptions";
 
 const frontSamples = __SAMPLE_IMAGES__.filter((sample) => !sample.isBack);
 const featuredSample =
@@ -20,6 +27,53 @@ const featuredSample =
 const supportingSamples = frontSamples
 	.filter((sample) => sample.src !== featuredSample?.src)
 	.slice(0, 2);
+
+const completedRedemptions = mockRedemptions.filter(
+	(redemption) => redemption.status === "completed",
+);
+const demoMetrics = {
+	partnerOrganizations: new Set(
+		mockPoliticians.map((politician) => politician.organization),
+	).size,
+	completedRedemptions: completedRedemptions.length,
+	totalValueRedeemed: completedRedemptions.reduce(
+		(total, redemption) => total + redemption.amount,
+		0,
+	),
+};
+
+const frequentlyAskedQuestions = [
+	{
+		id: "what-is-scryncard",
+		question: "What is Scryncard?",
+		answer:
+			"Scryncard turns a branded physical card into a useful gift, with an airtime or data reward recipients can redeem on their mobile phone.",
+	},
+	{
+		id: "how-to-redeem",
+		question: "How do I redeem a card?",
+		answer:
+			"Open the redemption page, enter the serial number and code from your card, provide the requested details, then choose the recipient's phone number and network before confirming.",
+	},
+	{
+		id: "supported-networks",
+		question: "Which mobile networks are supported?",
+		answer:
+			"The current experience lists MTN, Airtel, Glo, and 9Mobile. Available rewards can depend on the network and card you received.",
+	},
+	{
+		id: "custom-cards",
+		question: "Can I order cards for my business or event?",
+		answer:
+			"Yes. Scryncard cards are designed for businesses, celebrations, and organizations. Explore the gallery for design inspiration, then use the order flow to get started.",
+	},
+	{
+		id: "reward-arrival",
+		question: "When will the reward arrive?",
+		answer:
+			"Delivery time can vary by mobile network. After you confirm, the redemption screen will show whether the request was submitted successfully.",
+	},
+];
 
 const moments = [
 	{
@@ -210,31 +264,45 @@ export default function HomePage() {
 					aria-label="Scryncard at a glance"
 					className="border-y border-[#e8e2d7] bg-[#faf8f3]/85 backdrop-blur-sm"
 				>
-					<div className="mx-auto grid max-w-[1380px] grid-cols-1 divide-y divide-[#e5dfd4] px-5 sm:grid-cols-3 sm:divide-x sm:divide-y-0 sm:px-8 lg:px-12">
-						<div className="py-6 sm:px-7 sm:py-8">
-							<p className="font-serif text-5xl font-bold tracking-tight text-[#173f2d]">
-								{frontSamples.length}
-							</p>
-							<p className="mt-1 text-xs uppercase tracking-[0.16em] text-[#788076]">
-								Card designs to explore
-							</p>
+					<div className="mx-auto max-w-[1380px] px-5 sm:px-8 lg:px-12">
+						<div className="flex items-center justify-between gap-4 border-b border-[#e5dfd4] py-4">
+							<h2 className="text-[10px] font-semibold uppercase tracking-[0.2em] text-[#536257]">
+								Scryncard in numbers
+							</h2>
+							<span className="border border-[#d9c69f] px-2 py-1 text-[9px] font-semibold uppercase tracking-[0.16em] text-[#8e6c39]">
+								Demo data
+							</span>
 						</div>
-						<div className="py-6 sm:px-7 sm:py-8">
-							<p className="font-serif text-5xl font-bold tracking-tight text-[#173f2d]">
-								{mobileNetworks.length}
-							</p>
-							<p className="mt-1 text-xs uppercase tracking-[0.16em] text-[#788076]">
-								Mobile networks listed
-							</p>
+						<div className="grid grid-cols-1 divide-y divide-[#e5dfd4] sm:grid-cols-3 sm:divide-x sm:divide-y-0">
+							<div className="py-6 sm:px-7 sm:py-8 sm:pl-0">
+								<p className="font-serif text-5xl font-bold tracking-tight text-[#173f2d]">
+									{demoMetrics.partnerOrganizations}
+								</p>
+								<p className="mt-1 text-xs uppercase tracking-[0.16em] text-[#788076]">
+									Partner organizations
+								</p>
+							</div>
+							<div className="py-6 sm:px-7 sm:py-8">
+								<p className="font-serif text-5xl font-bold tracking-tight text-[#173f2d]">
+									{demoMetrics.completedRedemptions}
+								</p>
+								<p className="mt-1 text-xs uppercase tracking-[0.16em] text-[#788076]">
+									Cards redeemed
+								</p>
+							</div>
+							<div className="py-6 sm:px-7 sm:py-8 sm:pr-0">
+								<p className="font-serif text-4xl font-bold tracking-tight text-[#173f2d]">
+									{formatNaira(demoMetrics.totalValueRedeemed)}
+								</p>
+								<p className="mt-1 text-xs uppercase tracking-[0.16em] text-[#788076]">
+									Value redeemed
+								</p>
+							</div>
 						</div>
-						<div className="py-6 sm:px-7 sm:py-8">
-							<p className="font-serif text-5xl font-bold tracking-tight text-[#173f2d]">
-								02
-							</p>
-							<p className="mt-1 text-xs uppercase tracking-[0.16em] text-[#788076]">
-								Reward types · airtime & data
-							</p>
-						</div>
+						<p className="border-t border-[#e5dfd4] py-3 text-[11px] leading-5 text-[#858a80]">
+							Illustrative totals from sample records; live platform metrics are
+							not connected.
+						</p>
 					</div>
 				</section>
 
@@ -330,6 +398,43 @@ export default function HomePage() {
 								</div>
 							))}
 						</div>
+					</div>
+				</section>
+
+				<section className="border-y border-[#e8e2d7] bg-[#fffdf8]">
+					<div className="mx-auto grid max-w-[1380px] gap-10 px-5 py-16 sm:px-8 sm:py-20 md:grid-cols-[0.72fr_1.28fr] md:gap-16 lg:px-12">
+						<div>
+							<p className="text-[10px] font-semibold uppercase tracking-[0.24em] text-[#8e6c39]">
+								Good to know
+							</p>
+							<h2 className="mt-4 font-serif text-4xl leading-tight text-[#173f2d] sm:text-5xl">
+								A few helpful answers.
+							</h2>
+							<p className="mt-4 max-w-sm text-sm leading-7 text-[#69736a]">
+								Everything you need to know about ordering and redeeming a
+								Scryncard.
+							</p>
+						</div>
+						<Accordion
+							type="single"
+							collapsible
+							className="border-t border-[#e5dfd4]"
+						>
+							{frequentlyAskedQuestions.map((item) => (
+								<AccordionItem
+									key={item.id}
+									value={item.id}
+									className="border-[#e5dfd4]"
+								>
+									<AccordionTrigger className="py-5 text-left text-sm font-medium text-[#294331] hover:no-underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#8e6c39] focus-visible:ring-offset-2 sm:text-base">
+										{item.question}
+									</AccordionTrigger>
+									<AccordionContent className="max-w-2xl text-sm leading-7 text-[#69736a] motion-reduce:animate-none">
+										{item.answer}
+									</AccordionContent>
+								</AccordionItem>
+							))}
+						</Accordion>
 					</div>
 				</section>
 

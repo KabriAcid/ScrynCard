@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { useFieldArray, UseFormReturn } from "react-hook-form";
-import { ArrowLeft, ArrowRight, CreditCard, Minus, Plus, Smartphone, Wifi } from "lucide-react";
+import { ArrowRight, CreditCard, Minus, Plus, Smartphone, Wifi } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { OrderFormValues, denominations, dataProducts, airtimeProducts } from "./schema";
+import { OrderFormValues, denominations, dataProducts, airtimeProducts, calculateOrderTotals, MINIMUM_ORDER_VALUE } from "./schema";
 import { formatCurrency } from "@/lib/utils";
 import { StepHeader } from "./shared";
 
@@ -23,6 +23,7 @@ export function CardDetailsStep({ form, onPrev, onNext }: CardDetailsStepProps) 
   const selectedDenoms = new Set(fields.map((item) => item.denomination));
   const products = activeTab === "data" ? dataProducts : airtimeProducts;
   const watchedItems = form.watch("orderItems") || [];
+  const totals = calculateOrderTotals(watchedItems);
   const error = form.formState.errors.orderItems?.message || form.formState.errors.orderItems?.root?.message;
 
   const toggleProduct = (id: string) => {
@@ -43,7 +44,7 @@ export function CardDetailsStep({ form, onPrev, onNext }: CardDetailsStepProps) 
 
   return (
     <section className="order-step">
-      <StepHeader icon={CreditCard} title="Choose your rewards" description="Select the airtime and data cards you want to order." step={4} totalSteps={5} />
+      <StepHeader icon={CreditCard} title="Choose your rewards" description="Select the airtime and data cards you want to order." step={5} totalSteps={6} />
 
       <div className="order-tabs" role="tablist" aria-label="Reward type">
         <button type="button" role="tab" aria-selected={activeTab === "data"} onClick={() => setActiveTab("data")} className={`order-tab${activeTab === "data" ? " is-active" : ""}`}>
@@ -96,10 +97,13 @@ export function CardDetailsStep({ form, onPrev, onNext }: CardDetailsStepProps) 
       )}
 
       {error && <Alert variant="destructive" className="order-alert"><AlertDescription>{error}</AlertDescription></Alert>}
-      <p className="order-inline-note">Minimum order value: {formatCurrency(800000)}.</p>
+      <section className="order-selection-totals" aria-label="Order subtotal and minimum">
+        <div className="order-selection-subtotal"><span>Subtotal</span><strong>{formatCurrency(totals.cardValue)}</strong></div>
+        <p className="order-minimum-note">Minimum card order: {formatCurrency(MINIMUM_ORDER_VALUE)}</p>
+      </section>
 
       <div className="order-step-actions">
-        <Button type="button" variant="outline" onClick={onPrev} className="order-secondary-button"><ArrowLeft aria-hidden="true" /> Back</Button>
+        <Button type="button" variant="outline" onClick={onPrev} className="order-secondary-button">Back</Button>
         <Button type="button" onClick={onNext} disabled={fields.length === 0} className="order-primary-button">Review order <ArrowRight aria-hidden="true" /></Button>
       </div>
     </section>
