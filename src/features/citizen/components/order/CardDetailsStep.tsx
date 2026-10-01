@@ -1,327 +1,107 @@
-import { motion } from "framer-motion";
-import {
-  CreditCard,
-  ArrowLeft,
-  LoaderCircle,
-  Sparkles,
-  Minus,
-  Plus,
-  Info,
-  Wifi,
-  Smartphone,
-} from "lucide-react";
-import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { Alert, AlertDescription } from "@/components/ui/alert";
-import {
-  FormControl,
-  FormField,
-  FormItem,
-  FormMessage,
-} from "@/components/ui/form";
-import { UseFormReturn, useFieldArray } from "react-hook-form";
 import { useState } from "react";
-import { OrderFormValues, denominations, dataProducts, airtimeProducts, calculateOrderTotals } from "./schema";
+import { useFieldArray, UseFormReturn } from "react-hook-form";
+import { ArrowLeft, ArrowRight, CreditCard, Minus, Plus, Smartphone, Wifi } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { OrderFormValues, denominations, dataProducts, airtimeProducts } from "./schema";
 import { formatCurrency } from "@/lib/utils";
-import { stepTransition, StepHeader } from "./shared";
+import { StepHeader } from "./shared";
 
 interface CardDetailsStepProps {
   form: UseFormReturn<OrderFormValues>;
-  isLoading: boolean;
   onPrev: () => void;
+  onNext: () => void;
 }
 
-export function CardDetailsStep({
-  form,
-  isLoading,
-  onPrev,
-}: CardDetailsStepProps) {
+export function CardDetailsStep({ form, onPrev, onNext }: CardDetailsStepProps) {
   const [activeTab, setActiveTab] = useState<"data" | "airtime">("data");
   const { fields, append, remove, update } = useFieldArray({
     control: form.control,
     name: "orderItems",
     keyName: "customId",
   });
+  const selectedDenoms = new Set(fields.map((item) => item.denomination));
+  const products = activeTab === "data" ? dataProducts : airtimeProducts;
+  const watchedItems = form.watch("orderItems") || [];
+  const error = form.formState.errors.orderItems?.message || form.formState.errors.orderItems?.root?.message;
 
-  const selectedDenoms = new Set(fields.map((f) => f.denomination));
-  const displayProducts = activeTab === "data" ? dataProducts : airtimeProducts;
-
-  const handleDenominationToggle = (denomId: string) => {
-    if (selectedDenoms.has(denomId)) {
-      const index = fields.findIndex((f) => f.denomination === denomId);
-      if (index > -1) remove(index);
-    } else {
-      const denom = denominations.find((d) => d.id === denomId);
-      append({
-        denomination: denomId as any,
-        quantity: denom?.minQty || 1,
-      });
+  const toggleProduct = (id: string) => {
+    const index = fields.findIndex((item) => item.denomination === id);
+    if (index >= 0) {
+      remove(index);
+      return;
     }
+    append({ denomination: id as OrderFormValues["orderItems"][number]["denomination"], quantity: 10 });
   };
 
-  const handleUpdateQuantity = (index: number, delta: number) => {
-    const currentItem = fields[index];
-    const denom = denominations.find((d) => d.id === currentItem.denomination);
-    const minQty = denom?.minQty || 1;
-    const newQuantity = Math.max(minQty, currentItem.quantity + delta);
-    update(index, { ...currentItem, quantity: newQuantity });
+  const changeQuantity = (index: number, amount: number) => {
+    const item = fields[index];
+    const quantity = item.quantity + amount;
+    if (quantity < 10) remove(index);
+    else update(index, { denomination: item.denomination, quantity });
   };
-
-  const watchedOrderItems = form.watch("orderItems") || [];
-  const calculations = calculateOrderTotals(watchedOrderItems);
-
-  const errorMessage =
-    form.formState.errors.orderItems?.message ||
-    form.formState.errors.orderItems?.root?.message;
 
   return (
-    <motion.div
-      key="step-3"
-      variants={stepTransition}
-      initial="hidden"
-      animate="visible"
-      exit="exit"
-      className="space-y-6"
-    >
-      {/* Step Header */}
-      <StepHeader
-        icon={CreditCard}
-        title="Product Selection"
-        description="Choose data bundles and airtime vouchers for your order"
-        step={3}
-        totalSteps={3}
-      />
+    <section className="order-step">
+      <StepHeader icon={CreditCard} title="Choose your rewards" description="Select the airtime and data cards you want to order." step={4} totalSteps={5} />
 
-      {/* Denomination Selector */}
-      <Card>
-        <CardContent className="space-y-4">
-          {/* Tabs */}
-          <div className="flex gap-2">
-            <Button
-              type="button"
-              variant={activeTab === "data" ? "default" : "outline"}
-              onClick={() => setActiveTab("data")}
-              className="flex items-center gap-2"
-            >
-              <Wifi className="h-4 w-4" />
-              Data Bundles
-            </Button>
-            <Button
-              type="button"
-              variant={activeTab === "airtime" ? "default" : "outline"}
-              onClick={() => setActiveTab("airtime")}
-              className="flex items-center gap-2"
-            >
-              <Smartphone className="h-4 w-4" />
-              Airtime
-            </Button>
+      <div className="order-tabs" role="tablist" aria-label="Reward type">
+        <button type="button" role="tab" aria-selected={activeTab === "data"} onClick={() => setActiveTab("data")} className={`order-tab${activeTab === "data" ? " is-active" : ""}`}>
+          <Wifi aria-hidden="true" /> Data
+        </button>
+        <button type="button" role="tab" aria-selected={activeTab === "airtime"} onClick={() => setActiveTab("airtime")} className={`order-tab${activeTab === "airtime" ? " is-active" : ""}`}>
+          <Smartphone aria-hidden="true" /> Airtime
+        </button>
+      </div>
+
+      <div className="order-product-grid">
+        {products.map((product) => {
+          const selected = selectedDenoms.has(product.id);
+          return (
+            <button key={product.id} type="button" aria-pressed={selected} onClick={() => toggleProduct(product.id)} className={`order-product-option${selected ? " is-selected" : ""}`}>
+              <span>{product.label}</span>
+              <small>{formatCurrency(product.value)} value</small>
+            </button>
+          );
+        })}
+      </div>
+
+      {fields.length > 0 && (
+        <section className="order-quantity-section" aria-label="Card quantities">
+          <div className="order-section-heading">
+            <h3>Your cards</h3>
+            <p>Use the controls to add cards in groups of 10.</p>
           </div>
-
-          {/* Product Grid */}
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
-            {displayProducts.map((denom) => {
-              const isSelected = selectedDenoms.has(denom.id);
-
+          <div className="order-quantity-list">
+            {fields.map((field, index) => {
+              const product = denominations.find((item) => item.id === field.denomination);
+              const item = watchedItems[index];
+              const quantity = Number(item?.quantity) || 0;
               return (
-                <button
-                  key={denom.id}
-                  type="button"
-                  onClick={() => handleDenominationToggle(denom.id)}
-                  className={`relative p-4 rounded-lg border-2 transition-all hover:shadow-md ${isSelected
-                    ? "border-primary bg-primary/10"
-                    : "border-border hover:border-primary/50"
-                    }`}
-                >
-                  <div className="text-lg font-bold">{denom.label}</div>
-                </button>
+                <div className="order-quantity-row" key={field.customId}>
+                  <div className="order-quantity-product">
+                    <strong>{product?.label}</strong>
+                    <span>{quantity} cards - {formatCurrency((product?.value || 0) * quantity)}</span>
+                  </div>
+                  <div className="order-quantity-controls" aria-label={`${product?.label} quantity`}>
+                    <button type="button" aria-label={`Remove 10 ${product?.label} cards`} onClick={() => changeQuantity(index, -10)} className="order-quantity-button"><Minus aria-hidden="true" /></button>
+                    <span aria-live="polite" className="order-quantity-value">{quantity}</span>
+                    <button type="button" aria-label={`Add 10 ${product?.label} cards`} onClick={() => changeQuantity(index, 10)} className="order-quantity-button"><Plus aria-hidden="true" /></button>
+                  </div>
+                </div>
               );
             })}
           </div>
-
-          {errorMessage && (
-            <Alert variant="destructive">
-              <AlertDescription>{errorMessage}</AlertDescription>
-            </Alert>
-          )}
-        </CardContent>
-      </Card>
-
-      {/* Quantity Configurer */}
-      {fields.length > 0 && (
-        <Card>
-          <CardHeader>
-            <CardTitle>Configure Quantities</CardTitle>
-            <CardDescription>
-              Set the quantity for each selected denomination
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-3">
-              {fields.map((field, index) => {
-                const denom = denominations.find(
-                  (d) => d.id === field.denomination
-                );
-                const minQty = denom?.minQty || 1;
-
-                return (
-                  <div
-                    key={field.customId}
-                    className="flex items-center justify-between p-4 rounded-lg border bg-card"
-                  >
-                    <div className="flex-1">
-                      <div className="font-semibold">{denom?.label}</div>
-                      <div className="text-sm text-muted-foreground">
-                        {formatCurrency((denom?.value || 0) * field.quantity)}{" "}
-                        total
-                      </div>
-                    </div>
-                    <div className="flex items-center gap-1 sm:gap-3">
-                      <Button
-                        type="button"
-                        variant="outline"
-                        size="icon"
-                        onClick={() => handleUpdateQuantity(index, -10)}
-                        disabled={field.quantity <= minQty}
-                      >
-                        <Minus className="h-4 w-4" />
-                      </Button>
-                      <div className="w-20 text-center">
-                        <FormField
-                          control={form.control}
-                          name={`orderItems.${index}.quantity`}
-                          render={({ field: qtyField }) => (
-                            <FormItem>
-                              <FormControl>
-                                <input
-                                  type="number"
-                                  {...qtyField}
-                                  onChange={(e) =>
-                                    qtyField.onChange(
-                                      Math.max(
-                                        minQty,
-                                        parseInt(e.target.value) || minQty
-                                      )
-                                    )
-                                  }
-                                  min={minQty}
-                                  className="w-full text-center font-bold text-lg border-0 bg-transparent focus:outline-none focus:ring-0"
-                                />
-                              </FormControl>
-                              <FormMessage className="text-xs" />
-                            </FormItem>
-                          )}
-                        />
-                      </div>
-                      <Button
-                        type="button"
-                        variant="outline"
-                        size="icon"
-                        onClick={() => handleUpdateQuantity(index, 10)}
-                      >
-                        <Plus className="h-4 w-4" />
-                      </Button>
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-          </CardContent>
-        </Card>
+        </section>
       )}
 
-      {/* Order Summary */}
-      {fields.length > 0 && (
-        <Card className="sticky top-4">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <Sparkles className="h-5 w-5" />
-              Order Summary
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="space-y-3">
-              <div className="flex justify-between text-sm">
-                <span className="text-muted-foreground">Total Units:</span>
-                <span className="font-semibold">
-                  {calculations.totalCards.toLocaleString()}
-                </span>
-              </div>
-              <div className="flex justify-between text-sm">
-                <span className="text-muted-foreground">Product Value:</span>
-                <span className="font-semibold">
-                  {formatCurrency(calculations.cardValue)}
-                </span>
-              </div>
-              <div className="flex justify-between text-sm">
-                <span className="text-muted-foreground">
-                  Service Fee (15%):
-                </span>
-                <span className="font-semibold text-orange-600 dark:text-orange-400">
-                  {formatCurrency(calculations.serviceFee)}
-                </span>
-              </div>
-              <div className="flex justify-between text-sm">
-                <span className="text-muted-foreground">Processing Cost:</span>
-                <span className="font-semibold">
-                  {formatCurrency(calculations.printingCost)}
-                </span>
-              </div>
-              <div className="h-px bg-border" />
-              <div className="flex justify-between">
-                <span className="font-semibold">Total to Pay:</span>
-                <span className="text-2xl font-bold text-primary">
-                  {formatCurrency(calculations.totalToPay)}
-                </span>
-              </div>
-            </div>
+      {error && <Alert variant="destructive" className="order-alert"><AlertDescription>{error}</AlertDescription></Alert>}
+      <p className="order-inline-note">Minimum order value: {formatCurrency(800000)}.</p>
 
-            <Alert>
-              <Info className="h-4 w-4" />
-              <AlertDescription className="text-xs">
-                Minimum order value is ₦800,000. After placing your order, you'll receive bank details for payment completion. Instant delivery upon payment confirmation.
-              </AlertDescription>
-            </Alert>
-          </CardContent>
-        </Card>
-      )}
-
-      {/* Navigation */}
-      <div className="flex gap-3 pt-4">
-        <Button
-          type="button"
-          variant="outline"
-          onClick={onPrev}
-          disabled={isLoading}
-          size="lg"
-          className="h-12 text-base font-semibold"
-        >
-          Back
-        </Button>
-        <Button
-          type="submit"
-          disabled={isLoading || fields.length === 0}
-          size="lg"
-          className="flex-1 h-12 text-base font-semibold"
-        >
-          {isLoading ? (
-            <>
-              <LoaderCircle className="mr-2 h-5 w-5 animate-spin" />
-              Processing...
-            </>
-          ) : (
-            <>
-              <Sparkles className="mr-2 h-5 w-5" />
-              Place Order
-            </>
-          )}
-        </Button>
+      <div className="order-step-actions">
+        <Button type="button" variant="outline" onClick={onPrev} className="order-secondary-button"><ArrowLeft aria-hidden="true" /> Back</Button>
+        <Button type="button" onClick={onNext} disabled={fields.length === 0} className="order-primary-button">Review order <ArrowRight aria-hidden="true" /></Button>
       </div>
-    </motion.div>
+    </section>
   );
 }

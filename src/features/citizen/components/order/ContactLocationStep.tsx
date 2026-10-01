@@ -62,8 +62,8 @@ export function ContactLocationStep({
         icon={MapPin}
         title="Delivery Location"
         description="Select your state and local government area for delivery"
-        step={2}
-        totalSteps={3}
+        step={3}
+        totalSteps={5}
       />
 
       {/* Main Content */}

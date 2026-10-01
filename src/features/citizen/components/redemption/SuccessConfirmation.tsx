@@ -24,6 +24,16 @@ export function SuccessConfirmation({ onComplete }: SuccessConfirmationProps) {
   }, [onComplete]);
 
   useEffect(() => {
+    const successSound = new Audio("/sounds/ding.mp3");
+    void successSound.play().catch(() => undefined);
+
+    return () => {
+      successSound.pause();
+      successSound.currentTime = 0;
+    };
+  }, []);
+
+  useEffect(() => {
     let active = true;
     fetch("/Success-Lottie-Animation.json")
       .then((response) => response.json())

@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { User, CreditCard } from "lucide-react";
+import { User, CreditCard, Building2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -49,10 +49,10 @@ export function PersonalDetailsStep({
             {/* Step Header */}
             <StepHeader
                 icon={User}
-                title="Personal Info"
-                description="Please provide your personal details"
-                step={1}
-                totalSteps={3}
+                title="Business details"
+                description="Tell us about your business and the person managing this order."
+                step={2}
+                totalSteps={5}
             />
 
             {/* Main Content */}
@@ -65,6 +65,37 @@ export function PersonalDetailsStep({
                 <GlassCard>
                     <FormSection>
                         <FormGrid>
+                            <FormField
+                                control={form.control}
+                                name="businessName"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>Business name</FormLabel>
+                                        <FormControl>
+                                            <div className="relative">
+                                                <Building2 className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                                                <Input placeholder="Your business name" className="pl-10" {...field} />
+                                            </div>
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+
+                            <FormField
+                                control={form.control}
+                                name="businessType"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>Business type</FormLabel>
+                                        <FormControl>
+                                            <Input placeholder="e.g. Retail, hospitality" {...field} />
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+
                             {/* Full Name */}
                             <FormField
                                 control={form.control}

@@ -51,10 +51,10 @@ export default function HomePage() {
         <div className="flex items-center gap-2 sm:gap-3">
           <Link to="/login" className="hidden h-10 items-center rounded-full border border-[#c8c9bc] bg-white/35 px-4 text-sm text-[#435449] transition hover:border-[#173f2d] hover:bg-white/60 sm:inline-flex">Sign in</Link>
           <Link
-            to="/redeem"
+            to="/order"
             className="group relative isolate inline-flex h-10 items-center justify-center overflow-hidden rounded-full bg-[#173f2d] px-4 text-sm font-medium text-white transition-colors hover:bg-[#24553d] before:pointer-events-none before:absolute before:inset-y-0 before:-left-1/2 before:w-1/2 before:-skew-x-12 before:bg-gradient-to-r before:from-transparent before:via-white/40 before:to-transparent before:animate-shine sm:px-5"
           >
-            <span className="relative z-10 inline-flex items-center gap-2">Redeem your card <ArrowUpRight className="h-4 w-4" /></span>
+            <span className="relative z-10 inline-flex items-center gap-2">Order <ArrowUpRight className="h-4 w-4" /></span>
           </Link>
         </div>
       </header>
@@ -72,10 +72,10 @@ export default function HomePage() {
             </p>
             <div className="mt-9 flex flex-wrap items-center gap-3">
               <Link
-                to="/samples"
+                to="/order"
                 className="inline-flex h-12 items-center gap-2 border border-[#b9b5aa] bg-white/35 px-5 text-sm font-medium text-[#34463a] transition hover:border-[#9a835c] hover:bg-white/60"
               >
-                View card samples
+                Order cards
               </Link>
               <Link
                 to="/redeem"

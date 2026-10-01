@@ -1,5 +1,31 @@
-- Change the font-face to Figtree
-- 
-ORDER FLOW
-- Ensure it is fully mobile-responsive.
-- Remodel the card order flow by setting the newly agreed method which is 'values up to..' not a fixed amount of e.g 5GB, 10GB since it varies per network.
+## Card ordering
+
+- [ ] Make the card-ordering flow fully responsive on mobile devices.
+- [ ] Replace fixed data bundle sizes (such as 5 GB or 10 GB) with network-specific “up to” values, since available bundle sizes vary by provider.
+
+## Redemption flow
+
+- [ ] Show card details in the validation step in an invoice-style, two-column layout rather than a collection of separate grids.
+- [x] Remove the “Other network” option.
+- [x] Simplify the step indicator so it shows the current step and total step count, rather than displaying the full list of steps.
+- [x] Reduce the placeholder text size in the first step.
+- [x] Display data sizes in an appropriate unit (for example, show 2 GB instead of 2000 MB).
+- [ ] Present occupation choices as a grid of selectable buttons, allowing the user to choose one option instead of using a dropdown.
+- [ ] Automatically detect the mobile network as the user enters a phone number. Network prefixes will be provided separately.
+- [x] Include the user's NIN and occupation in the confirmation step.
+- [ ] Restore the redirect countdown in the confirmation step and show the remaining seconds.
+- [ ] Add a clear “Successful” status to the final step alongside the success animation, with a brief explanation of what happens while the transaction is processing.
+- [x] Play the success sound alongside the Lottie animation after a redemption succeeds.
+
+## Homepage
+
+- [ ] Replace the current hero headline with copy that better reflects the product.
+- [ ] Update the statistics section with prominent, larger figures for relevant metrics, such as business partners, cards redeemed, and total value redeemed in naira. Replace the current placeholder or less relevant statistics.
+- [ ] Add a partner section with a marquee of partner logos.
+- [ ] Add a frequently asked questions section.
+- [ ] Rework the footer to better support the site's content and navigation.
+
+## Navigation and legal pages
+
+- [ ] Add a hamburger menu for mobile navigation with links to the card gallery, sign-in, card ordering, and “How it works.”
+- [ ] Add Privacy Policy and Terms and Conditions pages.

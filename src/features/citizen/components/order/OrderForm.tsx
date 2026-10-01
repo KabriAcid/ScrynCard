@@ -1,52 +1,27 @@
-import { useEffect, useState, useCallback } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { motion, AnimatePresence } from "framer-motion";
-import { User, MapPin, CreditCard, Sparkles } from "lucide-react";
+import { AnimatePresence, motion } from "framer-motion";
+import { useNavigate } from "react-router-dom";
+import { Briefcase, CreditCard, MapPin, User } from "lucide-react";
 import { Form } from "@/components/ui/form";
 import { useToast } from "@/hooks/use-toast";
-import { useNavigate } from "react-router-dom";
 import { OrderSchema, OrderFormValues, StepConfig } from "./schema";
+import { OrderPurposeStep } from "./OrderPurposeStep";
 import { PersonalDetailsStep } from "./PersonalDetailsStep";
 import { ContactLocationStep } from "./ContactLocationStep";
 import { CardDetailsStep } from "./CardDetailsStep";
-import { cn } from "@/lib/utils";
+import { OrderReviewStep } from "./OrderReviewStep";
 
-// ============================================================================
-// STEP CONFIGURATION
-// ============================================================================
 const STEPS: StepConfig[] = [
-  {
-    id: 1,
-    title: "Your Information",
-    description: "Your personal details",
-    fields: [
-      "fullName",
-      "nin",
-    ] as const,
-    icon: User,
-  },
-  {
-    id: 2,
-    title: "Delivery Location",
-    description: "Where to deliver your order",
-    fields: ["state", "lga"] as const,
-    icon: MapPin,
-  },
-  {
-    id: 3,
-    title: "Product Selection",
-    description: "Choose data and airtime products",
-    fields: ["orderItems"] as const,
-    icon: CreditCard,
-  },
+  { id: 1, title: "Purpose", description: "Choose a card type", fields: ["purpose"], icon: Briefcase },
+  { id: 2, title: "Business details", description: "Tell us about your business", fields: ["businessName", "businessType", "fullName", "nin"], icon: User },
+  { id: 3, title: "Delivery", description: "Where to deliver your order", fields: ["state", "lga"], icon: MapPin },
+  { id: 4, title: "Rewards", description: "Choose card values and quantities", fields: ["orderItems"], icon: CreditCard },
 ];
 
-const FORM_STORAGE_KEY = "scryn-order-form-v2";
+const FORM_STORAGE_KEY = "scryn-order-form-v3";
 
-// ============================================================================
-// MAIN ORDER FORM COMPONENT
-// ============================================================================
 export function OrderForm() {
   const navigate = useNavigate();
   const { toast } = useToast();
@@ -58,6 +33,9 @@ export function OrderForm() {
     resolver: zodResolver(OrderSchema),
     mode: "onChange",
     defaultValues: {
+      purpose: "business",
+      businessName: "",
+      businessType: "",
       fullName: "",
       nin: "",
       state: "",
@@ -68,167 +46,78 @@ export function OrderForm() {
 
   const watchedValues = form.watch();
 
-  // Load form state from localStorage
   useEffect(() => {
     try {
       const savedState = localStorage.getItem(FORM_STORAGE_KEY);
       if (savedState) {
-        const {
-          values,
-          step: savedStep,
-        } = JSON.parse(savedState);
-        // Remove old fields if they exist (email, phone, political fields)
-        const { title, politicianName, politicalParty, politicalRole, photo, ward, email, phone, ...cleanedValues } = values;
-        form.reset(cleanedValues);
-        setStep(savedStep);
+        const { values, step: savedStep } = JSON.parse(savedState);
+        form.reset({ ...form.getValues(), ...values });
+        setStep(Math.min(Math.max(Number(savedStep) || 1, 1), 5));
       }
-    } catch (e) {
-      console.error("Failed to load form state from localStorage", e);
+    } catch (error) {
+      console.error("Failed to load saved order", error);
     } finally {
       setIsInitialized(true);
     }
   }, [form]);
 
-  // Save form state to localStorage (debounced)
   useEffect(() => {
     if (!isInitialized) return;
-
-    const timeoutId = setTimeout(() => {
+    const timeoutId = window.setTimeout(() => {
       try {
-        const stateToSave = {
-          values: watchedValues,
-          step,
-        };
-        localStorage.setItem(FORM_STORAGE_KEY, JSON.stringify(stateToSave));
-      } catch (e) {
-        console.error("Failed to save form state to localStorage", e);
+        localStorage.setItem(FORM_STORAGE_KEY, JSON.stringify({ values: watchedValues, step }));
+      } catch (error) {
+        console.error("Failed to save order", error);
       }
-    }, 500);
-
-    return () => clearTimeout(timeoutId);
+    }, 400);
+    return () => window.clearTimeout(timeoutId);
   }, [watchedValues, step, isInitialized]);
 
   const nextStep = useCallback(async () => {
-    const currentStepConfig = STEPS[step - 1];
-    const output = await form.trigger(currentStepConfig.fields as any, {
-      shouldFocus: true,
-    });
-    if (!output) return;
-
-    setStep((prev) => Math.min(prev + 1, STEPS.length));
+    const current = STEPS[step - 1];
+    if (!current) return;
+    const valid = await form.trigger(current.fields as any, { shouldFocus: true });
+    if (valid) setStep((currentStep) => Math.min(currentStep + 1, 5));
   }, [step, form]);
 
-  const prevStep = useCallback(() => {
-    setStep((prev) => Math.max(prev - 1, 1));
+  const previousStep = useCallback(() => {
+    setStep((currentStep) => Math.max(currentStep - 1, 1));
   }, []);
 
   const handleFormSubmit = async (data: OrderFormValues) => {
     setIsLoading(true);
-
     try {
-      // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 2000));
-
-      // Clear storage on success
+      await new Promise((resolve) => window.setTimeout(resolve, 1200));
       localStorage.removeItem(FORM_STORAGE_KEY);
-
-      // Create mock order ID
       const orderId = `ORD-${Date.now().toString().slice(-8)}`;
-
       toast({
-        title: "🎉 Order Placed Successfully!",
-        description: `Your order #${orderId} has been received. We'll send you payment details shortly.`,
+        title: "Order placed successfully!",
+        description: `Your order #${orderId} has been received. We’ll send you payment details shortly.`,
       });
-
-      // Navigate after a short delay
-      setTimeout(() => {
-        navigate("/politician");
-      }, 1500);
-    } catch (error) {
-      toast({
-        variant: "destructive",
-        title: "Order Failed",
-        description: "Something went wrong. Please try again.",
-      });
+      window.setTimeout(() => navigate("/redeem"), 1500);
+    } catch {
+      toast({ variant: "destructive", title: "Order failed", description: "Please try again." });
     } finally {
       setIsLoading(false);
     }
   };
 
-  // Don't render until initialized (to prevent flash of default values)
   if (!isInitialized) {
-    return (
-      <div className="flex items-center justify-center min-h-[400px]">
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          className="flex flex-col items-center gap-4"
-        >
-          <div className="relative">
-            <div className="w-12 h-12 rounded-full border-4 border-primary/20 border-t-primary animate-spin" />
-            <Sparkles className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-5 h-5 text-primary" />
-          </div>
-          <p className="text-sm text-muted-foreground">Loading your order...</p>
-        </motion.div>
-      </div>
-    );
+    return <div className="order-loading" role="status">Preparing your order…</div>;
   }
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5 }}
-      className="w-full"
-    >
+    <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} className="order-flow">
       <Form {...form}>
-        <form
-          onSubmit={form.handleSubmit(handleFormSubmit)}
-          className="space-y-8 w-full max-w-2xl mx-auto"
-        >
-          {/* Form Content */}
-          <div className="relative min-h-[600px]">
-            <AnimatePresence mode="wait" initial={false}>
-              {step === 1 && (
-                <PersonalDetailsStep
-                  key="step-1"
-                  form={form}
-                  onNext={nextStep}
-                />
-              )}
-
-              {step === 2 && (
-                <ContactLocationStep
-                  key="step-2"
-                  form={form}
-                  onNext={nextStep}
-                  onPrev={prevStep}
-                />
-              )}
-
-              {step === 3 && (
-                <CardDetailsStep
-                  key="step-3"
-                  form={form}
-                  isLoading={isLoading}
-                  onPrev={prevStep}
-                />
-              )}
-            </AnimatePresence>
-          </div>
-
-          {/* Footer Info */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.5 }}
-            className="text-center pt-4 border-t border-border/50"
-          >
-            <p className="text-xs text-muted-foreground">
-              Your information is secure and will only be used for order
-              processing.
-            </p>
-          </motion.div>
+        <form onSubmit={form.handleSubmit(handleFormSubmit)} className="order-form">
+          <AnimatePresence mode="wait" initial={false}>
+            {step === 1 && <OrderPurposeStep key="step-1" form={form} onNext={nextStep} />}
+            {step === 2 && <PersonalDetailsStep key="step-2" form={form} onNext={nextStep} />}
+            {step === 3 && <ContactLocationStep key="step-3" form={form} onNext={nextStep} onPrev={previousStep} />}
+            {step === 4 && <CardDetailsStep key="step-4" form={form} onNext={nextStep} onPrev={previousStep} />}
+            {step === 5 && <OrderReviewStep key="step-5" form={form} isLoading={isLoading} onPrev={previousStep} />}
+          </AnimatePresence>
+          <p className="order-privacy-note">Your details are used only to prepare and deliver this order.</p>
         </form>
       </Form>
     </motion.div>

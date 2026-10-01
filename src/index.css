@@ -216,3 +216,571 @@
 .redemption-premium [role="alert"] {
   border-radius: 2px;
 }
+
+/* Checkout and order form */
+.order-page {
+  min-height: 100dvh;
+  padding: 1rem;
+  color: #24382a;
+  background-color: #faf8f3;
+  background-image: radial-gradient(rgba(23, 63, 45, 0.055) 1px, transparent 1px);
+  background-size: 22px 22px;
+}
+
+.order-page-header,
+.order-page-main {
+  width: min(100%, 48rem);
+  margin-inline: auto;
+}
+
+.order-page-header {
+  display: flex;
+  min-height: 3.5rem;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.order-back-link {
+  display: inline-flex;
+  min-height: 2.75rem;
+  align-items: center;
+  gap: 0.5rem;
+  border: 1px solid #ded8cc;
+  border-radius: 999px;
+  background: rgba(255, 253, 248, 0.8);
+  padding: 0.5rem 0.85rem;
+  color: #435449;
+  font-size: 0.8rem;
+  transition: border-color 180ms ease, background-color 180ms ease;
+}
+
+.order-back-link:hover {
+  border-color: #9a835c;
+  background: #fffdf8;
+}
+
+.order-back-link svg,
+.order-step-actions svg,
+.order-tabs svg,
+.order-purpose-option svg,
+.order-quantity-button svg {
+  width: 1rem;
+  height: 1rem;
+  flex: none;
+}
+
+.order-page-main {
+  padding-block: 2.5rem 4rem;
+}
+
+.order-page-heading {
+  margin: 0 auto 2rem;
+  max-width: 36rem;
+  text-align: center;
+}
+
+.order-page-heading > p,
+.order-invoice-heading > div > p {
+  margin: 0;
+  color: #927547;
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+}
+
+.order-page-heading h1 {
+  margin: 0.7rem 0 0;
+  color: #173f2d;
+  font-family: "Plus Jakarta Sans", sans-serif;
+  font-size: clamp(1.8rem, 7vw, 2.8rem);
+  font-weight: 600;
+  letter-spacing: -0.045em;
+  line-height: 1.1;
+}
+
+.order-page-heading > span {
+  display: block;
+  margin-top: 0.75rem;
+  color: #758076;
+  font-size: 0.9rem;
+  line-height: 1.6;
+}
+
+.order-flow {
+  width: min(100%, 42rem);
+  margin-inline: auto;
+}
+
+.order-form {
+  display: grid;
+  gap: 1.5rem;
+  width: 100%;
+}
+
+.order-step {
+  display: grid;
+  gap: 1.25rem;
+  min-width: 0;
+}
+
+.order-flow .redemption-step-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.9rem;
+  margin: 0;
+  border: 1px solid #e5dfd4;
+  background: rgba(255, 253, 248, 0.88);
+  padding: 1rem;
+}
+
+.order-flow .redemption-step-header .absolute {
+  display: none;
+}
+
+.order-flow .redemption-step-header > div:first-of-type > div:last-child {
+  border-radius: 0.85rem;
+  background: #173f2d;
+  padding: 0.7rem;
+  box-shadow: none;
+}
+
+.order-flow .redemption-step-header h2 {
+  color: #173f2d;
+  font-family: "Plus Jakarta Sans", sans-serif;
+  font-size: clamp(1.1rem, 5vw, 1.35rem);
+  font-weight: 600;
+  line-height: 1.25;
+}
+
+.order-flow .redemption-step-header p {
+  color: #758076;
+  font-size: 0.8rem;
+}
+
+.order-flow .redemption-step-header span {
+  border: 1px solid #e5dbc8;
+  background: #f7f2e8;
+  color: #8e6c39;
+  font-size: 0.65rem;
+  font-weight: 700;
+}
+
+.order-purpose-grid,
+.order-product-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 0.75rem;
+}
+
+.order-purpose-option,
+.order-product-option {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  gap: 0.85rem;
+  border: 1px solid #e2dbcf;
+  border-radius: 0.35rem;
+  background: rgba(255, 253, 248, 0.92);
+  padding: 1rem;
+  color: #294331;
+  text-align: left;
+  transition: border-color 180ms ease, background-color 180ms ease, box-shadow 180ms ease;
+}
+
+.order-purpose-option:hover,
+.order-product-option:hover,
+.order-purpose-option[aria-pressed="true"],
+.order-product-option.is-selected {
+  border-color: #78917a;
+  background: #f5f6f0;
+  box-shadow: 0 0 0 2px rgba(23, 63, 45, 0.06);
+}
+
+.order-purpose-icon {
+  display: grid;
+  width: 2.75rem;
+  height: 2.75rem;
+  flex: none;
+  place-items: center;
+  border-radius: 50%;
+  background: #eaf0e9;
+  color: #28563b;
+}
+
+.order-purpose-icon svg {
+  width: 1.2rem;
+  height: 1.2rem;
+}
+
+.order-purpose-icon--warm {
+  background: #f5eee2;
+  color: #947142;
+}
+
+.order-purpose-copy {
+  display: grid;
+  min-width: 0;
+  gap: 0.25rem;
+}
+
+.order-purpose-copy strong {
+  color: #233b2d;
+  font-size: 0.95rem;
+}
+
+.order-purpose-copy span,
+.order-section-heading p {
+  color: #768076;
+  font-size: 0.78rem;
+  line-height: 1.5;
+}
+
+.order-purpose-arrow {
+  margin-left: auto;
+  color: #58745c;
+}
+
+.order-purpose-tag {
+  margin-left: auto;
+  border-radius: 999px;
+  background: #f4eee2;
+  padding: 0.3rem 0.55rem;
+  color: #8e6c39;
+  font-size: 0.62rem;
+  white-space: nowrap;
+}
+
+.order-inline-note {
+  margin: 0;
+  color: #7e857c;
+  font-size: 0.75rem;
+  line-height: 1.55;
+}
+
+.order-tabs {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.5rem;
+}
+
+.order-tab {
+  display: inline-flex;
+  min-height: 2.9rem;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  border: 1px solid #dfd8cc;
+  border-radius: 0.25rem;
+  background: #fffdf8;
+  color: #536257;
+  font-size: 0.82rem;
+  font-weight: 600;
+}
+
+.order-tab.is-active {
+  border-color: #173f2d;
+  background: #173f2d;
+  color: white;
+}
+
+.order-product-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.order-product-option {
+  display: grid;
+  align-content: center;
+  justify-items: start;
+  gap: 0.35rem;
+  min-height: 5.25rem;
+  padding: 0.85rem;
+}
+
+.order-product-option span {
+  font-size: 0.95rem;
+  font-weight: 700;
+}
+
+.order-product-option small {
+  color: #7e857c;
+  font-size: 0.68rem;
+}
+
+.order-quantity-section,
+.order-invoice {
+  overflow: hidden;
+  border: 1px solid #e2dbcf;
+  border-radius: 0.35rem;
+  background: rgba(255, 253, 248, 0.94);
+}
+
+.order-section-heading {
+  padding: 1rem 1rem 0.5rem;
+}
+
+.order-section-heading h3 {
+  margin: 0;
+  color: #294331;
+  font-size: 0.95rem;
+}
+
+.order-section-heading p {
+  margin: 0.25rem 0 0;
+}
+
+.order-quantity-list {
+  padding: 0 1rem 0.5rem;
+}
+
+.order-quantity-row {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  border-top: 1px solid #ece6db;
+  padding-block: 0.75rem;
+}
+
+.order-quantity-product {
+  display: grid;
+  min-width: 0;
+  gap: 0.25rem;
+}
+
+.order-quantity-product strong {
+  color: #294331;
+  font-size: 0.88rem;
+}
+
+.order-quantity-product span {
+  color: #7e857c;
+  font-size: 0.7rem;
+}
+
+.order-quantity-controls {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.order-quantity-button {
+  display: grid;
+  width: 2.5rem;
+  height: 2.5rem;
+  place-items: center;
+  border: 1px solid #d9d2c6;
+  border-radius: 0.25rem;
+  background: #fffdf8;
+  color: #31563d;
+}
+
+.order-quantity-button:hover {
+  border-color: #78917a;
+  background: #f3f6f0;
+}
+
+.order-quantity-value {
+  width: 2rem;
+  color: #263f30;
+  font-size: 0.9rem;
+  font-weight: 700;
+  text-align: center;
+}
+
+.order-step-actions {
+  display: grid;
+  grid-template-columns: minmax(6rem, 0.7fr) minmax(0, 1.3fr);
+  gap: 0.65rem;
+  padding-top: 0.25rem;
+}
+
+.order-step-actions--single {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.order-primary-button,
+.order-secondary-button {
+  display: inline-flex;
+  min-height: 3rem;
+  align-items: center;
+  justify-content: center;
+  gap: 0.55rem;
+  border-radius: 0.25rem;
+  padding: 0.65rem 0.85rem;
+  font-size: 0.83rem;
+  font-weight: 600;
+}
+
+.order-primary-button {
+  border: 1px solid #173f2d;
+  background: #173f2d;
+  color: white;
+}
+
+.order-primary-button:hover {
+  background: #24553d;
+}
+
+.order-secondary-button {
+  border: 1px solid #d9d2c6;
+  background: #fffdf8;
+  color: #46574b;
+}
+
+.order-secondary-button:hover {
+  background: #f5f1e8;
+}
+
+.order-invoice-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  background: #f6f2e9;
+  padding: 1rem;
+}
+
+.order-invoice-heading h3 {
+  margin: 0.35rem 0 0;
+  color: #294331;
+  font-size: 1rem;
+  font-weight: 650;
+}
+
+.order-invoice-heading > span {
+  flex: none;
+  border: 1px solid #e4dac8;
+  border-radius: 999px;
+  padding: 0.35rem 0.6rem;
+  color: #6d745f;
+  font-size: 0.65rem;
+}
+
+.order-invoice-details,
+.order-invoice-lines,
+.order-invoice-totals {
+  margin: 0;
+  padding-inline: 1rem;
+}
+
+.order-invoice-details,
+.order-invoice-lines {
+  border-bottom: 1px solid #e9e2d6;
+}
+
+.order-invoice-row {
+  display: flex;
+  min-height: 2.7rem;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  border-bottom: 1px solid #eee9df;
+  padding-block: 0.55rem;
+}
+
+.order-invoice-row:last-child {
+  border-bottom: 0;
+}
+
+.order-invoice-row dt {
+  min-width: 0;
+  color: #83897f;
+  font-size: 0.72rem;
+}
+
+.order-invoice-row dd {
+  max-width: 65%;
+  margin: 0;
+  overflow-wrap: anywhere;
+  color: #2b4233;
+  font-size: 0.75rem;
+  font-weight: 550;
+  text-align: right;
+}
+
+.order-invoice-totals {
+  padding-block: 0.25rem;
+}
+
+.order-invoice-row.is-strong {
+  min-height: 3.25rem;
+  border-top: 1px solid #dcd3c4;
+}
+
+.order-invoice-row.is-strong dt,
+.order-invoice-row.is-strong dd {
+  color: #173f2d;
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+
+.order-privacy-note {
+  margin: 0;
+  color: #92968e;
+  font-size: 0.68rem;
+  line-height: 1.5;
+  text-align: center;
+}
+
+.order-loading {
+  display: grid;
+  min-height: 14rem;
+  place-items: center;
+  color: #647067;
+  font-size: 0.85rem;
+}
+
+.order-flow input:not([type="checkbox"]):not([type="radio"]),
+.order-flow [role="combobox"] {
+  min-height: 3rem;
+  border-radius: 0.25rem;
+  border-color: #ded6c9;
+  background: #fffdf8;
+  color: #173f2d;
+}
+
+.order-flow input:focus-visible,
+.order-flow [role="combobox"]:focus-visible {
+  outline: 2px solid #b69054;
+  outline-offset: 2px;
+}
+
+@media (min-width: 40rem) {
+  .order-page {
+    padding: 1.25rem 2rem;
+  }
+
+  .order-page-main {
+    padding-top: 3rem;
+  }
+
+  .order-purpose-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .order-product-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .order-flow .redemption-step-header {
+    padding: 1.25rem;
+  }
+}
+
+@media (max-width: 22rem) {
+  .order-page {
+    padding-inline: 0.75rem;
+  }
+
+  .order-purpose-option {
+    gap: 0.6rem;
+    padding: 0.8rem;
+  }
+
+  .order-step-actions {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

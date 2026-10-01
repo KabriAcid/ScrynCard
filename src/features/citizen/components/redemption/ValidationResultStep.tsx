@@ -3,230 +3,241 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { CheckCircle2, AlertCircle, CreditCard } from "lucide-react";
 import { Spinner } from "@/components/ui/spinner";
+import { formatDataSize } from "@/lib/formatters";
 
 interface ValidationResultStepProps {
-  serialNumber: string;
-  cardCode: string;
-  giftDetails: {
-    giftType: string;
-    amount?: number;
-    dataSize?: number;
-  };
-  error?: {
-    message: string;
-    code: string;
-    details: string | null;
-  } | null;
-  isLoading?: boolean;
-  onRetry: () => void;
-  onProceed: () => void;
+	serialNumber: string;
+	cardCode: string;
+	giftDetails: {
+		giftType: string;
+		amount?: number;
+		dataSize?: number;
+	};
+	error?: {
+		message: string;
+		code: string;
+		details: string | null;
+	} | null;
+	isLoading?: boolean;
+	onRetry: () => void;
+	onProceed: () => void;
 }
 
 export function ValidationResultStep({
-  serialNumber,
-  cardCode,
-  giftDetails,
-  error,
-  isLoading = false,
-  onRetry,
-  onProceed,
+	serialNumber,
+	cardCode,
+	giftDetails,
+	error,
+	isLoading = false,
+	onRetry,
+	onProceed,
 }: ValidationResultStepProps) {
-  const [showResult, setShowResult] = React.useState(false);
-  const [displayError, setDisplayError] = React.useState(error);
+	const [showResult, setShowResult] = React.useState(false);
+	const [displayError, setDisplayError] = React.useState(error);
 
-  React.useEffect(() => {
-    // Show spinner for 2 seconds, then display result
-    const timer = setTimeout(() => {
-      setShowResult(true);
-      if (error) {
-        setDisplayError(error);
-      }
-    }, 2000);
+	React.useEffect(() => {
+		// Show spinner for 2 seconds, then display result
+		const timer = setTimeout(() => {
+			setShowResult(true);
+			if (error) {
+				setDisplayError(error);
+			}
+		}, 2000);
 
-    return () => clearTimeout(timer);
-  }, [error]);
+		return () => clearTimeout(timer);
+	}, [error]);
 
-  if (!showResult) {
-    // Spinner state
-    return (
-      <div className="space-y-6">
-        <div className="text-center">
-          <h2 className="font-serif text-2xl font-medium text-[#173f2d] sm:text-3xl">Checking your card</h2>
-          <p className="mt-2 text-sm text-[#758076] sm:text-base">
-            Validating your card details...
-          </p>
-        </div>
+	if (!showResult) {
+		// Spinner state
+		return (
+			<div className="space-y-6">
+				<div className="text-center">
+					<h2 className="font-serif text-2xl font-medium text-[#173f2d] sm:text-3xl">
+						Checking your card
+					</h2>
+					<p className="mt-2 text-sm text-[#758076] sm:text-base">
+						Validating your card details...
+					</p>
+				</div>
 
-        <Card className="border border-[#e6dfd3] bg-[#faf8f3] p-10 shadow-none sm:p-12">
-          <div className="space-y-6 text-center">
-            <div className="flex justify-center">
-              <Spinner size="lg" className="text-[#173f2d]" />
-            </div>
-            <div>
-              <h3 className="font-serif text-lg font-medium text-[#173f2d] sm:text-xl">
-                Confirming your reward
-              </h3>
-              <p className="mt-2 text-xs text-[#758076] sm:text-sm">
-                Please wait while we validate your card...
-              </p>
-            </div>
-          </div>
-        </Card>
-      </div>
-    );
-  }
+				<Card className="border border-[#e6dfd3] bg-[#faf8f3] p-10 shadow-none sm:p-12">
+					<div className="space-y-6 text-center">
+						<div className="flex justify-center">
+							<Spinner size="lg" className="text-[#173f2d]" />
+						</div>
+						<div>
+							<h3 className="font-serif text-lg font-medium text-[#173f2d] sm:text-xl">
+								Confirming your reward
+							</h3>
+							<p className="mt-2 text-xs text-[#758076] sm:text-sm">
+								Please wait while we validate your card...
+							</p>
+						</div>
+					</div>
+				</Card>
+			</div>
+		);
+	}
 
-  // Success state
-  if (!displayError && giftDetails) {
-    return (
-      <div className="space-y-6">
-        {/* Success Message Card */}
-        <Card className="rounded-sm border border-[#cad6c8] bg-[#f3f6f0] p-5 shadow-none sm:p-6">
-          <div className="space-y-4">
-            <div className="flex items-center gap-3">
-              <CheckCircle2 className="h-5 w-5 flex-shrink-0 text-[#416c49] sm:h-6 sm:w-6" />
-              <div>
-                <p className="font-serif text-lg font-medium text-[#173f2d] sm:text-xl">
-                  Validation Successful!
-                </p>
-                <p className="mt-1 text-xs text-[#657766] sm:text-sm">
-                  Your card details have been verified and confirmed.
-                </p>
-              </div>
-            </div>
-          </div>
-        </Card>
+	// Success state
+	if (!displayError && giftDetails) {
+		return (
+			<div className="space-y-6">
+				{/* Success Message Card */}
+				<Card className="rounded-sm border border-[#cad6c8] bg-[#f3f6f0] p-5 shadow-none sm:p-6">
+					<div className="space-y-4">
+						<div className="flex items-center gap-3">
+							<CheckCircle2 className="h-5 w-5 flex-shrink-0 text-[#416c49] sm:h-6 sm:w-6" />
+							<div>
+								<p className="font-serif text-lg font-medium text-[#173f2d] sm:text-xl">
+									Validation Successful!
+								</p>
+								<p className="mt-1 text-xs text-[#657766] sm:text-sm">
+									Your card details have been verified and confirmed.
+								</p>
+							</div>
+						</div>
+					</div>
+				</Card>
 
-        {/* Card Details Display */}
-        <Card className="rounded-sm border border-[#e6dfd3] bg-[#fffdf8] p-5 shadow-none sm:p-6">
-          <div className="space-y-4">
-            <div className="flex items-center gap-2 mb-4">
-              <CreditCard className="h-4 w-4 text-[#8e6c39] sm:h-5 sm:w-5" />
-              <h3 className="font-semibold text-sm sm:text-base">Card Details</h3>
-            </div>
-            <div className="grid grid-cols-2 gap-4">
-              <div className="space-y-1">
-                <p className="text-sm text-muted-foreground">Serial Number</p>
-                <p className="font-semibold">{serialNumber}</p>
-              </div>
-              <div className="space-y-1">
-                <p className="text-sm text-muted-foreground">Card Code</p>
-                <p className="text-sm font-semibold">{cardCode}</p>
-              </div>
-              <div className="space-y-1">
-                <p className="text-sm text-muted-foreground">Gift Type</p>
-                <p className="font-semibold capitalize">
-                  {giftDetails.giftType}
-                </p>
-              </div>
-              <div className="space-y-1">
-                <p className="text-sm text-muted-foreground">Value</p>
-                <p className="font-semibold">
-                  {giftDetails.giftType === "data"
-                    ? `${giftDetails.dataSize || "N/A"} MB`
-                    : `₦${(giftDetails.amount || 0).toLocaleString()}`}
-                </p>
-              </div>
-            </div>
-          </div>
-        </Card>
+				{/* Card Details Display */}
+				<Card className="rounded-sm border border-[#e6dfd3] bg-[#fffdf8] p-5 shadow-none sm:p-6">
+					<div className="space-y-4">
+						<div className="flex items-center gap-2 mb-4">
+							<CreditCard className="h-4 w-4 text-[#8e6c39] sm:h-5 sm:w-5" />
+							<h3 className="font-semibold text-sm sm:text-base">
+								Card Details
+							</h3>
+						</div>
+						<div className="grid grid-cols-2 gap-4">
+							<div className="space-y-1">
+								<p className="text-sm text-muted-foreground">Serial Number</p>
+								<p className="font-semibold">{serialNumber}</p>
+							</div>
+							<div className="space-y-1">
+								<p className="text-sm text-muted-foreground">Card Code</p>
+								<p className="text-sm font-semibold">{cardCode}</p>
+							</div>
+							<div className="space-y-1">
+								<p className="text-sm text-muted-foreground">Gift Type</p>
+								<p className="font-semibold capitalize">
+									{giftDetails.giftType}
+								</p>
+							</div>
+							<div className="space-y-1">
+								<p className="text-sm text-muted-foreground">Value</p>
+								<p className="font-semibold">
+									{giftDetails.giftType === "data"
+										? giftDetails.dataSize != null
+											? formatDataSize(giftDetails.dataSize)
+											: "N/A"
+										: `₦${(giftDetails.amount || 0).toLocaleString()}`}
+								</p>
+							</div>
+						</div>
+					</div>
+				</Card>
 
-        {/* Action Buttons */}
-        <div className="flex gap-3 pt-4">
-          <Button
-            type="button"
-            variant="outline"
-            onClick={onRetry}
-            disabled={isLoading}
-            className="h-12 flex-1 rounded-sm border-[#d8d0c2] bg-transparent text-[#46574b] hover:bg-[#f5f1e8]"
-          >
-            Use Different Card
-          </Button>
-          <Button
-            type="button"
-            onClick={onProceed}
-            disabled={isLoading}
-            className="h-12 flex-1 rounded-sm bg-[#173f2d] text-white hover:bg-[#24553d]"
-          >
-            Proceed
-          </Button>
-        </div>
-      </div>
-    );
-  }
+				{/* Action Buttons */}
+				<div className="flex gap-3 pt-4">
+					<Button
+						type="button"
+						variant="outline"
+						onClick={onRetry}
+						disabled={isLoading}
+						className="h-12 flex-1 rounded-sm border-[#d8d0c2] bg-transparent text-[#46574b] hover:bg-[#f5f1e8]"
+					>
+						Use Different Card
+					</Button>
+					<Button
+						type="button"
+						onClick={onProceed}
+						disabled={isLoading}
+						className="h-12 flex-1 rounded-sm bg-[#173f2d] text-white hover:bg-[#24553d]"
+					>
+						Proceed
+					</Button>
+				</div>
+			</div>
+		);
+	}
 
-  // Error state
-  return (
-    <div className="space-y-6">
-      <div>
-        <h2 className="font-serif text-2xl font-medium text-[#173f2d] sm:text-3xl">We couldn’t verify this card</h2>
-        <p className="mt-2 text-sm text-[#758076] sm:text-base">
-          We couldn't verify your card. Please try again.
-        </p>
-      </div>
+	// Error state
+	return (
+		<div className="space-y-6">
+			<div>
+				<h2 className="font-serif text-2xl font-medium text-[#173f2d] sm:text-3xl">
+					We couldn’t verify this card
+				</h2>
+				<p className="mt-2 text-sm text-[#758076] sm:text-base">
+					We couldn't verify your card. Please try again.
+				</p>
+			</div>
 
-      {/* Error Message Card */}
-      <Card className="rounded-sm border border-[#e8cbc5] bg-[#fbf4f1] p-5 shadow-none sm:p-6">
-        <div className="space-y-4">
-          <div className="flex items-start gap-3">
-            <AlertCircle className="h-5 w-5 sm:h-6 sm:w-6 text-red-600 flex-shrink-0 mt-0.5" />
-            <div className="flex-1">
-              <p className="font-semibold text-red-900 text-sm sm:text-base">
-                {displayError?.message || "Card verification failed"}
-              </p>
-              {displayError?.details && (
-                <p className="text-xs sm:text-sm text-red-700 mt-2">
-                  {displayError.details}
-                </p>
-              )}
-              <p className="mt-2 text-xs text-red-600">
-                Error code: {displayError?.code || "UNKNOWN"}
-              </p>
-            </div>
-          </div>
-        </div>
-      </Card>
+			{/* Error Message Card */}
+			<Card className="rounded-sm border border-[#e8cbc5] bg-[#fbf4f1] p-5 shadow-none sm:p-6">
+				<div className="space-y-4">
+					<div className="flex items-start gap-3">
+						<AlertCircle className="h-5 w-5 sm:h-6 sm:w-6 text-red-600 flex-shrink-0 mt-0.5" />
+						<div className="flex-1">
+							<p className="font-semibold text-red-900 text-sm sm:text-base">
+								{displayError?.message || "Card verification failed"}
+							</p>
+							{displayError?.details && (
+								<p className="text-xs sm:text-sm text-red-700 mt-2">
+									{displayError.details}
+								</p>
+							)}
+							<p className="mt-2 text-xs text-red-600">
+								Error code: {displayError?.code || "UNKNOWN"}
+							</p>
+						</div>
+					</div>
+				</div>
+			</Card>
 
-      {/* Card Details for Reference */}
-      <Card className="rounded-sm border border-[#e6dfd3] bg-[#fffdf8] p-5 shadow-none sm:p-6">
-        <div className="space-y-4">
-          <div className="flex items-center gap-2 mb-4">
-            <CreditCard className="h-4 w-4 text-[#8e6c39] sm:h-5 sm:w-5" />
-            <h3 className="font-semibold text-sm sm:text-base">Card Information</h3>
-          </div>
-          <div className="grid grid-cols-2 gap-4">
-            <div className="space-y-1">
-              <p className="text-sm text-muted-foreground">Serial Number</p>
-              <p className="font-semibold">{serialNumber}</p>
-            </div>
-            <div className="space-y-1">
-              <p className="text-sm text-muted-foreground">Card Code</p>
-              <p className="text-sm font-semibold">{cardCode}</p>
-            </div>
-          </div>
-        </div>
-      </Card>
+			{/* Card Details for Reference */}
+			<Card className="rounded-sm border border-[#e6dfd3] bg-[#fffdf8] p-5 shadow-none sm:p-6">
+				<div className="space-y-4">
+					<div className="flex items-center gap-2 mb-4">
+						<CreditCard className="h-4 w-4 text-[#8e6c39] sm:h-5 sm:w-5" />
+						<h3 className="font-semibold text-sm sm:text-base">
+							Card Information
+						</h3>
+					</div>
+					<div className="grid grid-cols-2 gap-4">
+						<div className="space-y-1">
+							<p className="text-sm text-muted-foreground">Serial Number</p>
+							<p className="font-semibold">{serialNumber}</p>
+						</div>
+						<div className="space-y-1">
+							<p className="text-sm text-muted-foreground">Card Code</p>
+							<p className="text-sm font-semibold">{cardCode}</p>
+						</div>
+					</div>
+				</div>
+			</Card>
 
-      {/* Action Buttons */}
-      <div className="flex gap-3 pt-4">
-        <Button
-          type="button"
-          onClick={onRetry}
-          disabled={isLoading}
-            className="h-12 flex-1 rounded-sm bg-[#173f2d] text-white hover:bg-[#24553d]"
-        >
-          Try Again
-        </Button>
-        <Button
-          type="button"
-          variant="outline"
-          onClick={onRetry}
-          disabled={isLoading}
-            className="h-12 flex-1 rounded-sm border-[#d8d0c2] bg-transparent text-[#46574b] hover:bg-[#f5f1e8]"
-        >
-          Use Different Card
-        </Button>
-      </div>
-    </div>
-  );
+			{/* Action Buttons */}
+			<div className="flex gap-3 pt-4">
+				<Button
+					type="button"
+					onClick={onRetry}
+					disabled={isLoading}
+					className="h-12 flex-1 rounded-sm bg-[#173f2d] text-white hover:bg-[#24553d]"
+				>
+					Try Again
+				</Button>
+				<Button
+					type="button"
+					variant="outline"
+					onClick={onRetry}
+					disabled={isLoading}
+					className="h-12 flex-1 rounded-sm border-[#d8d0c2] bg-transparent text-[#46574b] hover:bg-[#f5f1e8]"
+				>
+					Use Different Card
+				</Button>
+			</div>
+		</div>
+	);
 }

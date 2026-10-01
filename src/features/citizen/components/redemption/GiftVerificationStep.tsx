@@ -3,11 +3,11 @@ import { useFormContext } from "react-hook-form";
 import { CreditCard } from "lucide-react";
 import { StepHeader } from "../order/shared";
 import {
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
+	FormControl,
+	FormField,
+	FormItem,
+	FormLabel,
+	FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -16,135 +16,137 @@ import { Spinner } from "@/components/ui/spinner";
 import { formatSerialNumber, formatCardCode } from "@/lib/card-security";
 
 interface CardVerificationStepProps {
-  isLoading: boolean;
-  onNext: () => Promise<void>;
-  onPrev: () => void;
-  isFirstStep?: boolean;
+	isLoading: boolean;
+	onNext: () => Promise<void>;
+	onPrev: () => void;
+	isFirstStep?: boolean;
 }
 
 export function GiftVerificationStep({
-  isLoading,
-  onNext,
-  onPrev,
-  isFirstStep = false,
+	isLoading,
+	onNext,
+	onPrev,
+	isFirstStep = false,
 }: CardVerificationStepProps) {
-  const form = useFormContext<RedemptionFormValues>();
-  const [verificationLoading, setVerificationLoading] = React.useState(false);
+	const form = useFormContext<RedemptionFormValues>();
+	const [verificationLoading, setVerificationLoading] = React.useState(false);
 
-  const serialNumber = form.watch("serialNumber");
-  const cardCode = form.watch("cardCode");
+	const serialNumber = form.watch("serialNumber");
+	const cardCode = form.watch("cardCode");
 
-  const handleVerifyCard = async () => {
-    if (!serialNumber || !cardCode) {
-      if (!serialNumber) {
-        form.setError("serialNumber", {
-          message: "Serial number is required",
-        });
-      }
-      if (!cardCode) {
-        form.setError("cardCode", {
-          message: "Card code is required",
-        });
-      }
-      return;
-    }
+	const handleVerifyCard = async () => {
+		if (!serialNumber || !cardCode) {
+			if (!serialNumber) {
+				form.setError("serialNumber", {
+					message: "Serial number is required",
+				});
+			}
+			if (!cardCode) {
+				form.setError("cardCode", {
+					message: "Card code is required",
+				});
+			}
+			return;
+		}
 
-    setVerificationLoading(true);
-    // Proceed to the result step (which shows the spinner and result)
-    onNext();
-  };
+		setVerificationLoading(true);
+		// Proceed to the result step (which shows the spinner and result)
+		onNext();
+	};
 
-  return (
-    <div className="space-y-6">
-      <div>
-        <h2 className="font-serif text-2xl font-medium tracking-tight text-[#173f2d] sm:text-3xl">Verify your card</h2>
-        <p className="mt-2 text-sm leading-6 text-[#758076] sm:text-base">
-          Enter the serial number and card code from your scratch card
-        </p>
-      </div>
+	return (
+		<div className="space-y-6">
+			<div>
+				<h2 className="font-serif text-2xl font-medium tracking-tight text-[#173f2d] sm:text-3xl">
+					Verify your card
+				</h2>
+				<p className="mt-2 text-sm leading-6 text-[#758076] sm:text-base">
+					Enter the serial number and card code from your scratch card
+				</p>
+			</div>
 
-      <div className="space-y-4">
-        {/* Serial Number & Card Code Fields - Responsive Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-          {/* Serial Number Field - Smaller on large screens */}
-          <FormField
-            control={form.control}
-            name="serialNumber"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Serial Number</FormLabel>
-                <FormControl>
-                  <Input
-                    placeholder="AB-123456"
-                    maxLength={9}
-                    {...field}
-                    disabled={verificationLoading}
-                    className="font-medium uppercase tracking-[0.08em]"
-                    onChange={(e) =>
-                      field.onChange(formatSerialNumber(e.target.value))
-                    }
-                  />
-                </FormControl>
-                <p className="text-xs text-muted-foreground mt-1">
-                  {field.value.length}/9 characters
-                </p>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+			<div className="space-y-4">
+				{/* Serial Number & Card Code Fields - Responsive Grid */}
+				<div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+					{/* Serial Number Field - Smaller on large screens */}
+					<FormField
+						control={form.control}
+						name="serialNumber"
+						render={({ field }) => (
+							<FormItem>
+								<FormLabel>Serial Number</FormLabel>
+								<FormControl>
+									<Input
+										placeholder="AB-123456"
+										maxLength={9}
+										{...field}
+										disabled={verificationLoading}
+										className="font-medium uppercase tracking-[0.08em] placeholder:text-xs"
+										onChange={(e) =>
+											field.onChange(formatSerialNumber(e.target.value))
+										}
+									/>
+								</FormControl>
+								<p className="text-xs text-muted-foreground mt-1">
+									{field.value.length}/9 characters
+								</p>
+								<FormMessage />
+							</FormItem>
+						)}
+					/>
 
-          {/* Card Code Field - Larger on large screens */}
-          <FormField
-            control={form.control}
-            name="cardCode"
-            render={({ field }) => (
-              <FormItem className="lg:col-span-2">
-                <FormLabel>Card Code</FormLabel>
-                <FormControl>
-                  <Input
-                    placeholder="ABC-1234-5678-9012"
-                    maxLength={18}
-                    {...field}
-                    disabled={verificationLoading}
-                    className="font-medium uppercase tracking-[0.08em]"
-                    onChange={(e) =>
-                      field.onChange(formatCardCode(e.target.value))
-                    }
-                  />
-                </FormControl>
-                <p className="text-xs text-muted-foreground mt-1">
-                  {field.value.length}/18 characters
-                </p>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-        </div>
+					{/* Card Code Field - Larger on large screens */}
+					<FormField
+						control={form.control}
+						name="cardCode"
+						render={({ field }) => (
+							<FormItem className="lg:col-span-2">
+								<FormLabel>Card Code</FormLabel>
+								<FormControl>
+									<Input
+										placeholder="ABC-1234-5678-9012"
+										maxLength={18}
+										{...field}
+										disabled={verificationLoading}
+										className="font-medium uppercase tracking-[0.08em] placeholder:text-xs"
+										onChange={(e) =>
+											field.onChange(formatCardCode(e.target.value))
+										}
+									/>
+								</FormControl>
+								<p className="text-xs text-muted-foreground mt-1">
+									{field.value.length}/18 characters
+								</p>
+								<FormMessage />
+							</FormItem>
+						)}
+					/>
+				</div>
 
-        <Button
-          type="button"
-          onClick={handleVerifyCard}
-          disabled={verificationLoading || !serialNumber || !cardCode}
-          isLoading={verificationLoading}
-          className="h-12 w-full rounded-sm bg-[#173f2d] font-medium text-white hover:bg-[#24553d]"
-        >
-          Verify Card
-        </Button>
-      </div>
+				<Button
+					type="button"
+					onClick={handleVerifyCard}
+					disabled={verificationLoading || !serialNumber || !cardCode}
+					isLoading={verificationLoading}
+					className="h-12 w-full rounded-sm bg-[#173f2d] font-medium text-white hover:bg-[#24553d]"
+				>
+					Verify Card
+				</Button>
+			</div>
 
-      <div className="flex gap-3 pt-4">
-        {!isFirstStep && (
-          <Button
-            type="button"
-            variant="outline"
-            onClick={onPrev}
-            disabled={isLoading || verificationLoading}
-            className="flex-1"
-          >
-            Back
-          </Button>
-        )}
-      </div>
-    </div>
-  );
+			<div className="flex gap-3 pt-4">
+				{!isFirstStep && (
+					<Button
+						type="button"
+						variant="outline"
+						onClick={onPrev}
+						disabled={isLoading || verificationLoading}
+						className="flex-1"
+					>
+						Back
+					</Button>
+				)}
+			</div>
+		</div>
+	);
 }

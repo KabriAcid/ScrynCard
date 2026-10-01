@@ -1,8 +1,5 @@
 import { z } from "zod";
-import { LucideIcon } from "lucide-react";
-
-import { z } from "zod";
-import { LucideIcon } from "lucide-react";
+import type { LucideIcon } from "lucide-react";
 
 // ============================================================================
 // PRODUCTS (DATA & AIRTIME)
@@ -29,14 +26,12 @@ export const denominations = [...dataProducts, ...airtimeProducts] as const;
 // ============================================================================
 // ORDER CALCULATIONS
 // ============================================================================
-export const SERVICE_FEE_RATE = 0.15; // 15%
 export const PRINTING_COST_PER_CARD = 200; // ₦200 per unit
 export const MINIMUM_ORDER_VALUE = 800000; // ₦800k minimum
 
 interface OrderCalculations {
   totalCards: number;
   cardValue: number;
-  serviceFee: number;
   printingCost: number;
   totalToPay: number;
 }
@@ -52,11 +47,10 @@ export const calculateOrderTotals = (
     const denom = denominations.find((d) => d.id === item.denomination);
     return sum + (denom?.value || 0) * (Number(item.quantity) || 0);
   }, 0);
-  const serviceFee = cardValue * SERVICE_FEE_RATE;
   const printingCost = totalCards * PRINTING_COST_PER_CARD;
-  const totalToPay = cardValue + serviceFee + printingCost;
+  const totalToPay = cardValue + printingCost;
 
-  return { totalCards, cardValue, serviceFee, printingCost, totalToPay };
+  return { totalCards, cardValue, printingCost, totalToPay };
 };
 
 // ============================================================================
@@ -68,6 +62,9 @@ const denominationEnum = denominations.map((d) => d.id) as [
 ];
 
 export const OrderSchema = z.object({
+  purpose: z.enum(["business", "marriage"]),
+  businessName: z.string().min(2, "Enter your business name."),
+  businessType: z.string().min(2, "Enter your business type."),
   fullName: z.string().min(3, "Name must be at least 3 characters."),
   nin: z.string().regex(/^\d{11}$/, {
     message: "Please enter a valid NIN (11 digits).",
@@ -78,7 +75,7 @@ export const OrderSchema = z.object({
     .array(
       z.object({
         denomination: z.enum(denominationEnum),
-        quantity: z.coerce.number().min(1, "Min 1"),
+        quantity: z.coerce.number().min(10, "Minimum quantity is 10.").multipleOf(10, "Use increments of 10."),
       })
     )
     .min(1, "Please select at least one product.")
