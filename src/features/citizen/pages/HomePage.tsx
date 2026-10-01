@@ -2,6 +2,8 @@ import { ArrowRight, ArrowUpRight, Gift, Sparkles } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Logo } from "@/components/logo";
 
+const mobileNetworks = ["MTN", "Airtel", "Glo", "9Mobile"];
+
 const frontSamples = __SAMPLE_IMAGES__.filter((sample) => !sample.isBack);
 const featuredSample =
   frontSamples.find((sample) => sample.name.toLowerCase().includes("wedding")) ??
@@ -33,21 +35,26 @@ const moments = [
 
 export default function HomePage() {
   return (
-    <div className="min-h-screen bg-[#faf8f3] text-[#172d22]">
+    <div
+      className="min-h-screen bg-[#faf8f3] text-[#172d22]"
+      style={{
+        backgroundImage: "radial-gradient(rgba(23, 63, 45, 0.07) 1px, transparent 1px)",
+        backgroundSize: "24px 24px",
+      }}
+    >
       <header className="fixed left-1/2 top-3 z-50 flex h-[68px] w-[calc(100%-1.5rem)] max-w-[1120px] -translate-x-1/2 items-center justify-between rounded-full border border-white/70 bg-[#faf8f3]/75 px-4 shadow-[0_10px_35px_rgba(23,45,34,0.10)] backdrop-blur-xl sm:top-4 sm:h-[72px] sm:w-[calc(100%-3rem)] sm:px-7">
         <Logo />
         <nav className="hidden items-center gap-9 text-[13px] text-[#536257] md:flex" aria-label="Main navigation">
-          <a className="transition hover:text-[#173f2d]" href="#how-it-works">How it works</a>
-          <a className="transition hover:text-[#173f2d]" href="#occasions">Made for many moments</a>
-          <Link className="transition hover:text-[#173f2d]" to="/samples">Card gallery</Link>
+          <Link className="relative py-2 transition-colors duration-300 hover:text-[#173f2d] after:absolute after:bottom-0 after:left-0 after:h-[2px] after:w-full after:origin-left after:scale-x-0 after:bg-[#173f2d] after:transition-transform after:duration-300 hover:after:scale-x-100" to="/how-it-works">How it works</Link>
+          <Link className="relative py-2 transition-colors duration-300 hover:text-[#173f2d] after:absolute after:bottom-0 after:left-0 after:h-[2px] after:w-full after:origin-left after:scale-x-0 after:bg-[#173f2d] after:transition-transform after:duration-300 hover:after:scale-x-100" to="/samples">Card gallery</Link>
         </nav>
-        <div className="flex items-center gap-2 sm:gap-4">
-          <Link to="/login" className="hidden px-2 py-2 text-sm text-[#536257] transition hover:text-[#173f2d] sm:inline-flex">Sign in</Link>
+        <div className="flex items-center gap-2 sm:gap-3">
+          <Link to="/login" className="hidden h-10 items-center rounded-full border border-[#c8c9bc] bg-white/35 px-4 text-sm text-[#435449] transition hover:border-[#173f2d] hover:bg-white/60 sm:inline-flex">Sign in</Link>
           <Link
-            to="/samples"
-            className="inline-flex h-10 items-center gap-2 rounded-sm bg-[#173f2d] px-4 text-sm font-medium text-white transition hover:bg-[#24553d] sm:px-5"
+            to="/redeem"
+            className="group relative isolate inline-flex h-10 items-center justify-center overflow-hidden rounded-full bg-[#173f2d] px-4 text-sm font-medium text-white transition-colors hover:bg-[#24553d] before:pointer-events-none before:absolute before:inset-y-0 before:-left-1/2 before:w-1/2 before:-skew-x-12 before:bg-gradient-to-r before:from-transparent before:via-white/40 before:to-transparent before:animate-shine sm:px-5"
           >
-            See the cards <ArrowUpRight className="h-4 w-4" />
+            <span className="relative z-10 inline-flex items-center gap-2">Redeem your card <ArrowUpRight className="h-4 w-4" /></span>
           </Link>
         </div>
       </header>
@@ -69,16 +76,16 @@ export default function HomePage() {
             </p>
             <div className="mt-9 flex flex-wrap items-center gap-3">
               <Link
-                to="/redeem"
-                className="inline-flex h-12 items-center gap-3 bg-[#173f2d] px-6 text-sm font-medium text-white transition hover:bg-[#24553d]"
-              >
-                Redeem your card <ArrowRight className="h-4 w-4" />
-              </Link>
-              <Link
                 to="/samples"
-                className="inline-flex h-12 items-center gap-2 border border-[#b9b5aa] bg-transparent px-5 text-sm font-medium text-[#34463a] transition hover:border-[#9a835c] hover:bg-white/50"
+                className="inline-flex h-12 items-center gap-2 border border-[#b9b5aa] bg-white/35 px-5 text-sm font-medium text-[#34463a] transition hover:border-[#9a835c] hover:bg-white/60"
               >
                 View card samples
+              </Link>
+              <Link
+                to="/redeem"
+                className="group relative isolate inline-flex h-12 items-center justify-center overflow-hidden bg-[#173f2d] px-6 text-sm font-medium text-white transition-colors hover:bg-[#24553d] before:pointer-events-none before:absolute before:inset-y-0 before:-left-1/2 before:w-1/2 before:-skew-x-12 before:bg-gradient-to-r before:from-transparent before:via-white/40 before:to-transparent before:animate-shine"
+              >
+                <span className="relative z-10 inline-flex items-center gap-3">Redeem your card <ArrowRight className="h-4 w-4" /></span>
               </Link>
             </div>
             <div className="mt-12 flex items-center gap-3 border-t border-[#e6e1d7] pt-5 text-xs leading-5 text-[#778077]">
@@ -117,6 +124,23 @@ export default function HomePage() {
               </div>
             </div>
             <p className="absolute bottom-0 left-4 text-[10px] uppercase tracking-[0.18em] text-[#847d6d] sm:left-8">Made to be given. Made to be remembered.</p>
+          </div>
+        </section>
+
+        <section aria-label="Scryncard at a glance" className="border-y border-[#e8e2d7] bg-[#faf8f3]/85 backdrop-blur-sm">
+          <div className="mx-auto grid max-w-[1380px] grid-cols-1 divide-y divide-[#e5dfd4] px-5 sm:grid-cols-3 sm:divide-x sm:divide-y-0 sm:px-8 lg:px-12">
+            <div className="py-6 sm:px-7 sm:py-8">
+              <p className="font-serif text-4xl tracking-tight text-[#173f2d]">{frontSamples.length}</p>
+              <p className="mt-1 text-xs uppercase tracking-[0.16em] text-[#788076]">Card designs to explore</p>
+            </div>
+            <div className="py-6 sm:px-7 sm:py-8">
+              <p className="font-serif text-4xl tracking-tight text-[#173f2d]">{mobileNetworks.length}</p>
+              <p className="mt-1 text-xs uppercase tracking-[0.16em] text-[#788076]">Mobile networks listed</p>
+            </div>
+            <div className="py-6 sm:px-7 sm:py-8">
+              <p className="font-serif text-4xl tracking-tight text-[#173f2d]">02</p>
+              <p className="mt-1 text-xs uppercase tracking-[0.16em] text-[#788076]">Reward types · airtime & data</p>
+            </div>
           </div>
         </section>
 

@@ -20,6 +20,7 @@ import RedeemPage from "@/features/citizen/pages/RedeemPage";
 import RedeemDetails from "@/features/citizen/pages/RedeemDetails";
 import OrderCards from "@/features/citizen/pages/OrderCards";
 import SampleGallery from "@/features/citizen/pages/SampleGallery";
+import HowItWorksPage from "@/features/citizen/pages/HowItWorksPage";
 
 // Admin Pages
 import AdminDashboard from "@/features/admin/pages/Dashboard";
@@ -101,6 +102,7 @@ function App() {
         <Route path="/redeem/details" element={<RedeemDetails />} />
         <Route path="/order" element={<OrderCards />} />
         <Route path="/samples" element={<SampleGallery />} />
+        <Route path="/how-it-works" element={<HowItWorksPage />} />
 
         {/* Admin Routes - Super Admin */}
         <Route
