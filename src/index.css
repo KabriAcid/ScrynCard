@@ -361,6 +361,15 @@
   box-shadow: none;
 }
 
+.order-flow .order-location-card {
+  border: 1px solid #e5dfd4;
+  border-radius: 0.35rem;
+  background: #fffdf8;
+  background-image: none;
+  padding: 1rem;
+  box-shadow: none;
+}
+
 .order-flow .order-business-panel .grid {
   gap: 1rem;
 }
@@ -815,9 +824,14 @@
   line-height: 1.6;
 }
 
-.order-info-dialog button[data-state],
-.order-info-dialog [data-radix-collection-item] {
-  background: #fffdf8;
+.order-info-dialog {
+  border-color: #e5dfd4;
+  background: #fffdf8 !important;
+  color: #24382a;
+}
+
+.order-info-dialog .order-primary-button {
+  width: 100%;
 }
 
 .order-flow input:not([type="checkbox"]):not([type="radio"]),

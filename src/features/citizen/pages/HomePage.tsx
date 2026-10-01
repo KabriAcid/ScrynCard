@@ -1,104 +1,18 @@
-import {
-	ArrowRight,
-	ArrowUpRight,
-	Gift,
-	Menu,
-	Sparkles,
-	X,
-} from "lucide-react";
-import { useState } from "react";
+import { ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
-import { Logo } from "@/components/logo";
+import { HomeFooter } from "@/features/citizen/components/home/HomeFooter";
+import { HomeHeader } from "@/features/citizen/components/home/HomeHeader";
+import { HomeHero } from "@/features/citizen/components/home/HomeHero";
 import {
-	Accordion,
-	AccordionContent,
-	AccordionItem,
-	AccordionTrigger,
-} from "@/components/ui/accordion";
-import { formatNaira } from "@/lib/formatters";
-import { mockPoliticians } from "@/lib/mock/politicians";
-import { mockRedemptions } from "@/lib/mock/redemptions";
-
-const frontSamples = __SAMPLE_IMAGES__.filter((sample) => !sample.isBack);
-const featuredSample =
-	frontSamples.find((sample) =>
-		sample.name.toLowerCase().includes("wedding"),
-	) ?? frontSamples[0];
-const supportingSamples = frontSamples
-	.filter((sample) => sample.src !== featuredSample?.src)
-	.slice(0, 2);
-
-const completedRedemptions = mockRedemptions.filter(
-	(redemption) => redemption.status === "completed",
-);
-const demoMetrics = {
-	partnerOrganizations: new Set(
-		mockPoliticians.map((politician) => politician.organization),
-	).size,
-	completedRedemptions: completedRedemptions.length,
-	totalValueRedeemed: completedRedemptions.reduce(
-		(total, redemption) => total + redemption.amount,
-		0,
-	),
-};
-
-const frequentlyAskedQuestions = [
-	{
-		id: "what-is-scryncard",
-		question: "What is Scryncard?",
-		answer:
-			"Scryncard turns a branded physical card into a useful gift, with an airtime or data reward recipients can redeem on their mobile phone.",
-	},
-	{
-		id: "how-to-redeem",
-		question: "How do I redeem a card?",
-		answer:
-			"Open the redemption page, enter the serial number and code from your card, provide the requested details, then choose the recipient's phone number and network before confirming.",
-	},
-	{
-		id: "supported-networks",
-		question: "Which mobile networks are supported?",
-		answer:
-			"The current experience lists MTN, Airtel, Glo, and 9Mobile. Available rewards can depend on the network and card you received.",
-	},
-	{
-		id: "custom-cards",
-		question: "Can I order cards for my business or event?",
-		answer:
-			"Yes. Scryncard cards are designed for businesses, celebrations, and organizations. Explore the gallery for design inspiration, then use the order flow to get started.",
-	},
-	{
-		id: "reward-arrival",
-		question: "When will the reward arrive?",
-		answer:
-			"Delivery time can vary by mobile network. After you confirm, the redemption screen will show whether the request was submitted successfully.",
-	},
-];
-
-const moments = [
-	{
-		number: "01",
-		title: "For your customers",
-		description:
-			"Thank loyal customers, welcome new ones, and give every visit a little more meaning.",
-	},
-	{
-		number: "02",
-		title: "For your celebrations",
-		description:
-			"Give guests a keepsake with a useful reward inside, made for weddings and special days.",
-	},
-	{
-		number: "03",
-		title: "For your people",
-		description:
-			"Recognize a team, mark a milestone, or bring a community together with a thoughtful gift.",
-	},
-];
+	HomeFAQ,
+	HomeStats,
+} from "@/features/citizen/components/home/HomeHighlights";
+import {
+	howItWorksSteps,
+	moments,
+} from "@/features/citizen/components/home/homepage-data";
 
 export default function HomePage() {
-	const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-
 	return (
 		<div
 			className="min-h-screen bg-[#faf8f3] text-[#172d22]"
@@ -108,203 +22,14 @@ export default function HomePage() {
 				backgroundSize: "24px 24px",
 			}}
 		>
-			<header className="fixed left-1/2 top-3 z-50 flex h-[60px] w-[calc(100%-1.5rem)] max-w-[1120px] -translate-x-1/2 items-center justify-between rounded-full border border-white/70 bg-[#faf8f3]/75 px-4 shadow-[0_10px_35px_rgba(23,45,34,0.10)] backdrop-blur-xl sm:top-4 sm:h-[64px] sm:w-[calc(100%-3rem)] sm:px-7">
-				<Logo />
-				<nav
-					className="hidden items-center gap-9 text-[13px] text-[#536257] md:flex"
-					aria-label="Main navigation"
-				>
-					<Link
-						className="relative py-2 transition-colors duration-300 hover:text-[#173f2d] after:absolute after:bottom-0 after:left-0 after:h-[2px] after:w-full after:origin-left after:scale-x-0 after:bg-[#173f2d] after:transition-transform after:duration-300 hover:after:scale-x-100"
-						to="/how-it-works"
-					>
-						How it works
-					</Link>
-					<Link
-						className="relative py-2 transition-colors duration-300 hover:text-[#173f2d] after:absolute after:bottom-0 after:left-0 after:h-[2px] after:w-full after:origin-left after:scale-x-0 after:bg-[#173f2d] after:transition-transform after:duration-300 hover:after:scale-x-100"
-						to="/samples"
-					>
-						Card gallery
-					</Link>
-				</nav>
-				<div className="flex items-center gap-2 sm:gap-3">
-					<Link
-						to="/login"
-						className="hidden h-10 items-center rounded-full border border-[#c8c9bc] bg-white/35 px-4 text-sm text-[#435449] transition hover:border-[#173f2d] hover:bg-white/60 sm:inline-flex"
-					>
-						Sign in
-					</Link>
-					<Link
-						to="/order"
-						className="group relative isolate inline-flex h-10 items-center justify-center overflow-hidden rounded-full bg-[#173f2d] px-4 text-sm font-medium text-white transition-colors hover:bg-[#24553d] before:pointer-events-none before:absolute before:inset-y-0 before:-left-1/2 before:w-1/2 before:-skew-x-12 before:bg-gradient-to-r before:from-transparent before:via-white/40 before:to-transparent before:animate-shine sm:px-5"
-					>
-						<span className="relative z-10 inline-flex items-center gap-2">
-							Order <ArrowUpRight className="h-4 w-4" />
-						</span>
-					</Link>
-				</div>
-				<button
-					type="button"
-					className="grid h-10 w-10 shrink-0 place-items-center rounded-full border border-[#d9d3c7] text-[#294c35] md:hidden"
-					aria-label={
-						isMobileMenuOpen ? "Close navigation menu" : "Open navigation menu"
-					}
-					aria-expanded={isMobileMenuOpen}
-					aria-controls="mobile-navigation"
-					onClick={() => setIsMobileMenuOpen((open) => !open)}
-				>
-					{isMobileMenuOpen ? (
-						<X className="h-4 w-4" />
-					) : (
-						<Menu className="h-4 w-4" />
-					)}
-				</button>
-				<nav
-					id="mobile-navigation"
-					aria-label="Mobile navigation"
-					className={`${isMobileMenuOpen ? "block" : "hidden"} absolute left-0 right-0 top-full mt-2 rounded-lg border border-[#e6e1d7] bg-[#faf8f3] p-2 shadow-[0_12px_35px_rgba(23,45,34,0.14)] md:hidden`}
-				>
-					{[
-						["Card gallery", "/samples"],
-						["Sign in", "/login"],
-						["Order cards", "/order"],
-						["How it works", "/how-it-works"],
-					].map(([label, href]) => (
-						<Link
-							key={href}
-							to={href}
-							onClick={() => setIsMobileMenuOpen(false)}
-							className="flex min-h-11 items-center px-4 text-sm text-[#435449] transition-colors hover:bg-[#f1ecdf] hover:text-[#173f2d]"
-						>
-							{label}
-						</Link>
-					))}
-				</nav>
-			</header>
+			<HomeHeader />
 
 			<div aria-hidden="true" className="h-20 sm:h-24" />
 
 			<main>
-				<section className="mx-auto grid max-w-[1380px] items-center gap-12 px-5 pb-16 pt-10 sm:px-8 sm:pt-16 lg:grid-cols-[0.92fr_1.08fr] lg:gap-16 lg:px-12 lg:pb-24 lg:pt-14">
-					<div className="relative z-10 max-w-[600px]">
-						<h1 className="font-serif text-[clamp(3.4rem,7.1vw,6.5rem)] leading-[0.98] tracking-[-0.055em] text-[#173f2d]">
-							A scratch card that{" "}
-							<span className="italic text-[#a2783e]">gives more.</span>
-						</h1>
-						<p className="mt-7 max-w-[490px] text-base leading-8 text-[#647067] sm:text-lg sm:leading-9">
-							Branded scratch cards turn airtime and data into a gift people
-							remember. For your customers, your guests, and your team.
-						</p>
-						<div className="mt-9 flex flex-wrap items-center gap-3">
-							<Link
-								to="/order"
-								className="inline-flex h-12 items-center gap-2 border border-[#b9b5aa] bg-white/35 px-5 text-sm font-medium text-[#34463a] transition hover:border-[#9a835c] hover:bg-white/60"
-							>
-								Order cards
-							</Link>
-							<Link
-								to="/redeem"
-								className="group relative isolate inline-flex h-12 items-center justify-center overflow-hidden bg-[#173f2d] px-6 text-sm font-medium text-white transition-colors hover:bg-[#24553d] before:pointer-events-none before:absolute before:inset-y-0 before:-left-1/2 before:w-1/2 before:-skew-x-12 before:bg-gradient-to-r before:from-transparent before:via-white/40 before:to-transparent before:animate-shine"
-							>
-								<span className="relative z-10 inline-flex items-center gap-3">
-									Redeem your card <ArrowRight className="h-4 w-4" />
-								</span>
-							</Link>
-						</div>
-						<div className="mt-12 flex items-center gap-3 border-t border-[#e6e1d7] pt-5 text-xs leading-5 text-[#778077]">
-							<Sparkles className="h-4 w-4 shrink-0 text-[#a2783e]" />A personal
-							touch, with something useful inside.
-						</div>
-					</div>
+				<HomeHero />
 
-					<div className="relative mx-auto w-full max-w-[650px] pb-8 pl-3 pr-7 pt-3 sm:pl-8 sm:pr-12 sm:pt-8">
-						<div className="absolute inset-8 translate-x-3 translate-y-3 border border-[#d9c69f] sm:inset-12" />
-						<div className="relative border border-white/80 bg-[#f0e9dc] p-2 shadow-[0_24px_65px_rgba(33,46,36,0.14)] sm:p-3">
-							{featuredSample ? (
-								<img
-									src={featuredSample.src}
-									alt={`${featuredSample.name} front design`}
-									fetchPriority="high"
-									className="aspect-[1.58/1] w-full object-cover"
-								/>
-							) : (
-								<div className="flex aspect-[1.58/1] items-center justify-center bg-[#e9e1d2] text-[#718074]">
-									Your card design
-								</div>
-							)}
-							<div className="absolute -bottom-8 right-0 flex items-center gap-3 border border-[#e7e0d4] bg-[#faf8f3] p-2 shadow-[0_12px_34px_rgba(33,46,36,0.14)] sm:-bottom-9 sm:right-2 sm:gap-4 sm:p-3">
-								{supportingSamples.map((sample) => (
-									<img
-										key={sample.src}
-										src={sample.src}
-										alt={sample.name}
-										loading="lazy"
-										className="h-[62px] w-[92px] object-cover sm:h-[78px] sm:w-[118px]"
-									/>
-								))}
-								{supportingSamples.length === 0 && (
-									<Gift className="m-5 h-7 w-7 text-[#a2783e]" />
-								)}
-								<Link
-									to="/samples"
-									className="mr-1 grid h-9 w-9 shrink-0 place-items-center rounded-full bg-[#173f2d] text-white transition hover:bg-[#24553d]"
-									aria-label="Browse all card designs"
-								>
-									<ArrowUpRight className="h-4 w-4" />
-								</Link>
-							</div>
-						</div>
-						<p className="absolute bottom-0 left-4 text-[10px] uppercase tracking-[0.18em] text-[#847d6d] sm:left-8">
-							Made to be given. Made to be remembered.
-						</p>
-					</div>
-				</section>
-
-				<section
-					aria-label="Scryncard at a glance"
-					className="border-y border-[#e8e2d7] bg-[#faf8f3]/85 backdrop-blur-sm"
-				>
-					<div className="mx-auto max-w-[1380px] px-5 sm:px-8 lg:px-12">
-						<div className="flex items-center justify-between gap-4 border-b border-[#e5dfd4] py-4">
-							<h2 className="text-[10px] font-semibold uppercase tracking-[0.2em] text-[#536257]">
-								Scryncard in numbers
-							</h2>
-							<span className="border border-[#d9c69f] px-2 py-1 text-[9px] font-semibold uppercase tracking-[0.16em] text-[#8e6c39]">
-								Demo data
-							</span>
-						</div>
-						<div className="grid grid-cols-1 divide-y divide-[#e5dfd4] sm:grid-cols-3 sm:divide-x sm:divide-y-0">
-							<div className="py-6 sm:px-7 sm:py-8 sm:pl-0">
-								<p className="font-serif text-5xl font-bold tracking-tight text-[#173f2d]">
-									{demoMetrics.partnerOrganizations}
-								</p>
-								<p className="mt-1 text-xs uppercase tracking-[0.16em] text-[#788076]">
-									Partner organizations
-								</p>
-							</div>
-							<div className="py-6 sm:px-7 sm:py-8">
-								<p className="font-serif text-5xl font-bold tracking-tight text-[#173f2d]">
-									{demoMetrics.completedRedemptions}
-								</p>
-								<p className="mt-1 text-xs uppercase tracking-[0.16em] text-[#788076]">
-									Cards redeemed
-								</p>
-							</div>
-							<div className="py-6 sm:px-7 sm:py-8 sm:pr-0">
-								<p className="font-serif text-4xl font-bold tracking-tight text-[#173f2d]">
-									{formatNaira(demoMetrics.totalValueRedeemed)}
-								</p>
-								<p className="mt-1 text-xs uppercase tracking-[0.16em] text-[#788076]">
-									Value redeemed
-								</p>
-							</div>
-						</div>
-						<p className="border-t border-[#e5dfd4] py-3 text-[11px] leading-5 text-[#858a80]">
-							Illustrative totals from sample records; live platform metrics are
-							not connected.
-						</p>
-					</div>
-				</section>
+				<HomeStats />
 
 				<section className="border-y border-[#e8e2d7] bg-[#f3f0e8]">
 					<div className="mx-auto grid max-w-[1380px] gap-8 px-5 py-8 sm:px-8 md:grid-cols-[1fr_auto] md:items-center lg:px-12">
@@ -373,27 +98,14 @@ export default function HomePage() {
 							</h2>
 						</div>
 						<div className="grid gap-7 sm:grid-cols-3 sm:gap-5">
-							{[
-								[
-									"Choose",
-									"Pick the airtime or data reward that fits your moment.",
-								],
-								[
-									"Personalize",
-									"Put your business, event, or message on the card.",
-								],
-								[
-									"Share",
-									"Hand it over. They redeem it online in a few simple steps.",
-								],
-							].map(([title, description], index) => (
-								<div key={title} className="border-t border-white/20 pt-4">
+							{howItWorksSteps.map((step, index) => (
+								<div key={step.title} className="border-t border-white/20 pt-4">
 									<span className="text-[10px] tracking-[0.2em] text-[#d1b785]">
 										0{index + 1}
 									</span>
-									<h3 className="mt-3 font-serif text-2xl">{title}</h3>
+									<h3 className="mt-3 font-serif text-2xl">{step.title}</h3>
 									<p className="mt-2 text-sm leading-6 text-white/65">
-										{description}
+										{step.description}
 									</p>
 								</div>
 							))}
@@ -401,42 +113,7 @@ export default function HomePage() {
 					</div>
 				</section>
 
-				<section className="border-y border-[#e8e2d7] bg-[#fffdf8]">
-					<div className="mx-auto grid max-w-[1380px] gap-10 px-5 py-16 sm:px-8 sm:py-20 md:grid-cols-[0.72fr_1.28fr] md:gap-16 lg:px-12">
-						<div>
-							<p className="text-[10px] font-semibold uppercase tracking-[0.24em] text-[#8e6c39]">
-								Good to know
-							</p>
-							<h2 className="mt-4 font-serif text-4xl leading-tight text-[#173f2d] sm:text-5xl">
-								A few helpful answers.
-							</h2>
-							<p className="mt-4 max-w-sm text-sm leading-7 text-[#69736a]">
-								Everything you need to know about ordering and redeeming a
-								Scryncard.
-							</p>
-						</div>
-						<Accordion
-							type="single"
-							collapsible
-							className="border-t border-[#e5dfd4]"
-						>
-							{frequentlyAskedQuestions.map((item) => (
-								<AccordionItem
-									key={item.id}
-									value={item.id}
-									className="border-[#e5dfd4]"
-								>
-									<AccordionTrigger className="py-5 text-left text-sm font-medium text-[#294331] hover:no-underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#8e6c39] focus-visible:ring-offset-2 sm:text-base">
-										{item.question}
-									</AccordionTrigger>
-									<AccordionContent className="max-w-2xl text-sm leading-7 text-[#69736a] motion-reduce:animate-none">
-										{item.answer}
-									</AccordionContent>
-								</AccordionItem>
-							))}
-						</Accordion>
-					</div>
-				</section>
+				<HomeFAQ />
 
 				<section className="mx-auto flex max-w-[1380px] flex-col items-start justify-between gap-7 px-5 py-16 sm:px-8 sm:py-20 md:flex-row md:items-center lg:px-12">
 					<div>
@@ -456,18 +133,7 @@ export default function HomePage() {
 				</section>
 			</main>
 
-			<footer className="border-t border-[#e6e1d7]">
-				<div className="mx-auto flex max-w-[1380px] flex-col gap-4 px-5 py-6 text-sm text-[#7a8178] sm:px-8 md:flex-row md:items-center md:justify-between lg:px-12">
-					<Logo />
-					<p>
-						Thoughtful rewards for businesses, events, and the people who make
-						them matter.
-					</p>
-					<Link to="/redeem" className="hover:text-[#173f2d]">
-						Redeem a card
-					</Link>
-				</div>
-			</footer>
+			<HomeFooter />
 		</div>
 	);
 }
