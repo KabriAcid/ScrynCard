@@ -72,10 +72,10 @@ export function ConfirmationStep({
 
       <div className="space-y-4">
         {/* Card Details */}
-        <Card className="p-4 border-2 border-border">
+        <Card className="border border-[#e6dfd3] bg-[#fffdf8] p-5 shadow-none">
           <div className="space-y-3">
             <div className="flex items-center gap-2 mb-3">
-              <CreditCard className="h-4 w-4 sm:h-5 sm:w-5 text-primary" />
+              <CreditCard className="h-4 w-4 text-[#8e6c39] sm:h-5 sm:w-5" />
               <h3 className="font-semibold text-foreground text-sm sm:text-base">
                 Card Details
               </h3>
@@ -128,11 +128,11 @@ export function ConfirmationStep({
         </Card>
 
         {/* Phone Details */}
-        <Card className="p-4 border-2 border-border">
+        <Card className="border border-[#e6dfd3] bg-[#fffdf8] p-5 shadow-none">
           <div className="space-y-3">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <Phone className="h-4 w-4 sm:h-5 sm:w-5 text-primary" />
+                <Phone className="h-4 w-4 text-[#8e6c39] sm:h-5 sm:w-5" />
                 <h3 className="font-semibold text-foreground text-sm sm:text-base">
                   Recipient Phone
                 </h3>
@@ -160,10 +160,10 @@ export function ConfirmationStep({
         </Card>
 
         {/* Beneficiary Information */}
-        <Card className="p-4 border-2 border-border">
+        <Card className="border border-[#e6dfd3] bg-[#fffdf8] p-5 shadow-none">
           <div className="space-y-3">
             <div className="flex items-center gap-2 mb-3">
-              <User className="h-4 w-4 sm:h-5 sm:w-5 text-primary" />
+              <User className="h-4 w-4 text-[#8e6c39] sm:h-5 sm:w-5" />
               <h3 className="font-semibold text-foreground text-sm sm:text-base">
                 Beneficiary Information
               </h3>
@@ -196,7 +196,7 @@ export function ConfirmationStep({
         )}
 
         {/* Important Notice */}
-        <div className="bg-amber-50 border border-amber-200 rounded-lg p-3 text-xs sm:text-sm text-amber-800 space-y-1">
+        <div className="space-y-1 border border-[#e2d5b9] bg-[#f7f2e8] p-3 text-xs text-[#695a3c] sm:text-sm">
           <p className="font-semibold flex items-center gap-2">
             <span>⚠️</span> Important
           </p>
@@ -213,7 +213,7 @@ export function ConfirmationStep({
           variant="outline"
           onClick={onPrev}
           disabled={isLoading}
-          className="flex-1"
+          className="h-12 flex-1 rounded-sm border-[#d8d0c2] bg-transparent text-[#46574b] hover:bg-[#f5f1e8]"
         >
           Back
         </Button>
@@ -221,7 +221,7 @@ export function ConfirmationStep({
           type="button"
           onClick={handleSubmit}
           isLoading={isLoading}
-          className="flex-1"
+          className="h-12 flex-1 rounded-sm bg-[#173f2d] text-white hover:bg-[#24553d]"
         >
           {isLoading ? "Processing..." : "Confirm & Redeem"}
         </Button>

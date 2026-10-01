@@ -57,8 +57,8 @@ export function GiftVerificationStep({
   return (
     <div className="space-y-6">
       <div>
-        <h2 className="text-xl sm:text-2xl font-bold">Verify Your Card</h2>
-        <p className="text-sm sm:text-base text-muted-foreground mt-1">
+        <h2 className="font-serif text-2xl font-medium tracking-tight text-[#173f2d] sm:text-3xl">Verify your card</h2>
+        <p className="mt-2 text-sm leading-6 text-[#758076] sm:text-base">
           Enter the serial number and card code from your scratch card
         </p>
       </div>
@@ -79,7 +79,7 @@ export function GiftVerificationStep({
                     maxLength={9}
                     {...field}
                     disabled={verificationLoading}
-                    className="font-mono uppercase"
+                    className="font-mono uppercase tracking-[0.12em]"
                     onChange={(e) =>
                       field.onChange(formatSerialNumber(e.target.value))
                     }
@@ -106,7 +106,7 @@ export function GiftVerificationStep({
                     maxLength={18}
                     {...field}
                     disabled={verificationLoading}
-                    className="font-mono uppercase"
+                    className="font-mono uppercase tracking-[0.12em]"
                     onChange={(e) =>
                       field.onChange(formatCardCode(e.target.value))
                     }
@@ -126,7 +126,7 @@ export function GiftVerificationStep({
           onClick={handleVerifyCard}
           disabled={verificationLoading || !serialNumber || !cardCode}
           isLoading={verificationLoading}
-          className="w-full"
+          className="h-12 w-full rounded-sm bg-[#173f2d] font-medium text-white hover:bg-[#24553d]"
         >
           Verify Card
         </Button>

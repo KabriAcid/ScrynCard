@@ -51,22 +51,22 @@ export function ValidationResultStep({
     return (
       <div className="space-y-6">
         <div className="text-center">
-          <h2 className="text-xl sm:text-2xl font-bold">Processing Card</h2>
-          <p className="text-sm sm:text-base text-muted-foreground mt-1">
+          <h2 className="font-serif text-2xl font-medium text-[#173f2d] sm:text-3xl">Checking your card</h2>
+          <p className="mt-2 text-sm text-[#758076] sm:text-base">
             Validating your card details...
           </p>
         </div>
 
-        <Card className="p-12">
+        <Card className="border border-[#e6dfd3] bg-[#faf8f3] p-10 shadow-none sm:p-12">
           <div className="space-y-6 text-center">
             <div className="flex justify-center">
-              <Spinner size="lg" className="text-primary" />
+              <Spinner size="lg" className="text-[#173f2d]" />
             </div>
             <div>
-              <h3 className="font-semibold text-primary text-base sm:text-lg">
-                Verifying Card
+              <h3 className="font-serif text-lg font-medium text-[#173f2d] sm:text-xl">
+                Confirming your reward
               </h3>
-              <p className="text-xs sm:text-sm text-muted-foreground mt-2">
+              <p className="mt-2 text-xs text-[#758076] sm:text-sm">
                 Please wait while we validate your card...
               </p>
             </div>
@@ -81,15 +81,15 @@ export function ValidationResultStep({
     return (
       <div className="space-y-6">
         {/* Success Message Card */}
-        <Card className="p-6 bg-green-50 border-green-200">
+        <Card className="rounded-sm border border-[#cad6c8] bg-[#f3f6f0] p-5 shadow-none sm:p-6">
           <div className="space-y-4">
             <div className="flex items-center gap-3">
-              <CheckCircle2 className="h-5 w-5 sm:h-6 sm:w-6 text-green-600 flex-shrink-0" />
+              <CheckCircle2 className="h-5 w-5 flex-shrink-0 text-[#416c49] sm:h-6 sm:w-6" />
               <div>
-                <p className="font-semibold text-green-900 text-base sm:text-lg">
+                <p className="font-serif text-lg font-medium text-[#173f2d] sm:text-xl">
                   Validation Successful!
                 </p>
-                <p className="text-xs sm:text-sm text-green-700 mt-1">
+                <p className="mt-1 text-xs text-[#657766] sm:text-sm">
                   Your card details have been verified and confirmed.
                 </p>
               </div>
@@ -98,10 +98,10 @@ export function ValidationResultStep({
         </Card>
 
         {/* Card Details Display */}
-        <Card className="p-6">
+        <Card className="rounded-sm border border-[#e6dfd3] bg-[#fffdf8] p-5 shadow-none sm:p-6">
           <div className="space-y-4">
             <div className="flex items-center gap-2 mb-4">
-              <CreditCard className="h-4 w-4 sm:h-5 sm:w-5 text-primary" />
+              <CreditCard className="h-4 w-4 text-[#8e6c39] sm:h-5 sm:w-5" />
               <h3 className="font-semibold text-sm sm:text-base">Card Details</h3>
             </div>
             <div className="grid grid-cols-2 gap-4">
@@ -138,7 +138,7 @@ export function ValidationResultStep({
             variant="outline"
             onClick={onRetry}
             disabled={isLoading}
-            className="flex-1"
+            className="h-12 flex-1 rounded-sm border-[#d8d0c2] bg-transparent text-[#46574b] hover:bg-[#f5f1e8]"
           >
             Use Different Card
           </Button>
@@ -146,7 +146,7 @@ export function ValidationResultStep({
             type="button"
             onClick={onProceed}
             disabled={isLoading}
-            className="flex-1"
+            className="h-12 flex-1 rounded-sm bg-[#173f2d] text-white hover:bg-[#24553d]"
           >
             Proceed
           </Button>
@@ -159,14 +159,14 @@ export function ValidationResultStep({
   return (
     <div className="space-y-6">
       <div>
-        <h2 className="text-xl sm:text-2xl font-bold">Validation Failed</h2>
-        <p className="text-sm sm:text-base text-muted-foreground mt-1">
+        <h2 className="font-serif text-2xl font-medium text-[#173f2d] sm:text-3xl">We couldn’t verify this card</h2>
+        <p className="mt-2 text-sm text-[#758076] sm:text-base">
           We couldn't verify your card. Please try again.
         </p>
       </div>
 
       {/* Error Message Card */}
-      <Card className="p-6 bg-red-50 border-red-200">
+      <Card className="rounded-sm border border-[#e8cbc5] bg-[#fbf4f1] p-5 shadow-none sm:p-6">
         <div className="space-y-4">
           <div className="flex items-start gap-3">
             <AlertCircle className="h-5 w-5 sm:h-6 sm:w-6 text-red-600 flex-shrink-0 mt-0.5" />
@@ -188,10 +188,10 @@ export function ValidationResultStep({
       </Card>
 
       {/* Card Details for Reference */}
-      <Card className="p-6">
+      <Card className="rounded-sm border border-[#e6dfd3] bg-[#fffdf8] p-5 shadow-none sm:p-6">
         <div className="space-y-4">
           <div className="flex items-center gap-2 mb-4">
-            <CreditCard className="h-4 w-4 sm:h-5 sm:w-5 text-primary" />
+            <CreditCard className="h-4 w-4 text-[#8e6c39] sm:h-5 sm:w-5" />
             <h3 className="font-semibold text-sm sm:text-base">Card Information</h3>
           </div>
           <div className="grid grid-cols-2 gap-4">
@@ -213,7 +213,7 @@ export function ValidationResultStep({
           type="button"
           onClick={onRetry}
           disabled={isLoading}
-          className="flex-1"
+            className="h-12 flex-1 rounded-sm bg-[#173f2d] text-white hover:bg-[#24553d]"
         >
           Try Again
         </Button>
@@ -222,7 +222,7 @@ export function ValidationResultStep({
           variant="outline"
           onClick={onRetry}
           disabled={isLoading}
-          className="flex-1"
+            className="h-12 flex-1 rounded-sm border-[#d8d0c2] bg-transparent text-[#46574b] hover:bg-[#f5f1e8]"
         >
           Use Different Card
         </Button>

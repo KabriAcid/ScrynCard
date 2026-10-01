@@ -145,3 +145,69 @@
     animation: shine 2s ease-in-out infinite;
   }
 }
+
+/* Refined field and select styling shared by every redemption step. */
+.redemption-premium input:not([type="checkbox"]):not([type="radio"]),
+.redemption-premium [role="combobox"] {
+  height: 3rem;
+  border-radius: 2px;
+  border-color: #ded6c9;
+  background-color: #fffdf8;
+  color: #173f2d;
+  box-shadow: none;
+}
+
+.redemption-premium input:not([type="checkbox"]):not([type="radio"]) {
+  padding-inline: 0.9rem;
+}
+
+.redemption-premium input::placeholder {
+  color: #a0a196;
+}
+
+.redemption-premium input:focus-visible,
+.redemption-premium [role="combobox"]:focus-visible {
+  outline: 2px solid #b69054;
+  outline-offset: 2px;
+  border-color: #b69054;
+}
+
+.redemption-premium label {
+  color: #526052;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.035em;
+}
+
+.redemption-premium .redemption-step-header {
+  border-bottom: 1px solid #e8e1d5;
+  padding-bottom: 1.25rem;
+}
+
+.redemption-premium .redemption-step-header .absolute {
+  display: none;
+}
+
+.redemption-premium .redemption-step-header .rounded-xl {
+  border-radius: 2px;
+  background: #173f2d;
+  box-shadow: none;
+}
+
+.redemption-premium .redemption-step-header h2 {
+  color: #173f2d;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 1.5rem;
+  font-weight: 500;
+  letter-spacing: -0.025em;
+}
+
+.redemption-premium .redemption-step-header span {
+  border-radius: 999px;
+  background-color: #f3ede1;
+  color: #8e6c39;
+}
+
+.redemption-premium [role="alert"] {
+  border-radius: 2px;
+}

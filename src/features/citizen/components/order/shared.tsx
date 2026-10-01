@@ -75,7 +75,7 @@ export function StepHeader({
   totalSteps,
 }: StepHeaderProps) {
   return (
-    <motion.div variants={itemVariants} className="relative mb-8">
+    <motion.div variants={itemVariants} className="redemption-step-header relative mb-8">
       {/* Background gradient decoration */}
       <div className="absolute -inset-4 bg-gradient-to-r from-primary/5 via-primary/10 to-transparent rounded-2xl -z-10" />
 

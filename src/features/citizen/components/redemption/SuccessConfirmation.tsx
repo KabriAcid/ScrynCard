@@ -50,10 +50,10 @@ function DetailCard({ icon, title, children, delay }: DetailCardProps) {
       initial={{ opacity: 0, y: 16 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay, duration: 0.4 }}
-      className="rounded-xl border border-border bg-card p-4 shadow-sm divide-y divide-border"
+      className="rounded-sm border border-[#e6dfd3] bg-[#fffdf8] p-4 shadow-none divide-y divide-[#e8e1d5]"
     >
       <div className="flex items-center gap-3 pb-3">
-        <div className="p-2 bg-primary/10 rounded-lg text-primary">{icon}</div>
+        <div className="border border-[#e1d6c1] bg-[#f5f0e5] p-2 text-[#8e6c39]">{icon}</div>
         <h3 className="font-semibold text-foreground text-sm">{title}</h3>
       </div>
       <div className="pt-3 space-y-1">{children}</div>
@@ -102,7 +102,7 @@ export function SuccessConfirmation({
       : `${(giftDetails?.amount ?? 0).toLocaleString()}`;
 
   return (
-    <div className="flex flex-col items-center gap-5 py-4 px-4">
+    <div className="flex flex-col items-center gap-5 px-2 py-4 sm:px-4">
       {/* Lottie animation */}
       <Lottie
         animationData={successAnimation}
@@ -117,12 +117,12 @@ export function SuccessConfirmation({
         transition={{ delay: 0.2, duration: 0.4 }}
         className="text-center -mt-2"
       >
-        <h2 className="text-2xl sm:text-3xl font-bold text-foreground">
-          Redemption Successful!
+        <h2 className="font-serif text-3xl font-medium tracking-tight text-[#173f2d] sm:text-4xl">
+          Your gift is on its way
         </h2>
-        <p className="mt-1 text-sm sm:text-base text-muted-foreground">
+        <p className="mt-2 text-sm leading-6 text-[#758076] sm:text-base">
           Your{" "}
-          <span className="capitalize font-medium text-foreground">
+          <span className="capitalize font-semibold text-[#173f2d]">
             {giftDetails?.giftType}
           </span>{" "}
           gift has been sent.
@@ -167,7 +167,7 @@ export function SuccessConfirmation({
         transition={{ delay: 0.75, duration: 0.4 }}
         className="flex flex-col items-center gap-3"
       >
-        <p className="text-sm text-muted-foreground">
+        <p className="text-sm text-[#758076]">
           Redirecting in{" "}
           <AnimatePresence mode="wait">
             <motion.span
@@ -176,7 +176,7 @@ export function SuccessConfirmation({
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 1.4, opacity: 0 }}
               transition={{ duration: 0.2 }}
-              className="inline-block font-bold text-primary tabular-nums"
+              className="inline-block font-semibold text-[#8e6c39] tabular-nums"
             >
               {countdown}s
             </motion.span>
@@ -186,7 +186,7 @@ export function SuccessConfirmation({
         <Button
           variant="outline"
           onClick={onComplete}
-          className="border-2 hover:bg-primary/5 hover:border-primary transition-all"
+          className="h-11 rounded-sm border-[#d8d0c2] bg-transparent px-5 text-[#46574b] hover:border-[#173f2d] hover:bg-[#f5f1e8]"
         >
           Return Home Now
         </Button>

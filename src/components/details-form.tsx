@@ -101,7 +101,7 @@ export function DetailsForm() {
         <p className="text-muted-foreground">
           Your details have been saved. You can now redeem your card.
         </p>
-        <Button className="w-full" asChild>
+        <Button className="h-12 w-full rounded-sm bg-[#173f2d] text-white hover:bg-[#24553d]" asChild>
           <a href="/redeem">Continue to Redemption</a>
         </Button>
       </div>
@@ -260,7 +260,7 @@ export function DetailsForm() {
         </Label>
       </div>
 
-      <Button type="submit" disabled={isLoading} className="w-full">
+      <Button type="submit" disabled={isLoading} className="h-12 w-full rounded-sm bg-[#173f2d] text-white hover:bg-[#24553d]">
         {isLoading ? (
           <>
             <Loader className="mr-2 h-4 w-4 animate-spin" />

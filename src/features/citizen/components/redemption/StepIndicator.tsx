@@ -1,6 +1,6 @@
-import { motion } from "framer-motion";
-import { CheckCircle2 } from "lucide-react";
-import { STEPS } from "./schema";
+import { Check } from "lucide-react";
+
+const steps = ["Card", "Verify", "Details", "Phone", "Confirm"];
 
 interface StepIndicatorProps {
   currentStep: number;
@@ -8,56 +8,40 @@ interface StepIndicatorProps {
 }
 
 export function StepIndicator({ currentStep, totalSteps }: StepIndicatorProps) {
+  const visibleSteps = steps.slice(0, totalSteps);
+
   return (
-    <motion.div
-      className="mb-8 bg-secondary border border-border rounded-lg p-6"
-      initial={{ opacity: 0, y: -20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5 }}
-    >
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-4 flex-1">
-          {STEPS.slice(0, totalSteps).map((step, index) => (
-            <div key={step.id} className="flex items-center gap-4 flex-1">
-              <motion.div
-                className={`flex items-center justify-center w-12 h-12 rounded-full font-bold text-sm transition-all ${
-                  currentStep === step.id
-                    ? "bg-primary text-primary-foreground ring-4 ring-primary/50"
-                    : currentStep > step.id
-                    ? "bg-green-600 text-white"
-                    : "bg-muted text-muted-foreground"
+    <nav aria-label="Redemption progress" className="mb-8">
+      <ol className="flex items-start">
+        {visibleSteps.map((step, index) => {
+          const stepNumber = index + 1;
+          const isComplete = currentStep > stepNumber;
+          const isCurrent = currentStep === stepNumber;
+
+          return (
+            <li key={step} className="relative flex min-w-0 flex-1 flex-col items-center text-center">
+              {index < visibleSteps.length - 1 && (
+                <span className={`absolute left-1/2 top-3.5 h-px w-full ${isComplete ? "bg-[#9e865d]" : "bg-[#e3ddd1]"}`} aria-hidden="true" />
+              )}
+              <span
+                aria-current={isCurrent ? "step" : undefined}
+                className={`relative z-10 grid h-7 w-7 place-items-center rounded-full border text-[10px] font-semibold transition-colors ${
+                  isComplete
+                    ? "border-[#173f2d] bg-[#173f2d] text-white"
+                    : isCurrent
+                    ? "border-[#173f2d] bg-[#faf8f3] text-[#173f2d] ring-4 ring-[#173f2d]/10"
+                    : "border-[#d9d3c7] bg-[#fffdf8] text-[#9a9d92]"
                 }`}
               >
-                {currentStep > step.id ? (
-                  <CheckCircle2 className="h-6 w-6" />
-                ) : (
-                  step.id
-                )}
-              </motion.div>
-
-              {index < totalSteps - 1 && (
-                <div className="h-1 flex-1 bg-muted rounded-full overflow-hidden">
-                  <motion.div
-                    className="h-full bg-primary"
-                    initial={{ width: "0%" }}
-                    animate={{ width: currentStep > step.id ? "100%" : "0%" }}
-                    transition={{ duration: 0.6, ease: "easeInOut" }}
-                  />
-                </div>
-              )}
-            </div>
-          ))}
-        </div>
-
-        <div className="ml-4 text-right">
-          <p className="text-sm text-foreground font-medium">
-            Step {currentStep} of {totalSteps}
-          </p>
-          <p className="text-xs text-muted-foreground mt-1">
-            {STEPS[currentStep - 1]?.title}
-          </p>
-        </div>
-      </div>
-    </motion.div>
+                {isComplete ? <Check className="h-3.5 w-3.5" /> : `0${stepNumber}`}
+              </span>
+              <span className={`mt-2 text-[9px] sm:text-[10px] ${isCurrent ? "font-semibold text-[#294c35]" : "text-[#8a9087]"}`}>
+                {step}
+              </span>
+            </li>
+          );
+        })}
+      </ol>
+    </nav>
   );
 }

@@ -62,7 +62,7 @@ export function BioDataStep({ isLoading, onNext, onPrev }: BioDataStepProps) {
                     maxLength={11}
                     {...field}
                     disabled={isLoading}
-                    className="pl-10"
+                    className="h-12 pl-10"
                     onChange={(e) => {
                       const value = e.target.value.replace(/\D/g, "");
                       field.onChange(value);
@@ -119,7 +119,7 @@ export function BioDataStep({ isLoading, onNext, onPrev }: BioDataStepProps) {
           variant="outline"
           onClick={onPrev}
           disabled={isLoading}
-          className="flex-1"
+          className="h-12 flex-1 rounded-sm border-[#d8d0c2] bg-transparent text-[#46574b] hover:bg-[#f5f1e8]"
         >
           Back
         </Button>
@@ -127,7 +127,7 @@ export function BioDataStep({ isLoading, onNext, onPrev }: BioDataStepProps) {
           type="button"
           onClick={handleNext}
           disabled={isLoading}
-          className="flex-1"
+          className="h-12 flex-1 rounded-sm bg-[#173f2d] text-white hover:bg-[#24553d]"
         >
           Continue
         </Button>
