@@ -80,34 +80,43 @@ export function BioDataStep({ isLoading, onNext, onPrev }: BioDataStepProps) {
 							<FormLabel>Occupation</FormLabel>
 							<FormControl>
 								<div
-									role="group"
+									role="radiogroup"
 									aria-label="Choose your occupation"
-									className="grid grid-cols-2 gap-2 sm:grid-cols-3"
+									className="flex flex-wrap items-start gap-2"
 								>
 									{OCCUPATION_OPTIONS.map((occupation) => (
-										<button
-											key={occupation}
-											type="button"
-											aria-pressed={field.value === occupation}
-											disabled={isLoading}
-											onClick={() => {
-												field.onChange(occupation);
-												form.clearErrors("occupation");
-											}}
-											className={`flex min-h-11 items-center justify-between gap-2 border px-3 py-2 text-left text-xs transition-colors disabled:opacity-50 sm:text-sm ${
-												field.value === occupation
-													? "border-[#173f2d] bg-[#f2f4ee] font-medium text-[#173f2d] ring-1 ring-[#173f2d]/15"
-													: "border-[#e1dbcf] bg-[#fffdf8] text-[#536257] hover:border-[#b9a77e]"
-											}`}
-										>
-											<span>{occupation}</span>
-											{field.value === occupation && (
-												<Check
-													className="h-4 w-4 shrink-0"
-													aria-hidden="true"
-												/>
-											)}
-										</button>
+										<label key={occupation} className="cursor-pointer">
+											<input
+												ref={field.ref}
+												type="radio"
+												name={field.name}
+												value={occupation}
+												checked={field.value === occupation}
+												disabled={isLoading}
+												onBlur={field.onBlur}
+												onChange={() => {
+													field.onChange(occupation);
+													form.clearErrors("occupation");
+												}}
+												className="peer sr-only"
+											/>
+											<span
+												key={occupation}
+												className={`inline-flex min-h-11 items-center gap-2 whitespace-nowrap border px-4 py-2 text-sm transition-colors peer-focus-visible:outline-none peer-focus-visible:ring-2 peer-focus-visible:ring-[#8e6c39] peer-focus-visible:ring-offset-2 ${
+													field.value === occupation
+														? "border-[#173f2d] bg-[#f2f4ee] font-medium text-[#173f2d] ring-1 ring-[#173f2d]/15"
+														: "border-[#e1dbcf] bg-[#fffdf8] text-[#536257] hover:border-[#b9a77e]"
+												}`}
+											>
+												{occupation}
+												{field.value === occupation && (
+													<Check
+														className="h-4 w-4 shrink-0"
+														aria-hidden="true"
+													/>
+												)}
+											</span>
+										</label>
 									))}
 								</div>
 							</FormControl>

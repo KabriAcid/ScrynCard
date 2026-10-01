@@ -2,7 +2,7 @@ import { useCallback, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { AnimatePresence, motion } from "framer-motion";
-import { Briefcase, CreditCard, MapPin, UserRound } from "lucide-react";
+import { Briefcase, ClipboardCheck, CreditCard, MapPin, UserRound } from "lucide-react";
 import { Form } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
@@ -13,6 +13,7 @@ import { ContactDetailsStep } from "./ContactDetailsStep";
 import { ContactLocationStep } from "./ContactLocationStep";
 import { CardDetailsStep } from "./CardDetailsStep";
 import { OrderReviewStep } from "./OrderReviewStep";
+import { FlowStepProgress } from "../FlowStepProgress";
 
 const STEPS: StepConfig[] = [
   { id: 1, title: "Purpose", description: "Choose a card type", fields: ["purpose"], icon: Briefcase },
@@ -20,6 +21,15 @@ const STEPS: StepConfig[] = [
   { id: 3, title: "Contact", description: "Your contact details", fields: ["fullName", "email"], icon: UserRound },
   { id: 4, title: "Delivery", description: "Delivery location", fields: ["state", "lga"], icon: MapPin },
   { id: 5, title: "Rewards", description: "Card quantities", fields: ["orderItems"], icon: CreditCard },
+];
+
+const ORDER_PROGRESS_STEPS = [
+  { label: "Type", icon: Briefcase },
+  { label: "Brand", icon: Briefcase },
+  { label: "Contact", icon: UserRound },
+  { label: "Delivery", icon: MapPin },
+  { label: "Cards", icon: CreditCard },
+  { label: "Review", icon: ClipboardCheck },
 ];
 
 export function OrderForm() {
@@ -74,6 +84,7 @@ export function OrderForm() {
     <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} className="order-flow">
       <Form {...form}>
         <form onSubmit={form.handleSubmit(handleFormSubmit)} className="order-form">
+          <FlowStepProgress steps={ORDER_PROGRESS_STEPS} currentStep={step} label="Order progress" />
           <AnimatePresence mode="wait" initial={false}>
             {step === 1 && <OrderPurposeStep key="step-1" form={form} onNext={nextStep} />}
             {step === 2 && <PersonalDetailsStep key="step-2" form={form} onNext={nextStep} />}

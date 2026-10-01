@@ -211,6 +211,7 @@
   border-radius: 999px;
   background-color: #f3ede1;
   color: #8e6c39;
+  display: none;
 }
 
 .redemption-premium [role="alert"] {
@@ -293,6 +294,96 @@
   width: 100%;
 }
 
+.flow-progress {
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  margin: 0 auto 0.25rem;
+}
+
+.flow-progress-list {
+  display: flex;
+  width: min(100%, 42rem);
+  align-items: flex-start;
+  justify-content: center;
+  margin: 0;
+  padding: 0 0.25rem;
+  list-style: none;
+}
+
+.flow-progress-item {
+  position: relative;
+  display: flex;
+  min-width: 0;
+  flex: 1 1 0;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.4rem;
+  color: #92958d;
+  text-align: center;
+}
+
+.flow-progress-connector {
+  position: absolute;
+  z-index: 0;
+  top: 1rem;
+  left: 50%;
+  width: 100%;
+  height: 1px;
+  background: #e2ddd3;
+}
+
+.flow-progress-item.is-complete .flow-progress-connector {
+  background: #b9a77e;
+}
+
+.flow-progress-marker {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  width: 2rem;
+  height: 2rem;
+  place-items: center;
+  border: 1px solid #e2ddd3;
+  border-radius: 50%;
+  background: #fffdf8;
+  color: #9a9c93;
+  transition: border-color 180ms ease, background-color 180ms ease, color 180ms ease, box-shadow 180ms ease;
+}
+
+.flow-progress-marker svg {
+  width: 0.9rem;
+  height: 0.9rem;
+  stroke-width: 1.8;
+}
+
+.flow-progress-label {
+  max-width: 100%;
+  color: #858a80;
+  font-size: clamp(0.55rem, 2.4vw, 0.7rem);
+  font-weight: 550;
+  line-height: 1.1;
+  white-space: nowrap;
+}
+
+.flow-progress-item.is-complete .flow-progress-marker {
+  border-color: #d7c8a9;
+  background: #f4efe4;
+  color: #8e6c39;
+}
+
+.flow-progress-item.is-current .flow-progress-marker {
+  border-color: #173f2d;
+  background: #173f2d;
+  color: #fffdf8;
+  box-shadow: 0 0 0 4px rgba(182, 166, 130, 0.2);
+}
+
+.flow-progress-item.is-current .flow-progress-label {
+  color: #294331;
+  font-weight: 700;
+}
+
 .order-step {
   display: grid;
   gap: 1.25rem;
@@ -339,6 +430,7 @@
   color: #8e6c39;
   font-size: 0.65rem;
   font-weight: 700;
+  display: none;
 }
 
 .order-flow .redemption-step-header .relative.p-2 {
@@ -516,6 +608,12 @@
   color: white;
 }
 
+.order-tab:not(.is-active):hover {
+  border-color: #b6a682;
+  background: #f8f4eb;
+  color: #775e33;
+}
+
 .order-product-grid {
   grid-template-columns: repeat(2, minmax(0, 1fr));
 }
@@ -610,8 +708,9 @@
 }
 
 .order-quantity-button:hover {
-  border-color: #78917a;
-  background: #f3f6f0;
+  border-color: #b6a682;
+  background: #f8f4eb;
+  color: #775e33;
 }
 
 .order-quantity-value {
@@ -680,7 +779,9 @@
 }
 
 .order-primary-button:hover {
-  background: #24553d;
+  border-color: #24553d !important;
+  background: #24553d !important;
+  color: #fff !important;
 }
 
 .order-secondary-button {
@@ -696,6 +797,11 @@
 }
 
 .order-flow .order-secondary-button:hover {
+  background: transparent !important;
+  color: #46574b !important;
+}
+
+.order-flow .order-secondary-button:active {
   background: transparent !important;
 }
 

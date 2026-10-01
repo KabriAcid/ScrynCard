@@ -42,9 +42,12 @@ export const homeStats = [
 
 export const mobileNavigationItems = [
 	{ label: "Card gallery", href: "/samples" },
-	{ label: "Sign in", href: "/login" },
-	{ label: "Order cards", href: "/order" },
 	{ label: "How it works", href: "/how-it-works" },
+];
+
+export const mobileNavigationActions = [
+	{ label: "Sign in", href: "/login", primary: false },
+	{ label: "Order cards", href: "/order", primary: true },
 ];
 
 export const moments = [

@@ -10,7 +10,7 @@
 - [x] Simplify the step indicator so it shows the current step and total step count, rather than displaying the full list of steps.
 - [x] Reduce the placeholder text size in the first step.
 - [x] Display data sizes in an appropriate unit (for example, show 2 GB instead of 2000 MB).
-- [x] Present occupation choices as a grid of selectable buttons, allowing the user to choose one option instead of using a dropdown.
+- [x] Present occupation choices as content-sized, single-select radio chips that wrap naturally onto new rows.
 - [ ] Automatically detect the mobile network as the user enters a phone number. Network prefixes will be provided separately.
 - [x] Include the user's NIN and occupation in the confirmation step.
 - [x] Restore the redirect countdown in the confirmation step and show the remaining seconds.
