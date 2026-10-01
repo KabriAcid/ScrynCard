@@ -64,10 +64,6 @@ export default function HomePage() {
       <main>
         <section className="mx-auto grid max-w-[1380px] items-center gap-12 px-5 pb-16 pt-10 sm:px-8 sm:pt-16 lg:grid-cols-[0.92fr_1.08fr] lg:gap-16 lg:px-12 lg:pb-24 lg:pt-14">
           <div className="relative z-10 max-w-[600px]">
-            <div className="mb-7 flex items-center gap-3 text-[10px] font-semibold uppercase tracking-[0.24em] text-[#8e6c39] sm:text-[11px]">
-              <span className="h-px w-8 bg-[#b69054]" />
-              Rewards with your name on them
-            </div>
             <h1 className="font-serif text-[clamp(3.4rem,7.1vw,6.5rem)] leading-[0.98] tracking-[-0.055em] text-[#173f2d]">
               Make a little gesture <span className="italic text-[#a2783e]">mean more.</span>
             </h1>

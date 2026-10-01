@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap");
 
 @tailwind base;
 @tailwind components;
@@ -40,6 +40,15 @@
     --sidebar-accent-foreground: 120 60% 15%;
     --sidebar-border: 120 30% 80%;
     --sidebar-ring: 120 60% 33%;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: "Plus Jakarta Sans", system-ui, sans-serif;
   }
 
   .dark {
@@ -87,7 +96,7 @@
   html,
   body {
     @apply bg-background text-foreground;
-    font-family: "Plus Jakarta Sans", system-ui, sans-serif;
+    font-family: "Figtree", system-ui, sans-serif;
     font-feature-settings: "rlig" 1, "calt" 1;
     overflow: hidden;
     overflow-y: auto;
@@ -155,10 +164,6 @@
   background-color: #fffdf8;
   color: #173f2d;
   box-shadow: none;
-}
-
-.redemption-premium input:not([type="checkbox"]):not([type="radio"]) {
-  padding-inline: 0.9rem;
 }
 
 .redemption-premium input::placeholder {

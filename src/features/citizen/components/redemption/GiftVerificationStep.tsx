@@ -79,7 +79,7 @@ export function GiftVerificationStep({
                     maxLength={9}
                     {...field}
                     disabled={verificationLoading}
-                    className="font-mono uppercase tracking-[0.12em]"
+                    className="font-medium uppercase tracking-[0.08em]"
                     onChange={(e) =>
                       field.onChange(formatSerialNumber(e.target.value))
                     }
@@ -106,7 +106,7 @@ export function GiftVerificationStep({
                     maxLength={18}
                     {...field}
                     disabled={verificationLoading}
-                    className="font-mono uppercase tracking-[0.12em]"
+                    className="font-medium uppercase tracking-[0.08em]"
                     onChange={(e) =>
                       field.onChange(formatCardCode(e.target.value))
                     }

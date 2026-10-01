@@ -113,7 +113,7 @@ export function CardRedemptionInput({
               disabled={disabled}
               maxLength={9}
               className={cn(
-                "font-mono text-base tracking-wider h-10 w-full lg:w-40",
+                "font-medium text-base tracking-wide h-10 w-full lg:w-40",
                 serialValid && serialNumber.length > 0
                   ? "border-green-500 bg-green-50"
                   : ""
@@ -162,7 +162,7 @@ export function CardRedemptionInput({
               disabled={disabled}
               maxLength={18}
               className={cn(
-                "font-mono text-base tracking-wider h-10",
+                "font-medium text-base tracking-wide h-10",
                 codeValid && cardCode.length > 0
                   ? "border-green-500 bg-green-50"
                   : ""

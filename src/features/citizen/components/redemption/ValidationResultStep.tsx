@@ -107,11 +107,11 @@ export function ValidationResultStep({
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-1">
                 <p className="text-sm text-muted-foreground">Serial Number</p>
-                <p className="font-mono font-semibold">{serialNumber}</p>
+                <p className="font-semibold">{serialNumber}</p>
               </div>
               <div className="space-y-1">
                 <p className="text-sm text-muted-foreground">Card Code</p>
-                <p className="font-mono font-semibold text-sm">{cardCode}</p>
+                <p className="text-sm font-semibold">{cardCode}</p>
               </div>
               <div className="space-y-1">
                 <p className="text-sm text-muted-foreground">Gift Type</p>
@@ -179,7 +179,7 @@ export function ValidationResultStep({
                   {displayError.details}
                 </p>
               )}
-              <p className="text-xs text-red-600 mt-2 font-mono">
+              <p className="mt-2 text-xs text-red-600">
                 Error code: {displayError?.code || "UNKNOWN"}
               </p>
             </div>
@@ -197,11 +197,11 @@ export function ValidationResultStep({
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-1">
               <p className="text-sm text-muted-foreground">Serial Number</p>
-              <p className="font-mono font-semibold">{serialNumber}</p>
+              <p className="font-semibold">{serialNumber}</p>
             </div>
             <div className="space-y-1">
               <p className="text-sm text-muted-foreground">Card Code</p>
-              <p className="font-mono font-semibold text-sm">{cardCode}</p>
+              <p className="text-sm font-semibold">{cardCode}</p>
             </div>
           </div>
         </div>

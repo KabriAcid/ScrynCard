@@ -1,19 +1,10 @@
 import React from "react";
 import { useFormContext } from "react-hook-form";
-import {
-  FileCheck,
-  AlertCircle,
-  CreditCard,
-  Phone,
-  User,
-  Briefcase,
-} from "lucide-react";
-import { StepHeader } from "../order/shared";
+import { ArrowLeft, CheckCircle2, FileCheck } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
-import { RedemptionFormValues } from "./schema";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { Badge } from "@/components/ui/badge";
+import { StepHeader } from "../order/shared";
+import { RedemptionFormValues } from "./schema";
 
 interface ConfirmationStepProps {
   isLoading: boolean;
@@ -22,208 +13,100 @@ interface ConfirmationStepProps {
   onSubmit: (values: RedemptionFormValues) => Promise<void>;
 }
 
-export function ConfirmationStep({
-  isLoading,
-  giftDetails,
-  onPrev,
-  onSubmit,
-}: ConfirmationStepProps) {
+const NETWORK_LOGOS: Record<string, string> = {
+  MTN: "/brands/mtn.svg",
+  Airtel: "/brands/airtel-logo.png",
+  Glo: "/brands/glo.png",
+  "9Mobile": "/brands/9mobile.png",
+};
+
+function InvoiceRow({ label, children }: { label: string; children: React.ReactNode }) {
+  return (
+    <div className="flex min-h-11 items-center justify-between gap-4 border-b border-[#ece6db] py-2.5 last:border-b-0">
+      <dt className="shrink-0 text-[11px] text-[#858a80]">{label}</dt>
+      <dd className="max-w-[65%] break-words text-right text-[12px] font-medium leading-5 text-[#2a4032]">{children}</dd>
+    </div>
+  );
+}
+
+export function ConfirmationStep({ isLoading, giftDetails, onPrev, onSubmit }: ConfirmationStepProps) {
   const form = useFormContext<RedemptionFormValues>();
   const [submitError, setSubmitError] = React.useState<string | null>(null);
 
-  const serialNumber = form.getValues("serialNumber");
-  const cardCode = form.getValues("cardCode");
-  const phoneNumber = form.getValues("phoneNumber");
-  const nin = form.getValues("nin");
-  const occupation = form.getValues("occupation");
-  const network = form.getValues("network");
+  const values = form.getValues();
+  const isData = giftDetails?.giftType === "data";
+  const rewardValue = isData
+    ? `${giftDetails?.dataSize ?? "—"} MB`
+    : `₦${(giftDetails?.amount ?? 0).toLocaleString()}`;
+  const networkLogo = NETWORK_LOGOS[values.network];
 
   const handleSubmit = async () => {
     setSubmitError(null);
     try {
-      const values = form.getValues();
-      await onSubmit(values);
+      await onSubmit(form.getValues());
     } catch (error) {
-      setSubmitError(
-        error instanceof Error ? error.message : "Failed to process redemption",
-      );
+      setSubmitError(error instanceof Error ? error.message : "Failed to process redemption");
     }
   };
 
-  const getOperatorColor = (operator: string) => {
-    const colors: Record<string, string> = {
-      MTN: "bg-yellow-100 text-yellow-800 border-yellow-300",
-      Airtel: "bg-red-100 text-red-800 border-red-300",
-      Glo: "bg-green-100 text-green-800 border-green-300",
-      "9Mobile": "bg-blue-100 text-blue-800 border-blue-300",
-    };
-    return colors[operator] || "bg-gray-100 text-gray-800";
-  };
-
   return (
-    <div className="space-y-6">
+    <div className="space-y-4">
       <StepHeader
         icon={FileCheck}
-        title="Confirm Redemption"
-        description="Review your details carefully before confirming your gift redemption"
+        title="Review your gift"
+        description="Check the details before you confirm"
         step={3}
         totalSteps={3}
       />
 
-      <div className="space-y-4">
-        {/* Card Details */}
-        <Card className="border border-[#e6dfd3] bg-[#fffdf8] p-5 shadow-none">
-          <div className="space-y-3">
-            <div className="flex items-center gap-2 mb-3">
-              <CreditCard className="h-4 w-4 text-[#8e6c39] sm:h-5 sm:w-5" />
-              <h3 className="font-semibold text-foreground text-sm sm:text-base">
-                Card Details
-              </h3>
-            </div>
-            <div className="space-y-3 text-sm">
-              <div>
-                <p className="text-muted-foreground text-xs uppercase font-semibold">
-                  Serial Number
-                </p>
-                <p className="font-mono font-bold">{serialNumber}</p>
-              </div>
-              <div>
-                <p className="text-muted-foreground text-xs uppercase font-semibold">
-                  Card Code
-                </p>
-                <p className="font-mono font-bold">{cardCode}</p>
-              </div>
-              <div className="grid grid-cols-2 gap-4 pt-2 border-t border-border">
-                <div>
-                  <p className="text-muted-foreground text-xs uppercase font-semibold">
-                    Type
-                  </p>
-                  <Badge className="w-fit capitalize mt-1">
-                    {giftDetails?.giftType || "Unknown"}
-                  </Badge>
-                </div>
-                <div>
-                  <p className="text-muted-foreground text-xs uppercase font-semibold">
-                    Value
-                  </p>
-                  <p className="font-semibold mt-1">
-                    {giftDetails?.giftType === "data"
-                      ? `${giftDetails?.dataSize || "N/A"}MB`
-                      : `₦${(giftDetails?.amount || 0).toLocaleString()}`}
-                  </p>
-                </div>
-              </div>
-              {giftDetails?.expiryDate && (
-                <div className="pt-2 border-t border-border">
-                  <p className="text-muted-foreground text-xs uppercase font-semibold">
-                    Expiry Date
-                  </p>
-                  <p className="font-semibold">
-                    {new Date(giftDetails.expiryDate).toLocaleDateString()}
-                  </p>
-                </div>
-              )}
-            </div>
+      <section aria-label="Redemption summary" className="overflow-hidden border border-[#e3d9c7] bg-[#fffdf8]">
+        <div className="flex items-center justify-between gap-3 border-b border-[#e8e0d2] bg-[#f7f3ea] px-4 py-3">
+          <div>
+            <p className="text-[9px] font-semibold uppercase tracking-[0.17em] text-[#8d7954]">Gift summary</p>
+            <p className="mt-0.5 text-[12px] font-medium capitalize text-[#294331]">{giftDetails?.giftType ?? "Gift"} reward</p>
           </div>
-        </Card>
-
-        {/* Phone Details */}
-        <Card className="border border-[#e6dfd3] bg-[#fffdf8] p-5 shadow-none">
-          <div className="space-y-3">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <Phone className="h-4 w-4 text-[#8e6c39] sm:h-5 sm:w-5" />
-                <h3 className="font-semibold text-foreground text-sm sm:text-base">
-                  Recipient Phone
-                </h3>
-              </div>
-              <Badge
-                className={`text-xs font-semibold border ${getOperatorColor(
-                  network,
-                )}`}
-              >
-                {network}
-              </Badge>
-            </div>
-            <div className="space-y-2 text-sm">
-              <p>
-                <span className="text-muted-foreground font-semibold">
-                  Number:
-                </span>{" "}
-                <span className="font-mono font-bold">{phoneNumber}</span>
-              </p>
-              <p className="text-xs text-muted-foreground">
-                Your {giftDetails?.giftType} will be sent to this number
-              </p>
-            </div>
-          </div>
-        </Card>
-
-        {/* Beneficiary Information */}
-        <Card className="border border-[#e6dfd3] bg-[#fffdf8] p-5 shadow-none">
-          <div className="space-y-3">
-            <div className="flex items-center gap-2 mb-3">
-              <User className="h-4 w-4 text-[#8e6c39] sm:h-5 sm:w-5" />
-              <h3 className="font-semibold text-foreground text-sm sm:text-base">
-                Beneficiary Information
-              </h3>
-            </div>
-            <div className="grid grid-cols-2 gap-4 text-sm">
-              <div>
-                <p className="text-muted-foreground text-xs uppercase font-semibold">
-                  NIN
-                </p>
-                <p className="font-mono font-bold mt-1">{nin}</p>
-              </div>
-              <div>
-                <p className="text-muted-foreground text-xs uppercase font-semibold">
-                  Occupation
-                </p>
-                <div className="flex items-center gap-2 mt-1">
-                  <Briefcase className="h-4 w-4 text-muted-foreground" />
-                  <p className="font-medium">{occupation}</p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </Card>
-
-        {submitError && (
-          <Alert variant="destructive">
-            <AlertCircle className="h-4 w-4" />
-            <AlertDescription>{submitError}</AlertDescription>
-          </Alert>
-        )}
-
-        {/* Important Notice */}
-        <div className="space-y-1 border border-[#e2d5b9] bg-[#f7f2e8] p-3 text-xs text-[#695a3c] sm:text-sm">
-          <p className="font-semibold flex items-center gap-2">
-            <span>⚠️</span> Important
-          </p>
-          <p>
-            By confirming, you're redeeming this {giftDetails?.giftType} gift to
-            the phone number above. Make sure the number is correct.
-          </p>
+          <CheckCircle2 className="h-5 w-5 shrink-0 text-[#4d7654]" />
         </div>
-      </div>
 
-      <div className="flex gap-3 pt-4">
+        <dl className="px-4">
+          <InvoiceRow label="Gift value">{rewardValue}</InvoiceRow>
+          <InvoiceRow label="Phone number">{values.phoneNumber}</InvoiceRow>
+          <InvoiceRow label="Network">
+            <span className="inline-flex items-center justify-end gap-2">
+              {networkLogo && <img src={networkLogo} alt="" className="max-h-5 max-w-8 object-contain" />}
+              {values.network}
+            </span>
+          </InvoiceRow>
+        </dl>
+      </section>
+
+      {submitError && (
+        <Alert variant="destructive" className="rounded-none border-[#e8cbc5] bg-[#fbf4f1] text-[#854d43]">
+          <AlertDescription>{submitError}</AlertDescription>
+        </Alert>
+      )}
+
+      <p className="text-[10px] leading-4 text-[#898d83]">
+        Confirm only if the phone number and network above are correct.
+      </p>
+
+      <div className="grid grid-cols-[0.8fr_1.2fr] gap-2.5 pt-1">
         <Button
           type="button"
           variant="outline"
           onClick={onPrev}
           disabled={isLoading}
-          className="h-12 flex-1 rounded-sm border-[#d8d0c2] bg-transparent text-[#46574b] hover:bg-[#f5f1e8]"
+          className="h-12 rounded-sm border-[#d8d0c2] bg-transparent px-3 text-[#46574b] hover:bg-[#f5f1e8]"
         >
-          Back
+          <ArrowLeft className="h-4 w-4" /> Back
         </Button>
         <Button
           type="button"
           onClick={handleSubmit}
           isLoading={isLoading}
-          className="h-12 flex-1 rounded-sm bg-[#173f2d] text-white hover:bg-[#24553d]"
+          className="h-12 rounded-sm bg-[#173f2d] px-3 text-white hover:bg-[#24553d]"
         >
-          {isLoading ? "Processing..." : "Confirm & Redeem"}
+          Confirm & redeem
         </Button>
       </div>
     </div>
