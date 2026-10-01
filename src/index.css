@@ -949,6 +949,12 @@
   color: #173f2d;
 }
 
+.order-flow input::placeholder,
+.order-flow [role="combobox"][data-placeholder] {
+  color: #a0a196;
+  opacity: 1;
+}
+
 .order-flow input:focus-visible,
 .order-flow [role="combobox"]:focus-visible {
   outline: 2px solid #b69054;

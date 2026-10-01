@@ -1,3 +1,4 @@
+import { Plus } from "lucide-react";
 import {
 	Accordion,
 	AccordionContent,
@@ -74,7 +75,10 @@ export function HomeFAQ() {
 							value={item.id}
 							className="border-[#e5dfd4]"
 						>
-							<AccordionTrigger className="py-5 text-left text-sm font-medium text-[#294331] hover:no-underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#8e6c39] focus-visible:ring-offset-2 sm:text-base">
+							<AccordionTrigger
+								indicator={<Plus className="h-4 w-4" aria-hidden="true" />}
+								className="py-5 text-left text-sm font-medium text-[#294331] hover:no-underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#8e6c39] focus-visible:ring-offset-2 sm:text-base"
+							>
 								{item.question}
 							</AccordionTrigger>
 							<AccordionContent className="max-w-2xl text-sm leading-7 text-[#69736a] motion-reduce:animate-none">
