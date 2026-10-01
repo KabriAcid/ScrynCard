@@ -2,7 +2,6 @@ import { motion } from "framer-motion";
 import {
   MapPin,
   Building2,
-  ArrowRight,
   Globe,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -62,8 +61,8 @@ export function ContactLocationStep({
         icon={MapPin}
         title="Delivery Location"
         description="Select your state and local government area for delivery"
-        step={3}
-        totalSteps={5}
+        step={4}
+        totalSteps={6}
       />
 
       {/* Main Content */}
@@ -170,7 +169,7 @@ export function ContactLocationStep({
                 initial={{ opacity: 0, height: 0 }}
                 animate={{ opacity: 1, height: "auto" }}
                 exit={{ opacity: 0, height: 0 }}
-                className="mt-4 p-3 rounded-lg bg-primary/5 border border-primary/10"
+                className="order-location-preview"
               >
                 <div className="flex items-center gap-2 text-sm">
                   <MapPin className="h-4 w-4 text-primary" />
@@ -188,24 +187,8 @@ export function ContactLocationStep({
 
         {/* Navigation */}
         <motion.div variants={itemVariants} className="flex gap-3 pt-4">
-          <Button
-            type="button"
-            variant="outline"
-            onClick={onPrev}
-            size="lg"
-            className="h-12 text-base font-semibold group"
-          >
-            <span>Back</span>
-          </Button>
-          <Button
-            type="button"
-            onClick={onNext}
-            size="lg"
-            className="flex-1 h-12 text-base font-semibold group"
-          >
-            <span>Continue</span>
-            <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
-          </Button>
+          <Button type="button" variant="outline" onClick={onPrev} className="order-secondary-button">Back</Button>
+          <Button type="button" onClick={onNext} className="order-primary-button">Continue</Button>
         </motion.div>
       </motion.div>
     </motion.div>

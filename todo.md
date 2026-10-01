@@ -5,7 +5,7 @@
 
 ## Redemption flow
 
-- [ ] Show card details in the validation step in an invoice-style, two-column layout rather than a collection of separate grids.
+- [x] Show card details in the validation step in an invoice-style, two-column layout rather than a collection of separate grids.
 - [x] Remove the “Other network” option.
 - [x] Simplify the step indicator so it shows the current step and total step count, rather than displaying the full list of steps.
 - [x] Reduce the placeholder text size in the first step.
@@ -21,8 +21,8 @@
 
 - [x] Replace the current hero headline with copy that better reflects the product.
 - [ ] Update the statistics section with prominent, larger figures for relevant metrics, such as business partners, cards redeemed, and total value redeemed in naira. Replace the current placeholder or less relevant statistics.
-- [ ] Add a partner section with a marquee of partner logos.
 - [ ] Add a frequently asked questions section.
+- [ ] Add a partner section with a marquee of partner logos.
 - [ ] Rework the footer to better support the site's content and navigation.
 
 ## Navigation and legal pages

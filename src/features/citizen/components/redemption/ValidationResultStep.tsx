@@ -101,42 +101,45 @@ export function ValidationResultStep({
 				</Card>
 
 				{/* Card Details Display */}
-				<Card className="rounded-sm border border-[#e6dfd3] bg-[#fffdf8] p-5 shadow-none sm:p-6">
-					<div className="space-y-4">
-						<div className="flex items-center gap-2 mb-4">
-							<CreditCard className="h-4 w-4 text-[#8e6c39] sm:h-5 sm:w-5" />
-							<h3 className="font-semibold text-sm sm:text-base">
-								Card Details
-							</h3>
-						</div>
-						<div className="grid grid-cols-2 gap-4">
-							<div className="space-y-1">
-								<p className="text-sm text-muted-foreground">Serial Number</p>
-								<p className="font-semibold">{serialNumber}</p>
-							</div>
-							<div className="space-y-1">
-								<p className="text-sm text-muted-foreground">Card Code</p>
-								<p className="text-sm font-semibold">{cardCode}</p>
-							</div>
-							<div className="space-y-1">
-								<p className="text-sm text-muted-foreground">Gift Type</p>
-								<p className="font-semibold capitalize">
-									{giftDetails.giftType}
-								</p>
-							</div>
-							<div className="space-y-1">
-								<p className="text-sm text-muted-foreground">Value</p>
-								<p className="font-semibold">
-									{giftDetails.giftType === "data"
-										? giftDetails.dataSize != null
-											? formatDataSize(giftDetails.dataSize)
-											: "N/A"
-										: `₦${(giftDetails.amount || 0).toLocaleString()}`}
-								</p>
-							</div>
-						</div>
+				<section
+					aria-label="Card details"
+					className="overflow-hidden border border-[#e6dfd3] bg-[#fffdf8]"
+				>
+					<div className="flex items-center gap-2 border-b border-[#e6dfd3] bg-[#faf8f3] px-4 py-3">
+						<CreditCard className="h-4 w-4 text-[#8e6c39] sm:h-5 sm:w-5" />
+						<h3 className="text-sm font-semibold sm:text-base">Card details</h3>
 					</div>
-				</Card>
+					<dl className="grid grid-cols-2 divide-x divide-y divide-[#ece6db]">
+						<div className="min-w-0 px-3 py-3 sm:px-4">
+							<dt className="text-[11px] text-[#858a80]">Serial number</dt>
+							<dd className="mt-1 break-all text-xs font-semibold text-[#2a4032] sm:text-sm">
+								{serialNumber}
+							</dd>
+						</div>
+						<div className="min-w-0 px-3 py-3 sm:px-4">
+							<dt className="text-[11px] text-[#858a80]">Card code</dt>
+							<dd className="mt-1 break-all text-xs font-semibold text-[#2a4032] sm:text-sm">
+								{cardCode}
+							</dd>
+						</div>
+						<div className="min-w-0 px-3 py-3 sm:px-4">
+							<dt className="text-[11px] text-[#858a80]">Gift type</dt>
+							<dd className="mt-1 text-xs font-semibold capitalize text-[#2a4032] sm:text-sm">
+								{giftDetails.giftType}
+							</dd>
+						</div>
+						<div className="min-w-0 px-3 py-3 sm:px-4">
+							<dt className="text-[11px] text-[#858a80]">Value</dt>
+							<dd className="mt-1 text-xs font-semibold text-[#2a4032] sm:text-sm">
+								{giftDetails.giftType === "data"
+									? giftDetails.dataSize != null
+										? formatDataSize(giftDetails.dataSize)
+										: "N/A"
+									: `₦${(giftDetails.amount || 0).toLocaleString()}`}
+							</dd>
+						</div>
+					</dl>
+				</section>
 
 				{/* Action Buttons */}
 				<div className="flex gap-3 pt-4">

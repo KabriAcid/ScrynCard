@@ -1,4 +1,4 @@
-import { ArrowLeft, ClipboardCheck, LoaderCircle } from "lucide-react";
+import { ClipboardCheck, LoaderCircle } from "lucide-react";
 import type { ReactNode } from "react";
 import { Button } from "@/components/ui/button";
 import { UseFormReturn } from "react-hook-form";
@@ -31,8 +31,8 @@ export function OrderReviewStep({ form, isLoading, onPrev }: OrderReviewStepProp
         icon={ClipboardCheck}
         title="Review your order"
         description="Check the details and total before placing your order."
-        step={5}
-        totalSteps={5}
+        step={6}
+        totalSteps={6}
       />
 
       <section className="order-invoice" aria-label="Order invoice">
@@ -76,7 +76,7 @@ export function OrderReviewStep({ form, isLoading, onPrev }: OrderReviewStepProp
 
       <div className="order-step-actions">
         <Button type="button" variant="outline" onClick={onPrev} disabled={isLoading} className="order-secondary-button">
-          <ArrowLeft aria-hidden="true" /> Back
+          Back
         </Button>
         <Button type="submit" disabled={isLoading} className="order-primary-button">
           {isLoading ? <><LoaderCircle className="animate-spin" aria-hidden="true" /> Placing order...</> : "Place order"}

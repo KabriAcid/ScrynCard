@@ -27,7 +27,7 @@ export function OrderPurposeStep({ form, onNext }: OrderPurposeStepProps) {
         title="What are you ordering for?"
         description="Choose a card style to get started."
         step={1}
-        totalSteps={5}
+        totalSteps={6}
       />
 
       <div className="order-purpose-grid">
