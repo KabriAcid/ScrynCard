@@ -1,138 +1,202 @@
-import { Button } from "@/components/ui/button";
-import { ArrowRight, Gift, ShieldCheck, TrendingUp } from "lucide-react";
+import { ArrowRight, ArrowUpRight, Gift, Sparkles } from "lucide-react";
+import { Link } from "react-router-dom";
 import { Logo } from "@/components/logo";
-import { useNavigate } from "react-router-dom";
-import { PlaceHolderImages } from "@/lib/placeholder-images";
+
+const frontSamples = __SAMPLE_IMAGES__.filter((sample) => !sample.isBack);
+const featuredSample =
+  frontSamples.find((sample) => sample.name.toLowerCase().includes("wedding")) ??
+  frontSamples[0];
+const supportingSamples = frontSamples
+  .filter((sample) => sample.src !== featuredSample?.src)
+  .slice(0, 2);
+
+const moments = [
+  {
+    number: "01",
+    title: "For your customers",
+    description:
+      "Thank loyal customers, welcome new ones, and give every visit a little more meaning.",
+  },
+  {
+    number: "02",
+    title: "For your celebrations",
+    description:
+      "Give guests a keepsake with a useful reward inside, made for weddings and special days.",
+  },
+  {
+    number: "03",
+    title: "For your people",
+    description:
+      "Recognize a team, mark a milestone, or bring a community together with a thoughtful gift.",
+  },
+];
 
 export default function HomePage() {
-  const navigate = useNavigate();
-  const heroImage = PlaceHolderImages.find((p) => p.id === "hero-nigeria");
-
   return (
-    <div className="flex min-h-screen flex-col">
-      <header className="container mx-auto flex h-20 items-center justify-between px-4 md:px-6">
+    <div className="min-h-screen bg-[#faf8f3] text-[#172d22]">
+      <header className="fixed left-1/2 top-3 z-50 flex h-[68px] w-[calc(100%-1.5rem)] max-w-[1120px] -translate-x-1/2 items-center justify-between rounded-full border border-white/70 bg-[#faf8f3]/75 px-4 shadow-[0_10px_35px_rgba(23,45,34,0.10)] backdrop-blur-xl sm:top-4 sm:h-[72px] sm:w-[calc(100%-3rem)] sm:px-7">
         <Logo />
-        <div className="flex items-center gap-2">
-          <Button variant="ghost" onClick={() => navigate("/login")}>
-            Login
-          </Button>
-          <Button onClick={() => navigate("/order")}>
-            <span className="sm:hidden">Order</span>
-            <span className="hidden sm:block">Order For Cards</span>
-          </Button>
+        <nav className="hidden items-center gap-9 text-[13px] text-[#536257] md:flex" aria-label="Main navigation">
+          <a className="transition hover:text-[#173f2d]" href="#how-it-works">How it works</a>
+          <a className="transition hover:text-[#173f2d]" href="#occasions">Made for many moments</a>
+          <Link className="transition hover:text-[#173f2d]" to="/samples">Card gallery</Link>
+        </nav>
+        <div className="flex items-center gap-2 sm:gap-4">
+          <Link to="/login" className="hidden px-2 py-2 text-sm text-[#536257] transition hover:text-[#173f2d] sm:inline-flex">Sign in</Link>
+          <Link
+            to="/samples"
+            className="inline-flex h-10 items-center gap-2 rounded-sm bg-[#173f2d] px-4 text-sm font-medium text-white transition hover:bg-[#24553d] sm:px-5"
+          >
+            See the cards <ArrowUpRight className="h-4 w-4" />
+          </Link>
         </div>
       </header>
-      <main className="flex-1">
-        <section className="relative w-full py-20 md:py-32 lg:py-40">
-          {heroImage && (
-            <img
-              src={heroImage.imageUrl}
-              alt={heroImage.description}
-              className="absolute inset-0 w-full h-full object-cover"
-              data-ai-hint={heroImage.imageHint}
-            />
-          )}
-          <div className="absolute inset-0 bg-gradient-to-t from-background to-background/50" />
-          <div className="container relative z-10 mx-auto px-4 text-center md:px-6">
-            <h1 className="text-4xl font-bold tracking-tighter text-foreground sm:text-5xl md:text-6xl lg:text-7xl">
-              Rewarding Nigerian Citizens
+
+      <div aria-hidden="true" className="h-24 sm:h-28" />
+
+      <main>
+        <section className="mx-auto grid max-w-[1380px] items-center gap-12 px-5 pb-16 pt-10 sm:px-8 sm:pt-16 lg:grid-cols-[0.92fr_1.08fr] lg:gap-16 lg:px-12 lg:pb-24 lg:pt-14">
+          <div className="relative z-10 max-w-[600px]">
+            <div className="mb-7 flex items-center gap-3 text-[10px] font-semibold uppercase tracking-[0.24em] text-[#8e6c39] sm:text-[11px]">
+              <span className="h-px w-8 bg-[#b69054]" />
+              Rewards with your name on them
+            </div>
+            <h1 className="font-serif text-[clamp(3.4rem,7.1vw,6.5rem)] leading-[0.98] tracking-[-0.055em] text-[#173f2d]">
+              Make a little gesture <span className="italic text-[#a2783e]">mean more.</span>
             </h1>
-            <p className="mx-auto mt-4 max-w-[700px] text-lg text-muted-foreground md:text-xl">
-              A transparent, efficient, and secure platform for distributing
-              value.
+            <p className="mt-7 max-w-[490px] text-base leading-8 text-[#647067] sm:text-lg sm:leading-9">
+              Branded scratch cards turn airtime and data into a gift people remember. For your customers, your guests, and your team.
             </p>
-            <div className="mt-12 flex justify-center">
-              <Button
-                size="lg"
-                className="group relative h-16 px-12 text-lg font-bold transition-all duration-500 overflow-hidden before:absolute before:inset-0 before:-translate-x-full before:bg-gradient-to-r before:from-transparent before:via-white/30 before:to-transparent before:animate-shine hover:before:translate-x-full before:transition-transform before:duration-1000"
-                onClick={() => navigate("/redeem")}
+            <div className="mt-9 flex flex-wrap items-center gap-3">
+              <Link
+                to="/redeem"
+                className="inline-flex h-12 items-center gap-3 bg-[#173f2d] px-6 text-sm font-medium text-white transition hover:bg-[#24553d]"
               >
-                <div className="relative flex items-center gap-3 z-10">
-                  <Gift className="h-6 w-6 transition-transform duration-500 group-hover:rotate-6 group-hover:scale-105" />
-                  <span>Redeem Your Card</span>
-                  <ArrowRight className="h-6 w-6 transition-all duration-500 group-hover:translate-x-1" />
-                </div>
-              </Button>
+                Redeem your card <ArrowRight className="h-4 w-4" />
+              </Link>
+              <Link
+                to="/samples"
+                className="inline-flex h-12 items-center gap-2 border border-[#b9b5aa] bg-transparent px-5 text-sm font-medium text-[#34463a] transition hover:border-[#9a835c] hover:bg-white/50"
+              >
+                View card samples
+              </Link>
+            </div>
+            <div className="mt-12 flex items-center gap-3 border-t border-[#e6e1d7] pt-5 text-xs leading-5 text-[#778077]">
+              <Sparkles className="h-4 w-4 shrink-0 text-[#a2783e]" />
+              A personal touch, with something useful inside.
+            </div>
+          </div>
+
+          <div className="relative mx-auto w-full max-w-[650px] pb-8 pl-3 pr-7 pt-3 sm:pl-8 sm:pr-12 sm:pt-8">
+            <div className="absolute inset-8 translate-x-3 translate-y-3 border border-[#d9c69f] sm:inset-12" />
+            <div className="relative border border-white/80 bg-[#f0e9dc] p-2 shadow-[0_24px_65px_rgba(33,46,36,0.14)] sm:p-3">
+              {featuredSample ? (
+                <img
+                  src={featuredSample.src}
+                  alt={`${featuredSample.name} front design`}
+                  fetchPriority="high"
+                  className="aspect-[1.58/1] w-full object-cover"
+                />
+              ) : (
+                <div className="flex aspect-[1.58/1] items-center justify-center bg-[#e9e1d2] text-[#718074]">Your card design</div>
+              )}
+              <div className="absolute -bottom-8 right-0 flex items-center gap-3 border border-[#e7e0d4] bg-[#faf8f3] p-2 shadow-[0_12px_34px_rgba(33,46,36,0.14)] sm:-bottom-9 sm:right-2 sm:gap-4 sm:p-3">
+                {supportingSamples.map((sample) => (
+                  <img
+                    key={sample.src}
+                    src={sample.src}
+                    alt={sample.name}
+                    loading="lazy"
+                    className="h-[62px] w-[92px] object-cover sm:h-[78px] sm:w-[118px]"
+                  />
+                ))}
+                {supportingSamples.length === 0 && <Gift className="m-5 h-7 w-7 text-[#a2783e]" />}
+                <Link to="/samples" className="mr-1 grid h-9 w-9 shrink-0 place-items-center rounded-full bg-[#173f2d] text-white transition hover:bg-[#24553d]" aria-label="Browse all card designs">
+                  <ArrowUpRight className="h-4 w-4" />
+                </Link>
+              </div>
+            </div>
+            <p className="absolute bottom-0 left-4 text-[10px] uppercase tracking-[0.18em] text-[#847d6d] sm:left-8">Made to be given. Made to be remembered.</p>
+          </div>
+        </section>
+
+        <section className="border-y border-[#e8e2d7] bg-[#f3f0e8]">
+          <div className="mx-auto grid max-w-[1380px] gap-8 px-5 py-8 sm:px-8 md:grid-cols-[1fr_auto] md:items-center lg:px-12">
+            <p className="max-w-2xl font-serif text-xl leading-8 text-[#33483a] sm:text-2xl">
+              A beautiful card on the outside. Airtime or data on the inside.
+            </p>
+            <p className="text-sm leading-6 text-[#737b70] md:max-w-[330px]">
+              Recipients redeem online in a few simple steps, wherever the moment finds them.
+            </p>
+          </div>
+        </section>
+
+        <section id="occasions" className="mx-auto max-w-[1380px] px-5 py-20 sm:px-8 sm:py-28 lg:px-12">
+          <div className="grid gap-10 lg:grid-cols-[0.72fr_1.28fr] lg:gap-20">
+            <div>
+              <p className="text-[10px] font-semibold uppercase tracking-[0.24em] text-[#8e6c39]">Many reasons to give</p>
+              <h2 className="mt-5 max-w-sm font-serif text-4xl leading-tight tracking-[-0.035em] text-[#173f2d] sm:text-5xl">
+                One thoughtful reward. Endless occasions.
+              </h2>
+              <p className="mt-5 max-w-sm text-sm leading-7 text-[#69736a]">
+                From everyday appreciation to once-in-a-lifetime celebrations, make the reward feel like it belongs to the moment.
+              </p>
+              <Link to="/samples" className="mt-7 inline-flex items-center gap-2 text-sm font-semibold text-[#31563d] hover:text-[#8e6c39]">
+                Find a little inspiration <ArrowRight className="h-4 w-4" />
+              </Link>
+            </div>
+            <div className="grid divide-y divide-[#e5dfd4] border-y border-[#e5dfd4] sm:grid-cols-3 sm:divide-x sm:divide-y-0">
+              {moments.map((moment) => (
+                <article key={moment.number} className="py-6 sm:px-5 sm:py-2 lg:px-7">
+                  <span className="font-serif text-sm italic text-[#a2783e]">{moment.number}</span>
+                  <h3 className="mt-5 font-serif text-2xl text-[#243d2e]">{moment.title}</h3>
+                  <p className="mt-3 text-sm leading-6 text-[#737b70]">{moment.description}</p>
+                </article>
+              ))}
             </div>
           </div>
         </section>
 
-        <section className="container mx-auto px-4 py-20 md:px-6 md:py-32">
-          <div className="mx-auto grid max-w-5xl items-center gap-8 lg:grid-cols-2 lg:gap-16">
-            <div className="space-y-4">
-              <div className="inline-block rounded-lg bg-secondary px-3 py-1 text-sm">
-                Key Features
-              </div>
-              <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl">
-                A Modern Solution for Community Support
+        <section id="how-it-works" className="bg-[#173f2d] text-[#f8f5ed]">
+          <div className="mx-auto grid max-w-[1380px] gap-10 px-5 py-16 sm:px-8 sm:py-20 md:grid-cols-[0.8fr_1.2fr] md:items-center lg:px-12">
+            <div>
+              <p className="text-[10px] font-semibold uppercase tracking-[0.24em] text-[#d1b785]">Simple from the first card</p>
+              <h2 className="mt-5 max-w-md font-serif text-4xl leading-tight tracking-[-0.035em] sm:text-5xl">
+                Give something they can use right away.
               </h2>
-              <p className="text-muted-foreground md:text-lg">
-                Scryn provides a modern toolkit for politicians and a secure way
-                for citizens to receive support.
-              </p>
             </div>
-            <div className="grid gap-6">
-              <div className="flex items-start gap-4">
-                <div className="rounded-full bg-primary/10 p-3">
-                  <Gift className="h-6 w-6 text-primary" />
+            <div className="grid gap-7 sm:grid-cols-3 sm:gap-5">
+              {[
+                ["Choose", "Pick the airtime or data reward that fits your moment."],
+                ["Personalize", "Put your business, event, or message on the card."],
+                ["Share", "Hand it over. They redeem it online in a few simple steps."],
+              ].map(([title, description], index) => (
+                <div key={title} className="border-t border-white/20 pt-4">
+                  <span className="text-[10px] tracking-[0.2em] text-[#d1b785]">0{index + 1}</span>
+                  <h3 className="mt-3 font-serif text-2xl">{title}</h3>
+                  <p className="mt-2 text-sm leading-6 text-white/65">{description}</p>
                 </div>
-                <div>
-                  <h3 className="font-semibold">Seamless Distribution</h3>
-                  <p className="text-sm text-muted-foreground">
-                    Easily create and distribute uniquely branded scratch cards
-                    for your campaign.
-                  </p>
-                </div>
-              </div>
-              <div className="flex items-start gap-4">
-                <div className="rounded-full bg-primary/10 p-3">
-                  <TrendingUp className="h-6 w-6 text-primary" />
-                </div>
-                <div>
-                  <h3 className="font-semibold">Real-Time Analytics</h3>
-                  <p className="text-sm text-muted-foreground">
-                    Track redemption rates, geographic distribution, and ROI on
-                    your dashboard.
-                  </p>
-                </div>
-              </div>
-              <div className="flex items-start gap-4">
-                <div className="rounded-full bg-primary/10 p-3">
-                  <ShieldCheck className="h-6 w-6 text-primary" />
-                </div>
-                <div>
-                  <h3 className="font-semibold">Advanced Fraud Prevention</h3>
-                  <p className="text-sm text-muted-foreground">
-                    Our AI-powered tools monitor and flag suspicious activities
-                    to ensure security.
-                  </p>
-                </div>
-              </div>
+              ))}
             </div>
           </div>
+        </section>
+
+        <section className="mx-auto flex max-w-[1380px] flex-col items-start justify-between gap-7 px-5 py-16 sm:px-8 sm:py-20 md:flex-row md:items-center lg:px-12">
+          <div>
+            <p className="text-[10px] font-semibold uppercase tracking-[0.24em] text-[#8e6c39]">Start with a look</p>
+            <h2 className="mt-3 font-serif text-3xl tracking-[-0.03em] text-[#173f2d] sm:text-4xl">Find a card that feels like you.</h2>
+          </div>
+          <Link to="/samples" className="inline-flex h-12 items-center gap-3 border border-[#b6a682] px-6 text-sm font-medium text-[#284632] transition hover:bg-[#f1ecdf]">
+            Browse the sample gallery <ArrowRight className="h-4 w-4" />
+          </Link>
         </section>
       </main>
 
-      <footer className="border-t bg-secondary/50">
-        <div className="container mx-auto flex flex-col items-center justify-between gap-4 px-4 py-8 md:flex-row md:px-6">
+      <footer className="border-t border-[#e6e1d7]">
+        <div className="mx-auto flex max-w-[1380px] flex-col gap-4 px-5 py-6 text-sm text-[#7a8178] sm:px-8 md:flex-row md:items-center md:justify-between lg:px-12">
           <Logo />
-          <p className="text-sm text-muted-foreground">
-            &copy; {new Date().getFullYear()} Scryn. All rights reserved.
-          </p>
-          <div className="flex items-center gap-4">
-            <button
-              className="text-sm hover:underline"
-              onClick={() => navigate("/")}
-            >
-              Terms of Service
-            </button>
-            <button
-              className="text-sm hover:underline"
-              onClick={() => navigate("/")}
-            >
-              Privacy Policy
-            </button>
-          </div>
+          <p>Thoughtful rewards for businesses, events, and the people who make them matter.</p>
+          <Link to="/redeem" className="hover:text-[#173f2d]">Redeem a card</Link>
         </div>
       </footer>
     </div>
