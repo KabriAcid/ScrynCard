@@ -5,7 +5,7 @@ export function Logo() {
   const navigate = useNavigate();
 
   return (
-    <div className="flex items-center gap-2 font-headline text-xl font-bold">
+    <div className="flex items-center align-center gap-2 font-headline text-xl font-bold">
       <div className="p-2">
         <button
           onClick={() => navigate("/")}
