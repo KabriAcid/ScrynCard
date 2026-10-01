@@ -3,7 +3,7 @@ import { useFieldArray, UseFormReturn } from "react-hook-form";
 import { ArrowRight, CreditCard, Minus, Plus, Smartphone, Wifi } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { OrderFormValues, denominations, dataProducts, airtimeProducts, calculateOrderTotals, MINIMUM_ORDER_VALUE } from "./schema";
+import { OrderFormValues, denominations, dataProducts, airtimeProducts, calculateOrderTotals, getDenominationLabel, MINIMUM_ORDER_VALUE } from "./schema";
 import { formatCurrency } from "@/lib/utils";
 import { StepHeader } from "./shared";
 
@@ -60,7 +60,7 @@ export function CardDetailsStep({ form, onPrev, onNext }: CardDetailsStepProps) 
           const selected = selectedDenoms.has(product.id);
           return (
             <button key={product.id} type="button" aria-pressed={selected} onClick={() => toggleProduct(product.id)} className={`order-product-option${selected ? " is-selected" : ""}`}>
-              <span>{product.label}</span>
+              <span>{getDenominationLabel(product)}</span>
               <small>{formatCurrency(product.value)} value</small>
             </button>
           );
@@ -81,13 +81,13 @@ export function CardDetailsStep({ form, onPrev, onNext }: CardDetailsStepProps) 
               return (
                 <div className="order-quantity-row" key={field.customId}>
                   <div className="order-quantity-product">
-                    <strong>{product?.label}</strong>
+                    <strong>{product ? getDenominationLabel(product) : "Card"}</strong>
                     <span>{quantity} cards - {formatCurrency((product?.value || 0) * quantity)}</span>
                   </div>
-                  <div className="order-quantity-controls" aria-label={`${product?.label} quantity`}>
-                    <button type="button" aria-label={`Remove 10 ${product?.label} cards`} onClick={() => changeQuantity(index, -10)} className="order-quantity-button"><Minus aria-hidden="true" /></button>
+                  <div className="order-quantity-controls" aria-label={`${product ? getDenominationLabel(product) : "Card"} quantity`}>
+                    <button type="button" aria-label={`Remove 10 ${product ? getDenominationLabel(product) : "Card"} cards`} onClick={() => changeQuantity(index, -10)} className="order-quantity-button"><Minus aria-hidden="true" /></button>
                     <span aria-live="polite" className="order-quantity-value">{quantity}</span>
-                    <button type="button" aria-label={`Add 10 ${product?.label} cards`} onClick={() => changeQuantity(index, 10)} className="order-quantity-button"><Plus aria-hidden="true" /></button>
+                    <button type="button" aria-label={`Add 10 ${product ? getDenominationLabel(product) : "Card"} cards`} onClick={() => changeQuantity(index, 10)} className="order-quantity-button"><Plus aria-hidden="true" /></button>
                   </div>
                 </div>
               );

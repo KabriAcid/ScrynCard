@@ -1,5 +1,6 @@
 import { z } from "zod";
 import type { LucideIcon } from "lucide-react";
+import { formatCurrency } from "@/lib/utils";
 
 // ============================================================================
 // PRODUCTS (DATA & AIRTIME)
@@ -22,6 +23,10 @@ export const airtimeProducts = [
 ] as const;
 
 export const denominations = [...dataProducts, ...airtimeProducts] as const;
+
+export function getDenominationLabel(product: (typeof denominations)[number]) {
+  return product.type === "airtime" ? formatCurrency(product.value) : product.label;
+}
 
 // ============================================================================
 // ORDER CALCULATIONS

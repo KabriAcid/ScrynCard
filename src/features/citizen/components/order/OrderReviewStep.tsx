@@ -2,13 +2,14 @@ import { ClipboardCheck, LoaderCircle } from "lucide-react";
 import type { ReactNode } from "react";
 import { Button } from "@/components/ui/button";
 import { UseFormReturn } from "react-hook-form";
-import { OrderFormValues, calculateOrderTotals, denominations, PRINTING_COST_PER_CARD } from "./schema";
+import { OrderFormValues, calculateOrderTotals, denominations, getDenominationLabel, PRINTING_COST_PER_CARD } from "./schema";
 import { formatCurrency } from "@/lib/utils";
 import { StepHeader } from "./shared";
 
 interface OrderReviewStepProps {
   form: UseFormReturn<OrderFormValues>;
   isLoading: boolean;
+  hasSubmitted: boolean;
   onPrev: () => void;
 }
 
@@ -21,7 +22,7 @@ function InvoiceRow({ label, value, strong = false }: { label: string; value: Re
   );
 }
 
-export function OrderReviewStep({ form, isLoading, onPrev }: OrderReviewStepProps) {
+export function OrderReviewStep({ form, isLoading, hasSubmitted, onPrev }: OrderReviewStepProps) {
   const values = form.watch();
   const totals = calculateOrderTotals(values.orderItems || []);
 
@@ -47,7 +48,7 @@ export function OrderReviewStep({ form, isLoading, onPrev }: OrderReviewStepProp
         <dl className="order-invoice-details">
           <InvoiceRow label="Business type" value={values.businessType || "-"} />
           <InvoiceRow label="Contact person" value={values.fullName || "-"} />
-          <InvoiceRow label="NIN" value={values.nin || "-"} />
+          <InvoiceRow label="Email" value={values.email || "-"} />
           <InvoiceRow label="Delivery location" value={[values.lga, values.state].filter(Boolean).join(", ") || "-"} />
         </dl>
 
@@ -58,7 +59,7 @@ export function OrderReviewStep({ form, isLoading, onPrev }: OrderReviewStepProp
             return (
               <InvoiceRow
                 key={item.denomination}
-                label={`${product?.label || "Card"} x ${quantity}`}
+                label={`${product ? getDenominationLabel(product) : "Card"} x ${quantity}`}
                 value={formatCurrency((product?.value || 0) * quantity)}
               />
             );
@@ -78,8 +79,8 @@ export function OrderReviewStep({ form, isLoading, onPrev }: OrderReviewStepProp
         <Button type="button" variant="outline" onClick={onPrev} disabled={isLoading} className="order-secondary-button">
           Back
         </Button>
-        <Button type="submit" disabled={isLoading} className="order-primary-button">
-          {isLoading ? <><LoaderCircle className="animate-spin" aria-hidden="true" /> Placing order...</> : "Place order"}
+        <Button type="submit" disabled={isLoading || hasSubmitted} className="order-primary-button">
+          {isLoading ? <><LoaderCircle className="animate-spin" aria-hidden="true" /> Placing order...</> : hasSubmitted ? "Order placed" : "Place order"}
         </Button>
       </div>
     </section>

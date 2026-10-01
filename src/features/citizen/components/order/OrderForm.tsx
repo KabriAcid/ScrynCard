@@ -80,7 +80,7 @@ export function OrderForm() {
             {step === 3 && <ContactDetailsStep key="step-3" form={form} onNext={nextStep} onPrev={previousStep} />}
             {step === 4 && <ContactLocationStep key="step-4" form={form} onNext={nextStep} onPrev={previousStep} />}
             {step === 5 && <CardDetailsStep key="step-5" form={form} onNext={nextStep} onPrev={previousStep} />}
-            {step === 6 && <OrderReviewStep key="step-6" form={form} isLoading={isLoading || hasSubmitted} onPrev={previousStep} />}
+            {step === 6 && <OrderReviewStep key="step-6" form={form} isLoading={isLoading} hasSubmitted={hasSubmitted} onPrev={previousStep} />}
           </AnimatePresence>
           <p className="order-privacy-note">Your details are used only to prepare and deliver this order.</p>
         </form>

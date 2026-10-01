@@ -73,7 +73,7 @@ export function ContactLocationStep({
         className="space-y-6"
       >
         {/* Location Section */}
-        <GlassCard>
+        <GlassCard className="order-location-card">
           <FormSection
             title="Delivery Location"
             description="Select your state and local government area for delivery"
@@ -186,7 +186,7 @@ export function ContactLocationStep({
         </GlassCard>
 
         {/* Navigation */}
-        <motion.div variants={itemVariants} className="flex gap-3 pt-4">
+        <motion.div variants={itemVariants} className="order-step-actions">
           <Button type="button" variant="outline" onClick={onPrev} className="order-secondary-button">Back</Button>
           <Button type="button" onClick={onNext} className="order-primary-button">Continue</Button>
         </motion.div>
